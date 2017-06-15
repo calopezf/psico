@@ -1,0 +1,36 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" 
+    "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:ui="http://java.sun.com/jsf/facelets"
+      xmlns:h="http://java.sun.com/jsf/html"
+      xmlns:f="http://java.sun.com/jsf/core">
+    <h:head>
+        <title>#{etiquetas['nombre.sistema']}</title>
+        <meta http-equiv="Content-Type" content="text/html; charset=iso-8859-1" />
+        <link type="text/css"
+              href="#{facesContext.externalContext.requestContextPath}/css/socioempleo.css"
+              rel="stylesheet" media="screen" />
+    </h:head>
+
+    <h:body>
+
+        <!-- Begin Wrapper -->
+        <div id="wrapper">
+dan
+
+            <table align="center">
+                <tr>
+                    <td><h:graphicImage value="/img/logoSocioEmpleo.png" /></td>
+                </tr>
+            </table>
+
+
+            <!-- Begin Right Column -->
+            <div id="rightcolumnbasico">
+                <ui:insert name="content">Default Content logout</ui:insert>
+            </div>
+
+        </div>
+        <!-- wrapper -->
+    </h:body>
+</html>

@@ -1,0 +1,267 @@
+<ui:composition xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:ui="http://java.sun.com/jsf/facelets"
+	xmlns:h="http://java.sun.com/jsf/html"
+	xmlns:f="http://java.sun.com/jsf/core"
+	xmlns:p="http://primefaces.org/ui" template="/WEB-INF/template.xhtml">
+	<ui:define name="content">
+		<h:form id="formSeguimientoLista">
+			<h1>#{etiquetas['listaSeguimiento']}</h1>
+			<p:growl id="msg" autoUpdate="true" />
+			<h:panelGrid columns="1">
+				<h:panelGrid columns="2" id="gridFiltros" style="width: 700px">
+					<h:panelGrid columns="2" columnClasses="form-label,form-input">
+						<p:outputLabel value="#{etiquetas['semestre']}"
+							rendered="#{not usuarioCtrl.profesor and not usuarioCtrl.alumno}" />
+						<p:selectOneMenu id="semestre"
+							rendered="#{not usuarioCtrl.profesor and not usuarioCtrl.alumno}"
+							value="#{seguimientoCtrl.seguimientoFiltro.semestre.codigo}"
+							style="width:250px">
+							<f:selectItem />
+							<f:selectItems value="#{seguimientoCtrl.semestreLista}"
+								var="item" itemLabel="#{item.nombre}" itemValue="#{item.codigo}" />
+						</p:selectOneMenu>
+						<p:outputLabel value="#{etiquetas['estado']}"
+							rendered="#{not usuarioCtrl.profesor and not usuarioCtrl.alumno}" />
+						<p:selectOneMenu id="estado"
+							rendered="#{not usuarioCtrl.profesor and not usuarioCtrl.alumno}"
+							value="#{seguimientoCtrl.seguimientoFiltro.estado}">
+							<f:selectItem />
+							<f:selectItems value="#{selectItemCtrl.estadoEnum}" />
+						</p:selectOneMenu>
+						<p:outputLabel for="facultad" value="#{etiquetas['carrera']}" />
+						<p:selectOneMenu id="facultad"
+							value="#{seguimientoCtrl.seguimientoFiltro.carrera.codigo}"
+							style="width:250px">
+							<f:selectItem />
+							<f:selectItems value="#{seguimientoCtrl.carreraLista}" var="item"
+								itemLabel="#{item.nombre}" itemValue="#{item.codigo}" />
+							<f:ajax event="change" render="pagMateria"
+								listener="#{seguimientoCtrl.cambiaCarrera}" />
+						</p:selectOneMenu>
+						<p:outputLabel value="#{etiquetas['materia']}" />
+						<h:panelGroup id="pagMateria">
+							<p:selectOneMenu id="materia"
+								value="#{seguimientoCtrl.seguimientoFiltro.materia.codigo}"
+								style="width:250px">
+								<f:selectItem />
+								<f:selectItems value="#{seguimientoCtrl.materiaLista}"
+									var="item" itemLabel="#{item.codigo} - #{item.nombre}"
+									itemValue="#{item.codigo}" />
+							</p:selectOneMenu>
+						</h:panelGroup>
+						<p:outputLabel value="#{etiquetas['profesor']}"
+							rendered="#{not usuarioCtrl.profesor}" />
+						<p:selectOneMenu id="profesor"
+							rendered="#{not usuarioCtrl.profesor}"
+							disabled="#{usuarioCtrl.profesor and not usuarioCtrl.administrador}"
+							value="#{seguimientoCtrl.seguimientoFiltro.profesor.identificacion}"
+							style="width:250px">
+							<f:selectItem />
+							<f:selectItems value="#{seguimientoCtrl.profesorLista}"
+								var="item" itemLabel="#{item.identificacion} - #{item.nombre}"
+								itemValue="#{item.identificacion}" />
+						</p:selectOneMenu>
+						<p:outputLabel value="#{etiquetas['alumno']}"
+							rendered="#{not usuarioCtrl.profesor and not usuarioCtrl.alumno}" />
+						<p:selectOneMenu id="alumno"
+							rendered="#{not usuarioCtrl.profesor and not usuarioCtrl.alumno}"
+							disabled="#{usuarioCtrl.alumno and not usuarioCtrl.administrador}"
+							value="#{seguimientoCtrl.seguimientoFiltro.alumno.identificacion}"
+							style="width:250px">
+							<f:selectItem />
+							<f:selectItems value="#{seguimientoCtrl.alumnoLista}" var="item"
+								itemLabel="#{item.identificacion} - #{item.nombre}"
+								itemValue="#{item.identificacion}" />
+						</p:selectOneMenu>
+						<p:outputLabel value="#{etiquetas['coordinador']}"
+							rendered="#{not usuarioCtrl.profesor and not usuarioCtrl.alumno}" />
+						<p:selectOneMenu id="coordinador"
+							rendered="#{not usuarioCtrl.profesor and not usuarioCtrl.alumno}"
+							disabled="#{usuarioCtrl.alumno and usuarioCtrl.profesor and not usuarioCtrl.administrador}"
+							value="#{seguimientoCtrl.seguimientoFiltro.coordinador.identificacion}"
+							style="width:250px">
+							<f:selectItem />
+							<f:selectItems value="#{seguimientoCtrl.coordinadorLista}"
+								var="item" itemLabel="#{item.identificacion} - #{item.nombre}"
+								itemValue="#{item.identificacion}" />
+						</p:selectOneMenu>
+						<p:outputLabel value="#{etiquetas['director']}"
+							rendered="#{not usuarioCtrl.profesor and not usuarioCtrl.alumno and not usuarioCtrl.coordinador}" />
+						<p:selectOneMenu id="director"
+							rendered="#{not usuarioCtrl.profesor and not usuarioCtrl.alumno and not usuarioCtrl.coordinador}"
+							disabled="#{not usuarioCtrl.director and not usuarioCtrl.administrador}"
+							value="#{seguimientoCtrl.seguimientoFiltro.director.identificacion}"
+							style="width:250px">
+							<f:selectItem />
+							<f:selectItems value="#{seguimientoCtrl.directorLista}"
+								var="item" itemLabel="#{item.identificacion} - #{item.nombre}"
+								itemValue="#{item.identificacion}" />
+						</p:selectOneMenu>
+					</h:panelGrid>
+				</h:panelGrid>
+				<h:panelGrid columns="2">
+					<p:commandButton value="Nuevo Registro"
+						action="/paginas/seguimiento/seguimiento?faces-redirect=true"
+						title="#{etiquetas['crear.nuevo']}" immediate="true">
+					</p:commandButton>
+					<p:commandButton value="Buscar" action="#{seguimientoCtrl.buscar}"
+						title="#{etiquetas.buscar}">
+						<p:ajax update="itemsPanel" process="gridFiltros" />
+					</p:commandButton>
+				</h:panelGrid>
+			</h:panelGrid>
+
+			<h:panelGroup id="itemsPanel">
+
+
+				<p:dataTable id="itemsTable"
+					emptyMessage="#{etiquetas['no.existen.registros']}"
+					value="#{seguimientoCtrl.seguimientoLista}" var="item"
+					style="width:100%"
+					paginatorTemplate="{CurrentPageReport}  {FirstPageLink} {PreviousPageLink} {PageLinks} {NextPageLink} {LastPageLink} "
+					paginator="true" rows="10">
+					<p:column style="width:100px;">
+						<f:facet name="header">
+							<h:outputText value="#{etiquetas['semestre']}" />
+						</f:facet>
+						<h:outputText value="#{item.semestre.nombre}" />
+					</p:column>
+					<p:column style="width:200px;">
+						<f:facet name="header">
+							<h:outputText value="#{etiquetas['carrera']}" />
+						</f:facet>
+						<h:outputText value="#{item.carrera.nombre}" />
+					</p:column>
+					<p:column style="width:200px;">
+						<f:facet name="header">
+							<h:outputText value="#{etiquetas['materia']}" />
+						</f:facet>
+						<h:outputText
+							value="#{item.materia.codigo} - #{item.materia.nombre}" />
+					</p:column>
+					<p:column style="width:200px;">
+						<f:facet name="header">
+							<h:outputText value="#{etiquetas['profesor']}" />
+						</f:facet>
+						<h:outputText
+							value="#{item.profesor.identificacion} - #{item.profesor.nombre} #{item.profesor.apellido}" />
+					</p:column>
+					<p:column style="width:200px;"
+						rendered="#{not usuarioCtrl.profesor}">
+						<f:facet name="header">
+							<h:outputText value="#{etiquetas['alumno']}" />
+						</f:facet>
+						<h:outputText
+							value="#{item.alumno.identificacion} - #{item.alumno.nombre} #{item.alumno.apellido}" />
+					</p:column>
+					<p:column style="width:200px;"
+						rendered="#{not usuarioCtrl.profesor and not usuarioCtrl.alumno}">
+						<f:facet name="header">
+							<h:outputText value="#{etiquetas['coordinador']}" />
+						</f:facet>
+						<h:outputText
+							value="#{item.coordinador.identificacion} - #{item.coordinador.nombre} #{item.coordinador.apellido}" />
+					</p:column>
+					<p:column style="width:200px;"
+						rendered="#{not usuarioCtrl.profesor and not usuarioCtrl.alumno}">
+						<f:facet name="header">
+							<h:outputText value="#{etiquetas['director']}" />
+						</f:facet>
+						<h:outputText
+							value="#{item.director.identificacion} - #{item.director.nombre} #{item.director.apellido}" />
+					</p:column>
+					<p:column styleClass="columnaCentrada" style="width:150px;">
+						<f:facet name="header">
+							<h:outputText value="#{etiquetas['actualizarSeguimiento']}"
+								rendered="#{(usuarioCtrl.profesor and not usuarioCtrl.coordinador and not usuarioCtrl.director) or usuarioCtrl.alumno}" />
+							<h:outputText value="#{etiquetas['verSeguimiento']}"
+								rendered="#{usuarioCtrl.coordinador or usuarioCtrl.director or usuarioCtrl.administrador}" />
+						</f:facet>
+						<h:commandLink action="#{seguimientoCtrl.editar}"
+							title="#{etiquetas.editar}">
+							<h:graphicImage value="/img/edit.png" id="editImage"
+								style="width:20px; height:20px" />
+						</h:commandLink>
+					</p:column>
+					<p:column styleClass="columnaCentrada" style="width:350px;"
+						rendered="#{usuarioCtrl.coordinador or usuarioCtrl.director}">
+						<f:facet name="header">
+							<h:outputText value="#{etiquetas['calificarSeguimiento']}"
+								rendered="#{usuarioCtrl.coordinador or usuarioCtrl.director}" />
+						</f:facet>
+						<h:panelGrid id="columnas" columns="2"
+							columnClasses="form-label,form-input">
+							<p:selectBooleanCheckbox value="#{item.checkCoordinador1}"
+								rendered="#{usuarioCtrl.coordinador}">
+								<f:ajax event="change" render="columnas"
+									listener="#{seguimientoCtrl.guardaCalificacion}" />
+							</p:selectBooleanCheckbox>
+							<h:inputTextarea value="#{item.comentarioCoordinador1}"
+								disabled="#{!item.checkCoordinador1}"
+								rendered="#{usuarioCtrl.coordinador}">
+								<f:ajax event="change" render="columnas"
+									listener="#{seguimientoCtrl.guardaCalificacion}" />
+							</h:inputTextarea>
+
+							<p:selectBooleanCheckbox value="#{item.checkCoordinador2}"
+								rendered="#{usuarioCtrl.coordinador}">
+								<f:ajax event="change" render="columnas"
+									listener="#{seguimientoCtrl.guardaCalificacion}" />
+							</p:selectBooleanCheckbox>
+							<h:inputTextarea value="#{item.comentarioCoordinador2}"
+								disabled="#{!item.checkCoordinador2}"
+								rendered="#{usuarioCtrl.coordinador}">
+								<f:ajax event="change" render="columnas"
+									listener="#{seguimientoCtrl.guardaCalificacion}" />
+							</h:inputTextarea>
+
+							<p:selectBooleanCheckbox value="#{item.checkCoordinador3}"
+								rendered="#{usuarioCtrl.coordinador}">
+								<f:ajax event="change" render="columnas"
+									listener="#{seguimientoCtrl.guardaCalificacion}" />
+							</p:selectBooleanCheckbox>
+							<h:inputTextarea value="#{item.comentarioCoordinador3}"
+								disabled="#{!item.checkCoordinador3}"
+								rendered="#{usuarioCtrl.coordinador}">
+								<f:ajax event="change" render="columnas"
+									listener="#{seguimientoCtrl.guardaCalificacion}" />
+							</h:inputTextarea>
+
+
+							<p:selectBooleanCheckbox value="#{item.checkDirector}"
+								rendered="#{usuarioCtrl.director}">
+								<f:ajax event="change" render="columnas"
+									listener="#{seguimientoCtrl.guardaCalificacion}" />
+							</p:selectBooleanCheckbox>
+							<h:inputTextarea value="#{item.comentarioDirector}"
+								disabled="#{!item.checkDirector}"
+								rendered="#{usuarioCtrl.director}">
+								<f:ajax event="change" render="columnas"
+									listener="#{seguimientoCtrl.guardaCalificacion}" />
+							</h:inputTextarea>
+						</h:panelGrid>
+					</p:column>
+					<p:column style="width:80px;"
+						rendered="#{not usuarioCtrl.profesor and not usuarioCtrl.alumno}">
+						<f:facet name="header">
+							<h:outputText value="#{etiquetas['estado']}" />
+						</f:facet>
+						<h:outputText value="#{etiquetas[item.estado.etiqueta]}" />
+					</p:column>
+					<p:column styleClass="columnaCentrada"
+						rendered="#{sesionCtrl.administrador}"
+						headerText="#{etiquetas['eliminar.sistema']}" style="width:100px;">
+						<h:commandLink
+							actionListener="#{seguimientoCtrl.eliminarSeguimiento}"
+							title="#{etiquetas['eliminar.sistema']}"
+							onclick="if(!confirm('#{mensajes['esta.seguro']}'))return false;">
+							<h:graphicImage value="/img/delete.png" id="trashImage"
+								style="width:20px; height:20px" />
+							<f:ajax render="@form" />
+						</h:commandLink>
+					</p:column>
+				</p:dataTable>
+			</h:panelGroup>
+		</h:form>
+	</ui:define>
+</ui:composition>

@@ -1,0 +1,325 @@
+<ui:composition xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:ui="http://java.sun.com/jsf/facelets"
+	xmlns:h="http://java.sun.com/jsf/html"
+	xmlns:f="http://java.sun.com/jsf/core"
+	template="/template/general.xhtml" xmlns:p="http://primefaces.org/ui">
+
+	<ui:define name="content">
+	<style type="text/css">
+      html, body { height: 100%; margin: 0; padding: 0; }
+      #map { height: 100%; }
+    </style>
+     <div id="map"></div>
+    <script async defer
+      src="https://maps.googleapis.com/maps/api/js?key=AIzaSyC_utMGsrbWjkTFthrTR4rfX8khdRgt6S8&callback=initMap">
+    </script>
+			
+		<script type="text/javascript">
+		var map;
+		function initMap() {
+		  map = new google.maps.Map(document.getElementById('map'), {
+		    center: {lat: -34.397, lng: 150.644},
+		    zoom: 8
+		  });
+		}
+
+		
+var geocoder;
+
+var tiempo = window.setInterval("myFunction()", 100);
+
+function myFunction() {
+if (navigator.geolocation) {
+    var location_timeout = setTimeout("geolocFail()", 10000);
+
+    navigator.geolocation.getCurrentPosition(function(position) {
+        clearTimeout(location_timeout);
+        var lat = position.coords.latitude;
+        var lng = position.coords.longitude;
+        console.log("lat: "+lat+"  "+"lng: "+lng);
+      // window.alert("lat: "+lat+"  "+"lng: "+lng);
+       //*********************ESTACION LA Y*****************
+        if(lat &gt; -0.1655 ){//mas 
+        //	window.alert("Entro 1");
+       	 if(lat &lt; -0.1625){ //menos  
+       		//window.alert("Entro 2");
+       		if(lng &gt; -78.4858){ //mas
+       			//window.alert("Entro 3");
+        	if(lng &lt; -78.4845){//menos 
+            	//window.alert("Entro 4");
+        		window.alert("Entro 1");
+        		document.getElementById('audio1').play();
+            }
+        	}
+       	 }
+        }
+        //*********************PARADA MARIANA DE JESUS*****************
+        if(lat &gt; -0.1890){ //mas  
+       	 if(lat &lt; -0.1881 ){//menos 
+           		if(lng &gt; -78.4923){ //mas
+            		if(lng &lt; -78.4917){//menos 
+            			window.alert("Entro 2");
+            		document.getElementById('audio2').play();
+                  }
+            	}
+           	  }
+            }
+
+        //*********************PARADA CUERO Y CAICEDO*****************
+        if(lat &gt; -0.1923){ //mas  
+        if(lat &lt; -0.1915 ){//menos 
+           		if(lng &gt; -78.4933){ //mas
+            		if(lng &lt; -78.4930){//menos 
+            			window.alert("Entro 3");
+            		document.getElementById('audio3').play();
+                  }
+            	}
+           	  }
+            }
+
+        //*********************PARADA COLON*****************
+        if(lat &gt; -0.1985){ //mas  
+        if(lat &lt; -0.1975 ){//menos 
+           		if(lng &gt; -78.4963){ //mas
+            		if(lng &lt; -78.4955){//menos 
+            			window.alert("Entro 4");
+            		document.getElementById('audio4').play();
+                  }
+            	}
+           	  }
+            }
+
+        //*********************PARADA SANTA CLARA*****************
+        if(lat &gt; -0.2012){ //mas  
+        if(lat &lt; -0.2004 ){//menos 
+           		if(lng &gt; -78.4977){ //mas
+            		if(!lng &lt; -78.4969){//menos 
+            			window.alert("Entro 5");
+            		document.getElementById('audio5').play();
+                  }
+            	}
+           	  }
+            }
+
+      //*********************PARADA MARISCAL*****************
+      if(lat &gt; -0.2048){ //mas  
+        if(lat &lt; -0.2040 ){//menos 
+           		if(lng &gt; -78.4991){ //mas
+            		if(lng &lt; -78.4984){//menos 
+            			window.alert("Entro 6");
+            		document.getElementById('audio6').play();
+                  }
+            	}
+           	  }
+            }
+
+        //*********************PARADA MARISCAL*****************
+         if(lat &gt; -0.2048){ //mas  
+        if(lat &lt; -0.2040 ){//menos 
+           		if(lng &gt; -78.4991){ //mas
+            		if(lng &lt; -78.4984){//menos 
+            			window.alert("Entro 7");
+            		document.getElementById('audio7').play();
+                  }
+            	}
+           	  }
+            }
+
+        //*********************PARADA EL EJIDO*****************
+       
+       if(lat &gt; -0.2092){ //mas  
+        if(lat &lt; -0.2083 ){//menos
+           		if(lng &gt; -78.5006){ //mas
+            		if(lng &lt; -78.4999){//menos 
+            			window.alert("Entro 8");
+            		document.getElementById('audio8').play();
+                  }
+            	}
+           	  }
+            }
+
+
+        //*********************PARADA LA ALAMEDA*****************
+        if(lat &gt; -0.2141){ //mas 
+        if(lat &lt; -0.2134 ){//menos 
+           		if(lng &gt; -78.5031){ //mas
+            		if(lng &lt; -78.5026){//menos 
+            			window.alert("Entro 9");
+            		document.getElementById('audio9').play();
+                  }
+            	}
+           	  }
+            }
+
+
+        //*********************PARADA BANCO CENTRAL*****************
+        if(lat &gt; -0.2172){ //mas  
+        if(lat &lt; -0.2167 ){//menos 
+           		if(lng &gt; -78.5054){ //mas
+            		if(lng &lt; -78.5050){//menos 
+            			window.alert("Entro 10");
+            		document.getElementById('audio10').play();
+                  }
+            	}
+           	  }
+            }
+
+        //*********************PARADA HERMANO MIGUEL*****************
+        if(lat &gt; -0.2180){ //mas 
+        if(lat &lt; -0.2175 ){//menos 
+           		if(lng &gt; -78.5061){ //mas
+            		if(lng &lt; -78.5057){//menos 
+            			window.alert("Entro 11");
+            		document.getElementById('audio11').play();
+                  }
+            	}
+           	  }
+            }
+
+
+        //*********************PARADA PLAZA GRANDE*****************
+        if(lat &gt; -0.2207){ //mas  
+        if(lat &lt; -0.2202 ){//menos 
+           		if(lng &gt; -78.5110){ //mas
+            		if(lng &lt; -78.5105){//menos 
+            			window.alert("Entro 12");
+            		document.getElementById('audio12').play();
+                  }
+            	}
+           	  }
+            }
+
+        //*********************PARADA SANTO DOMINGO*****************
+        if(lat &gt; -0.2242){ //mas  
+        if(lat &lt; -0.2232 ){//menos 
+           		if(lng &gt; -78.5134){ //mas
+            		if(lng &lt; -78.5123){//menos 
+            			window.alert("Entro 13");
+            		document.getElementById('audio13').play();
+                  }
+            	}
+           	  }
+            }
+
+        //*********************PARADA CUMANDA*****************
+        if(lat &gt; -0.2266){ //mas  
+        if(lat &lt; -0.2263 ){//menos 
+           		if(lng &gt; -78.5127){ //mas
+            		if(lng &lt; -78.5131){//menos 
+            			window.alert("Entro 14");
+            		document.getElementById('audio14').play();
+                  }
+            	}
+           	  }
+            }
+
+        //*********************PARADA JEFERSON PEREZ*****************
+        if(lat &gt; -0.2344){ //mas  
+        if(lat &lt; -0.2235 ){//menos 
+           		if(lng &gt; -78.5145){ //mas
+            		if(lng &lt; -78.5139){//menos 
+            			window.alert("Entro 15");
+            		document.getElementById('audio15').play();
+                  }
+            	}
+           	  }
+            }
+
+        //*********************PARADA VILLAFLORA*****************
+       if(lat &gt; -0.2451){ //mas  
+        if(lat &lt; -0.2439 ){//menos 
+           		if(lng &gt; -78.5193){ //mas
+            		if(lng &lt; -78.5185){//menos 
+            			window.alert("Entro 16");
+            		document.getElementById('audio16').play();
+                  }
+            	}
+           	  }
+            }
+
+      //*********************ESTACION TERMINAL SUR*****************
+        if(lat &gt; -0.2544){ //mas  
+        if(lat &lt; -0.2517 ){//menos 
+           		if(lng &gt; -78.5219){ //mas
+            		if(lng &lt; -78.5198){//menos 
+            			window.alert("Entro 17");
+            		document.getElementById('audio17').play();
+                  }
+            	}
+           	  }
+            }
+
+      //*********************PRUEBA CASA*****************
+        if(lat &gt; -0.2040){ //mas 
+        	//window.alert("Entro 18 1"); 
+            if(lat &lt; -0.2020 ){//menos 
+            	//window.alert("Entro 18 2");
+               		if(lng &gt; -78.4840){ //mas
+               		//	window.alert("Entro 18 3");
+                		if(lng &lt; -78.4810){//menos 
+                		//	window.alert("Entro 18 4");
+                		document.getElementById('audio18').play();
+                      }
+                	}
+               	  }
+                }
+    }, function(error) {
+    });
+} 
+}
+
+
+/*if (navigator.geolocation) {
+navigator.geolocation.getCurrentPosition(successFunction, errorFunction);
+}
+//Get the latitude and the longitude;
+function successFunction(position) {
+var lat = position.coords.latitude;
+var lng = position.coords.longitude;
+codeLatLng(lat, lng)
+
+}
+function errorFunction(){
+alert("Geocoder failed");
+} */
+</script>
+
+		<h:form id="formParametros">
+			<p id="demo"></p>
+			<h1>PARADAS TROLEBUS</h1>
+			<p:growl id="growl" autoUpdate="true" />
+			<audio id="audio1" src="sonido/audio1.wav" />
+			<audio id="audio2" src="sonido/audio2.wav" />
+			<audio id="audio3" src="sonido/audio3.wav" />
+			<audio id="audio4" src="sonido/audio4.wav" />
+			<audio id="audio5" src="sonido/audio5.wav" />
+			<audio id="audio6" src="sonido/audio6.wav" />
+			<audio id="audio7" src="sonido/audio7.wav" />
+			<audio id="audio8" src="sonido/audio8.wav" />
+			<audio id="audio9" src="sonido/audio9.wav" />
+			<audio id="audio1O" src="sonido/audio10.wav" />
+			<audio id="audio11" src="sonido/audio11.wav" />
+			<audio id="audio12" src="sonido/audio12.wav" />
+			<audio id="audio13" src="sonido/audio13.wav" />
+			<audio id="audio14" src="sonido/audio14.wav" />
+			<audio id="audio15" src="sonido/audio15.wav" />
+			<audio id="audio16" src="sonido/audio16.wav" />
+			<audio id="audio17" src="sonido/audio17.wav" />
+			<audio id="audio18" src="sonido/audio18.wav" />
+
+			<br />
+
+			<br />
+			<br />
+			<h:outputText
+				value="Geolocalización de Paradas del Trolebus para personas no videntes" />
+			<br />
+			<br />
+
+
+
+		</h:form>
+
+	</ui:define>
+
+</ui:composition>

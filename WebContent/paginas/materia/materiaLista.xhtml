@@ -1,0 +1,88 @@
+<ui:composition xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:ui="http://java.sun.com/jsf/facelets"
+	xmlns:h="http://java.sun.com/jsf/html"
+	xmlns:f="http://java.sun.com/jsf/core"
+	xmlns:p="http://primefaces.org/ui" template="/WEB-INF/template.xhtml">
+	<ui:define name="content">
+		<h:form id="formMateriaLista">
+		<h1>#{etiquetas['materias']}</h1>
+			<p:growl id="msg" autoUpdate="true" />
+			<h:panelGrid columns="1">
+				<h:panelGrid columns="2" id="gridFiltros" style="width: 700px">
+					<h:panelGrid columns="2" columnClasses="form-label,form-input">
+						<p:outputLabel value="#{etiquetas['codigoMateria']}" />
+						<p:inputText style="width:120px"
+							value="#{materiaCtrl.materiaFiltro.codigo}"></p:inputText>
+						<p:outputLabel value="#{etiquetas['nombre']}" />
+						<p:inputText value="#{materiaCtrl.materiaFiltro.nombre}"
+							style="width:120px" />
+					</h:panelGrid>
+				</h:panelGrid>
+				<h:panelGrid columns="2">
+					<p:commandButton value="Nuevo Registro"
+						action="/paginas/materia/materia?faces-redirect=true"
+						title="#{etiquetas['crear.nuevo']}" immediate="true">
+					</p:commandButton>
+					<p:commandButton value="Buscar" action="#{materiaCtrl.buscar}"
+						title="#{etiquetas.buscar}">
+						<p:ajax update="itemsPanel" process="gridFiltros" />
+					</p:commandButton>
+				</h:panelGrid>
+			</h:panelGrid>
+
+			<h:panelGroup id="itemsPanel">
+
+
+				<p:dataTable id="itemsTable"
+					emptyMessage="#{etiquetas['no.existen.registros']}"
+					value="#{materiaCtrl.materias}" var="item" style="width:100%"
+					paginatorTemplate="{CurrentPageReport}  {FirstPageLink} {PreviousPageLink} {PageLinks} {NextPageLink} {LastPageLink} "
+					paginator="true" rows="10" >
+					<p:column headerText="#{etiquetas['codigoMateria']}" style="width:100px;">
+						<h:outputText value="#{item.codigo}" />
+					</p:column>
+					<p:column headerText="#{etiquetas['nombre']}" style="width:150px;">
+						<h:outputText value="#{item.nombre}" />
+					</p:column>
+					<p:column headerText="#{etiquetas['carrera']}" style="width:150px;">
+						<h:outputText value="#{item.carrera.nombre}" />
+					</p:column>
+					<p:column headerText="#{etiquetas['area']}" style="width:150px;">
+						<h:outputText value="#{item.area.nombre}" />
+					</p:column>
+					<p:column headerText="#{etiquetas['creditos']}" style="width:50px;">
+						<h:outputText value="#{item.creditos}" />
+					</p:column>
+					<p:column headerText="#{etiquetas['nivel']}" style="width:100px;">
+						<h:outputText value="#{item.nivel.nombre}" />
+					</p:column>
+					<p:column headerText="#{etiquetas['estado']}" style="width:100px;">
+						<h:outputText value="#{etiquetas[item.estado.etiqueta]}" />
+					</p:column>
+					<p:column headerText="#{etiquetas['contenido']}" style="width:70px;" styleClass="columnaCentrada">
+						<h:commandLink action="#{materiaCtrl.navegarSyllabus}"
+							title="#{etiquetas.syllabus}">
+							<h:graphicImage value="/img/syllabus.png" id="syllabusImage"
+								style="width:20px; height:20px" />
+						</h:commandLink>
+					</p:column>
+					<p:column headerText="#{etiquetas['editar']}" style="width:70px;" styleClass="columnaCentrada">
+						<h:commandLink action="#{materiaCtrl.editar}"
+							title="#{etiquetas.editar}">
+							<h:graphicImage value="/img/edit.png" id="editImage" style="width:20px; height:20px"/>
+						</h:commandLink>
+					</p:column>
+					<p:column  style="width:70px;" styleClass="columnaCentrada"
+						headerText="#{etiquetas['eliminar.sistema']}">
+						<h:commandLink actionListener="#{materiaCtrl.eliminarMateria}"
+							title="#{etiquetas['eliminar.sistema']}"
+							onclick="if(!confirm('#{mensajes['esta.seguro']}'))return false;">
+							<h:graphicImage value="/img/delete.png" id="trashImage" style="width:20px; height:20px"/>
+							<f:ajax render="@form" />
+						</h:commandLink>
+					</p:column>
+				</p:dataTable>
+			</h:panelGroup>
+		</h:form>
+	</ui:define>
+</ui:composition>

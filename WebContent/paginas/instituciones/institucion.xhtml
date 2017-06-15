@@ -1,0 +1,42 @@
+<ui:composition xmlns="http://www.w3.org/1999/xhtml"
+                xmlns:ui="http://java.sun.com/jsf/facelets"
+                xmlns:h="http://java.sun.com/jsf/html"
+                xmlns:f="http://java.sun.com/jsf/core"
+                template="/template/general.xhtml"
+                xmlns:p="http://primefaces.org/ui">
+
+    <ui:define name="title">
+        <h:outputText value="#{etiquetas['institucion.administracion']}" />
+    </ui:define>
+
+    <ui:define name="content">
+        <h:form id="formInstitucion">
+            <p:growl id="growl" autoUpdate="true"/>  
+
+            <div align="center">
+                <br/>
+                <h:panelGrid id="datosGenerales" columns="2" columnClasses="form-label,form-input,form-label,form-input" >
+                    <h:outputLabel value="*#{etiquetas['institucion.nombre']}:"/>
+                    <h:inputText id="nombreParametro" value="#{institucionCtrl.institucion.nombre}" required="true"  requiredMessage="#{etiquetas['parametro.nombre']} #{mensajes['requerido.masculino']}" />
+                    <h:outputLabel value="*#{etiquetas['estado']}:"/>
+                    <h:selectOneMenu id="tipoParam" value="#{institucionCtrl.institucion.estado}">
+                        <f:selectItems value="#{selectItemCtrl.estadoEnum}"/>
+                    </h:selectOneMenu>
+                    <h:outputLabel value="#{etiquetas['correoElectronico']}:"/>
+                    <h:inputText value="#{institucionCtrl.institucion.email}"/>
+                </h:panelGrid>
+                <h:outputText value="#{etiquetas['campos.obligatorios']}"  />
+                <br/>
+                <br/>
+                <!--<p:commandButton  value="#{etiquetas['guardar']}" action="#{institucionCtrl.guardar}"/>  -->
+                <p:commandLink action="#{institucionCtrl.guardar}" title="#{etiquetas.guardar}" update="growl">
+                    <h:panelGrid style="text-align:center">
+                        <h:graphicImage value="/img/guardar.png" title="#{etiquetas['guardar']}"/>
+                        <h:outputText value="#{etiquetas['guardar']}"/>
+                    </h:panelGrid>
+                </p:commandLink>
+            </div>
+        </h:form>
+    </ui:define>
+
+</ui:composition>

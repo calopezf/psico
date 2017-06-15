@@ -1,0 +1,177 @@
+<ui:composition xmlns="http://www.w3.org/1999/xhtml"
+                xmlns:ui="http://java.sun.com/jsf/facelets"
+                xmlns:h="http://java.sun.com/jsf/html"
+                xmlns:f="http://java.sun.com/jsf/core"
+                xmlns:p="http://primefaces.org/ui"
+                template="/template/general.xhtml">
+
+    <ui:define name="title">
+        <h:form>
+            <f:subview id="subLinkPersona" rendered="#{param.idPersona!=null}">
+                <h:commandLink action="/paginas/ficha/fichaLista.jsf" value="#{etiquetas['historial']}">
+                    <f:param id="idPersona" name="idPersona" value="#{param.idPersona}"/>
+                </h:commandLink>
+                |
+            </f:subview>
+            <h:outputText value="#{etiquetas['nueva.ficha']}" rendered="#{param.idFicha==null}" />
+            <h:outputText value="#{etiquetas['edicion.ficha']}" rendered="#{param.idFicha!=null}" />
+        </h:form>
+    </ui:define>
+
+    <ui:define name="content">
+        <h:form id="formFicha">
+
+            <div align="center">                
+                <table>
+                    <tr>
+                        <td>
+                            <div align="center" class="#{fichaCtrl.classInformacionPersonal}" onmouseover="cambiaColorFoncdoCeldaHvMouseOver(this)" onmouseout="cambiaColorFoncdoCeldaHvMouseOut(this)">
+                                <p:commandLink action="#{fichaCtrl.guardar}" partialSubmit="true" process=":formFicha :formPestana" update=":formFicha :formPestana:panelCambia">
+                                    <h:outputText value="#{etiquetas['datos.personales']}" />
+                                    <f:setPropertyActionListener value="/paginas/ficha/informacionPersonal.xhtml" target="#{fichaCtrl.areaCargadaTarget}"/>
+                                </p:commandLink> 
+
+                            </div>
+                        </td>
+                        <td>
+                            <div align="center" class="#{fichaCtrl.classDireccion}" onmouseover="cambiaColorFoncdoCeldaHvMouseOver(this)" onmouseout="cambiaColorFoncdoCeldaHvMouseOut(this)">
+                                <p:commandLink rendered="#{fichaCtrl.ficha.id!=null}" action="#{fichaCtrl.guardar}" partialSubmit="true" process=":formFicha :formPestana" update=":formFicha :formPestana:panelCambia">
+                                    <h:outputText value="#{etiquetas['datos.domicilio']}"/>
+                                    <f:setPropertyActionListener value="/paginas/ficha/direccion.xhtml" target="#{fichaCtrl.areaCargadaTarget}"/>
+                                </p:commandLink>
+                                <f:subview id="sub2" rendered="#{fichaCtrl.ficha.id==null}">
+                                    <h:outputText value="#{etiquetas['datos.domicilio']}"/>
+                                </f:subview>
+                            </div>   
+                        </td>
+                        <td>
+                            <div align="center" class="#{fichaCtrl.classInformacionHogar}" onmouseover="cambiaColorFoncdoCeldaHvMouseOver(this)" onmouseout="cambiaColorFoncdoCeldaHvMouseOut(this)">
+                                <p:commandLink styleClass="hojaVidaTitle" rendered="#{fichaCtrl.ficha.id!=null and !fichaCtrl.ficha.datosPersonales.cabezaHogar}" action="#{fichaCtrl.guardar}" partialSubmit="true" process=":formFicha :formPestana" update=":formFicha :formPestana:panelCambia">
+                                    <h:outputText value="#{etiquetas['informacion.hogar']}"/>
+                                    <f:setPropertyActionListener value="/paginas/ficha/informacionHogar.xhtml" target="#{fichaCtrl.areaCargadaTarget}"/>
+                                </p:commandLink>
+                                <f:subview id="sub3" rendered="#{fichaCtrl.ficha.id==null or fichaCtrl.ficha.datosPersonales.cabezaHogar}">
+                                    <h:outputText value="#{etiquetas['informacion.hogar']}"/>
+                                </f:subview>
+                            </div>
+                        </td>
+                        <td>
+                            <div align="center" class="#{fichaCtrl.classInformacionEducacion}" onmouseover="cambiaColorFoncdoCeldaHvMouseOver(this)" onmouseout="cambiaColorFoncdoCeldaHvMouseOut(this)">
+                                <p:commandLink styleClass="hojaVidaTitle" rendered="#{fichaCtrl.ficha.id!=null}" action="#{fichaCtrl.guardar}" partialSubmit="true" process=":formFicha :formPestana" update=":formFicha :formPestana:panelCambia">
+                                    <h:outputText value="#{etiquetas['informacion.educacion']}"/>
+                                    <f:setPropertyActionListener value="/paginas/ficha/informacionEducacion.xhtml" target="#{fichaCtrl.areaCargadaTarget}"/>
+                                </p:commandLink>
+                                <f:subview id="sub4" rendered="#{fichaCtrl.ficha.id==null}">
+                                    <h:outputText value="#{etiquetas['informacion.educacion']}"/>
+                                </f:subview>
+                            </div>
+                        </td>
+                        <td>
+                            <div align="center" class="#{fichaCtrl.classInfoActividadEconomica}" onmouseover="cambiaColorFoncdoCeldaHvMouseOver(this)" onmouseout="cambiaColorFoncdoCeldaHvMouseOut(this)">
+                                <p:commandLink styleClass="hojaVidaTitle" rendered="#{fichaCtrl.ficha.id!=null}" action="#{fichaCtrl.guardar}" partialSubmit="true" process=":formFicha :formPestana" update=":formFicha :formPestana:panelCambia">
+                                    <h:outputText value="#{etiquetas['actividad.economica']}"/>
+                                    <f:setPropertyActionListener value="/paginas/ficha/actividadEconomica.xhtml" target="#{fichaCtrl.areaCargadaTarget}"/>
+                                </p:commandLink> 
+                                <f:subview id="sub5" rendered="#{fichaCtrl.ficha.id==null}">
+                                    <h:outputText value="#{etiquetas['actividad.economica']}"/>
+                                </f:subview>
+                            </div>
+                        </td>
+                        <!--                        <td>
+                                                    <div align="center" class="cell-hoja-vida" onmouseover="cambiaColorFoncdoCeldaHvMouseOver(this)" onmouseout="cambiaColorFoncdoCeldaHvMouseOut(this)">
+                                                        <p:commandLink styleClass="hojaVidaTitle" ajax="false" rendered="#{fichaCtrl.ficha.id!=null}" action="#{fichaCtrl.guardar}" partialSubmit="true" process=":formFicha :formPestana" update=":formFicha :formPestana:panelCambia">
+                                                            <h:graphicImage value="/img/capacitacion.png" width="32px"/><br/>
+                                                            <h:outputText value="#{etiquetas['condiciones.trabajo']}"/>
+                                                            <f:setPropertyActionListener value="/paginas/ficha/condicionesTrabajo.xhtml" target="#{fichaCtrl.areaCargadaTarget}"/>
+                                                        </p:commandLink>
+                                                        <f:subview id="sub6" rendered="#{fichaCtrl.ficha.id==null}">
+                                                            <h:graphicImage value="/img/capacitacion.png" title="Guarde primero por favor para habilitar"/><br/>
+                                                            <h:outputText value="#{etiquetas['condiciones.trabajo']}"/>
+                                                        </f:subview>
+                                                    </div>
+                                                </td>-->
+                        <td>
+                            <div align="center" class="#{fichaCtrl.classInformacionSalud}" onmouseover="cambiaColorFoncdoCeldaHvMouseOver(this)" onmouseout="cambiaColorFoncdoCeldaHvMouseOut(this)">
+                                <p:commandLink styleClass="hojaVidaTitle" rendered="#{fichaCtrl.ficha.id!=null}" action="#{fichaCtrl.guardar}" partialSubmit="true" process=":formFicha :formPestana" update=":formFicha :formPestana:panelCambia">
+                                    <h:outputText value="#{etiquetas['informacion.salud']}"/>
+                                    <f:setPropertyActionListener value="/paginas/ficha/informacionSalud.xhtml" target="#{fichaCtrl.areaCargadaTarget}"/>
+                                </p:commandLink>
+                                <f:subview id="sub6" rendered="#{fichaCtrl.ficha.id==null}">
+                                    <h:outputText value="#{etiquetas['informacion.salud']}"/>
+                                </f:subview>
+                            </div>
+                        </td>
+                        <td>
+                            <div align="center" class="#{fichaCtrl.classInformacionParticipacion}" onmouseover="cambiaColorFoncdoCeldaHvMouseOver(this)" onmouseout="cambiaColorFoncdoCeldaHvMouseOut(this)">
+                                <p:commandLink styleClass="hojaVidaTitle" rendered="#{fichaCtrl.ficha.id!=null}" action="#{fichaCtrl.guardar}" partialSubmit="true" process=":formFicha :formPestana" update=":formFicha :formPestana:panelCambia">
+                                    <h:outputText value="#{etiquetas['participacion']}"/>
+                                    <f:setPropertyActionListener value="/paginas/ficha/informacionParticipacion.xhtml" target="#{fichaCtrl.areaCargadaTarget}"/>
+                                </p:commandLink>
+                                <f:subview id="sub7" rendered="#{fichaCtrl.ficha.id==null}">
+                                    <h:outputText value="#{etiquetas['participacion']}"/>
+                                </f:subview>
+                            </div>
+                        </td>
+                    </tr>
+                </table>
+            </div>
+        </h:form>
+        <p:ajaxStatus onstart="loadingDialog.show();" onsuccess="loadingDialog.hide();"/>  
+        <p:dialog modal="true" widgetVar="loadingDialog" header="#{etiquetas['cargando']}" draggable="false" closable="false" width="200" height="50" resizable="false">
+            <br/>
+            <div align="center">
+                <p:graphicImage value="/img/ajax-loader.gif" />  
+            </div>
+            <br/>
+        </p:dialog>
+        <br/>
+        <h:form id="formPestana">
+            <h:panelGrid id="panelCambia" style="width:100%">
+
+                <ui:include src="/paginas/ficha/informacionPersonal.xhtml" />
+
+                <ui:include src="/paginas/ficha/direccion.xhtml" />
+
+                <ui:include src="/paginas/ficha/informacionHogar.xhtml" />
+
+                <ui:include src="/paginas/ficha/informacionEducacion.xhtml" />
+
+                <ui:include src="/paginas/ficha/actividadEconomica.xhtml"/>
+
+                <ui:include src="/paginas/ficha/informacionSalud.xhtml"/>
+
+                <ui:include src="/paginas/ficha/informacionParticipacion.xhtml"/>
+
+            </h:panelGrid>  
+        </h:form>
+
+
+        <p:dialog  id="datosMCDS" header="#{etiquetas['datos.mcds']}" widgetVar="datosMCDSDgl" modal="true" height="220" width="450">  
+            <div align="center">
+                <div class="titulo-caja">
+                    <h:outputText value="#{etiquetas['datos.mcds']}"/>
+                </div>
+                <br/>
+                <h:form id="datosMCDSForm">
+                    <h:panelGrid columns="2" columnClasses="etiquetaDatosMCDS,">
+                        <h:outputText value="#{etiquetas['certificado.numero']}:"/>
+                        <h:outputText value="#{fichaCtrl.respuestaMcds.certificado}"/>
+                        <h:outputText value="#{etiquetas['fecha.ultima.visita']}:"/>
+                        <h:outputText value="#{fichaCtrl.respuestaMcds.fechaencuesta}"/>
+                        <h:outputText value="#{etiquetas['documentacion']}:"/>
+                        <h:outputText value="#{fichaCtrl.respuestaMcds.tipodocumentopersona}"/>
+                        <h:outputText value="#{etiquetas['convive.con.madre']}:"/>
+                        <h:outputText value="#{fichaCtrl.respuestaMcds.convivemadre}"/>
+                        <h:outputText value="#{etiquetas['autodefinicion.etnica']}:"/>
+                        <h:outputText value="#{fichaCtrl.respuestaMcds.etnia}"/>
+                        <h:outputText value="#{etiquetas['asistencia.escolar']}:"/>
+                        <h:outputText value="#{fichaCtrl.respuestaMcds.asistenciaescolar}"/>
+                        <h:outputText value="#{etiquetas['carnet.conadis']}"/>
+                        <h:outputText value="#{fichaCtrl.respuestaMcds.carnetconadisMsp}"/>
+                    </h:panelGrid>
+                </h:form>
+            </div>
+        </p:dialog>
+    </ui:define>
+
+</ui:composition>

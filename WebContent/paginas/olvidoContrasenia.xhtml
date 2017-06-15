@@ -1,0 +1,72 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:h="http://java.sun.com/jsf/html"
+	xmlns:f="http://java.sun.com/jsf/core"
+	xmlns:ui="http://java.sun.com/jsf/facelets"
+	xmlns:p="http://primefaces.org/ui">
+
+<h:head>
+	<f:facet name="first">
+		<meta http-equiv="X-UA-Compatible" content="IE=edge" />
+		<meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
+		<meta name="viewport"
+			content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=0" />
+		<meta name="apple-mobile-web-app-capable" content="yes" />
+	</f:facet>
+	<title>PSICO</title>
+	<h:outputScript name="js/ripple.js" library="ultima-layout" />
+	<h:outputScript name="js/layout.js" library="ultima-layout" />
+</h:head>
+
+<h:body styleClass="login-body">
+	<div align="center">
+		<br /> <font size="5" color="white">MEDICIÓN Y EVALUACIÓN DE</font><br />
+		<font size="5" color="white">LOS ASPECTOS PSICOSOCIALES</font>
+	</div>
+
+	<div class="card login-panel ui-fluid">
+
+		<div class="ui-g-16">
+			<h:form id="formUsuario">
+				<p:growl id="growl" autoUpdate="true" />
+
+				<!-- Begin Right Column -->
+				<h:outputText value="#{etiquetas['ingresoCorreo']}" />
+				<h:panelGrid columns="2" styleClass="form-label,form-input">
+					<p:outputLabel value="#{etiquetas['correoElectronico']}*:" />
+
+					<p:inputText id="correo" value="#{usuarioCtrl.usuario.email}"
+						required="true"
+						requiredMessage="#{etiquetas['correoElectronico']} #{mensajes['requerido.masculino']}"
+						maxlength="10">
+					</p:inputText>
+					<br />
+					<br />
+					<br />
+				</h:panelGrid>
+				<h:panelGrid columns="2"
+					style="text-align: center;width:100%;font-size:12px">
+					<p:commandButton value="#{etiquetas['enviar']}"
+						action="#{usuarioCtrl.enviaContraseniaNueva}" update="@form" />
+					<p:commandButton value="Regresar"
+						action="/paginas/login?faces-redirect=true" immediate="true"
+						update="@form" process="@this" />
+
+				</h:panelGrid>
+
+
+			</h:form>
+
+		</div>
+	</div>
+	<div align="center">
+		<br /> <font size="5" color="white">Modelo V. Ponce</font> <br /> <br />
+		<font size="5" color="white">Metodología Psicométrica Integral
+			y Sistemática</font>
+	</div>
+	<h:outputStylesheet name="css/ripple.css" library="ultima-layout" />
+	<h:outputStylesheet name="css/layout-#{guestPreferences.theme}.css"
+		library="ultima-layout" />
+</h:body>
+
+</html>

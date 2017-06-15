@@ -1,0 +1,191 @@
+<div  xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:ui="http://java.sun.com/jsf/facelets"
+      xmlns:h="http://java.sun.com/jsf/html"
+      xmlns:f="http://java.sun.com/jsf/core"
+      xmlns:p="http://primefaces.org/ui" align="center">
+
+    <h:panelGrid id="grid1" rendered="#{fichaCtrl.areaCargada=='/paginas/ficha/informacionPersonal.xhtml'}">
+
+        <p:growl id="growl1" showDetail="false" sticky="false" />
+
+        <h:outputText value="#{etiquetas['informacion.personal.texto']}" rendered="#{fichaCtrl.persona.id==null}" />
+
+        <h:panelGrid columns="2" columnClasses="form-label-width,form-input" cellpadding="0" cellspacing="1">
+
+            <h:outputLabel  value="#{etiquetas['tipo.identificacion']}: "/>
+            <h:selectOneMenu   value="#{fichaCtrl.ficha.datosPersonales.tipoIdentificacion}" >
+                <f:selectItems value="#{selectItemCtrl.tipoIdentificacion}"/>
+                <p:ajax event="change" listener="#{fichaCtrl.generaSecuencia}" update="@form" /> 
+            </h:selectOneMenu>
+            <h:outputLabel  value="#{etiquetas['identificacion']}: "/>
+            <h:panelGrid columns="2" cellpadding="0" cellspacing="0">
+                <p:inputText id="txtIdentificacion" style="width:128px" value="#{fichaCtrl.ficha.datosPersonales.identificacion}" required="true" requiredMessage="#{etiquetas['identificacion']} #{mensajes['requerido.femenino']}" maxlength="10" onkeypress="return acceptNum(event)" disabled="#{fichaCtrl.bloqueaCedula == true or fichaCtrl.ficha.id!=null}">
+                    <p:ajax event="blur" listener="#{fichaCtrl.validarCedula}" update="@form" oncomplete="document.getElementById('formPestana:apPat').focus(); "/> 
+                </p:inputText>
+                <p:commandButton value="Existen Datos MCDS" rendered="false" onclick="datosMCDSDgl.show();" />
+            </h:panelGrid>
+
+            <h:outputLabel  value="#{etiquetas['apellido.paterno']}: "/>
+            <p:inputText  id="apPat" value="#{fichaCtrl.ficha.datosPersonales.apellidoPaterno}" required="true" requiredMessage="#{etiquetas['apellido.paterno']} #{mensajes['requerido.masculino']}" maxlength="50" onkeypress="return acceptText(event)" styleClass="inputUpper" disabled="#{fichaCtrl.cedulaValida == false}"/>
+            <h:outputLabel  value="#{etiquetas['apellido.materno']}: "/>
+            <p:inputText  value="#{fichaCtrl.ficha.datosPersonales.apellidoMaterno}" maxlength="50" onkeypress="return acceptText(event)" styleClass="inputUpper" disabled="#{fichaCtrl.cedulaValida == false}"/>                
+
+            <h:outputLabel  value="#{etiquetas['primer.nombre']}: "/>
+            <p:inputText  value="#{fichaCtrl.ficha.datosPersonales.primerNombre}" required="true" requiredMessage="#{etiquetas['primer.nombre']} #{mensajes['requerido.masculino']}" maxlength="50" onkeypress="return acceptText(event)" styleClass="inputUpper" disabled="#{fichaCtrl.cedulaValida == false}"/>                
+            <h:outputLabel  value="#{etiquetas['segundo.nombre']}: "/>
+            <p:inputText  value="#{fichaCtrl.ficha.datosPersonales.segundoNombre}" maxlength="50" onkeypress="return acceptText(event)" styleClass="inputUpper" disabled="#{fichaCtrl.cedulaValida == false}"/>  
+
+            <h:panelGroup id="panelFn">
+                <h:outputLabel id="fn" value="#{etiquetas['fecha.nacimiento']}: " rendered="#{!fichaCtrl.ficha.datosPersonales.desconoceEdad}"/>
+<!--                <h:outputLabel id="fnp" value="#{etiquetas['fecha.nacimiento.provicional']}" rendered="#{fichaCtrl.ficha.datosPersonales.desconoceEdad}"/>-->
+            </h:panelGroup>
+            <h:panelGrid id="panelFechas" columns="3">
+                <p:calendar id="calFecNac" value="#{fichaCtrl.ficha.datosPersonales.fechaNacimiento}" disabled="#{fichaCtrl.cedulaValida == false}" required="true" requiredMessage="#{etiquetas['fecha.nacimiento']} #{mensajes['requerido.masculino']}" rendered="#{!fichaCtrl.ficha.datosPersonales.desconoceEdad}">
+                    <p:ajax event="dateSelect" update="edad msgCalFecNac rangoEdad" />
+                    <p:ajax event="change" update="edad msgCalFecNac rangoEdad" />
+                    <f:validator validatorId="EdadValidator" />
+                </p:calendar>
+<!--                <p:calendar id="fecNac" value="#{fichaCtrl.ficha.datosPersonales.fechaNacimiento}" rendered="#{fichaCtrl.ficha.datosPersonales.desconoceEdad}" disabled="true"/>-->
+                <h:outputText value="#{etiquetas['ej.fecha']}" styleClass="ejemplo" rendered="#{!fichaCtrl.ficha.datosPersonales.desconoceEdad}" />
+                <p:message id="msgCalFecNac" for="calFecNac"/>
+            </h:panelGrid>
+            <h:panelGroup id="etqEdad">
+                <h:outputLabel value="#{etiquetas['edad']}: " rendered="#{!fichaCtrl.ficha.datosPersonales.desconoceEdad}" />
+                <h:outputLabel value="#{etiquetas['edad.aproximada']}: " rendered="#{fichaCtrl.ficha.datosPersonales.desconoceEdad}" />
+            </h:panelGroup>
+            <h:panelGrid id="panelEdad" columns="3">
+                <h:outputText  id="edad" value="#{fichaCtrl.ficha.datosPersonales.edad}" rendered="#{!fichaCtrl.ficha.datosPersonales.desconoceEdad}" />
+                <h:inputText id="edadText" value="#{fichaCtrl.ficha.datosPersonales.edad}" rendered="#{fichaCtrl.ficha.datosPersonales.desconoceEdad}" required="true" requiredMessage="#{etiquetas['edad']} #{mensajes['requerido.femenino']}" >
+                    <p:ajax event="blur" listener="#{fichaCtrl.calcularFechaNacimiento}" process="@this" update="panelFechas panelEdad" />
+                </h:inputText>
+                <h:outputLabel value="#{etiquetas['desconoce.edad']}" styleClass="form-label" style="right: 20px" rendered="true"/>
+                <h:selectBooleanCheckbox id="de" value="#{fichaCtrl.ficha.datosPersonales.desconoceEdad}" disabled="#{fichaCtrl.cedulaValida == false}" rendered="true">
+                    <p:ajax event="change" update="panelEdad panelFn panelFechas etqEdad" process="@this" />
+                </h:selectBooleanCheckbox>
+            </h:panelGrid>
+            <h:outputLabel value="#{etiquetas['rango.edad']}:" />
+            <h:outputText id="rangoEdad" value="#{fichaCtrl.ficha.datosPersonales.rangoEdad}" />
+            <h:outputLabel value="#{etiquetas['nacionalidad']}: "/>
+            <h:selectOneMenu id="cmbPais" value="#{fichaCtrl.ficha.datosPersonales.pais.id}" disabled="#{fichaCtrl.cedulaValida == false}">
+                <f:selectItems value="#{selectItemCtrl.pais}"/>
+                <f:ajax event="valueChange" listener="#{fichaCtrl.cambiaPais}" render="combos" execute="@this"/>
+            </h:selectOneMenu>
+        </h:panelGrid>
+        <h:panelGroup id="combos" >
+            <h:panelGrid columns="2" >
+                <h:panelGrid  columns="2" columnClasses="form-label-width,form-input" cellpadding="0" cellspacing="1" rendered="#{fichaCtrl.ficha.datosPersonales.pais.id eq fichaCtrl.ecuadorId}">
+
+                    <h:outputLabel value="#{etiquetas['provincia.nacimiento']}: "/>
+                    <h:selectOneMenu   value="#{fichaCtrl.ficha.datosPersonales.provincia.id}" disabled="#{fichaCtrl.cedulaValida == false}" required="true" requiredMessage="#{etiquetas['provincia.nacimiento']} #{mensajes['requerido.femenino']}" >
+                        <f:selectItem itemLabel="#{etiquetas['seleccione.una.opcion']}" itemValue="" />
+                        <f:selectItems value="#{fichaCtrl.provincias}"/>
+                        <f:ajax event="valueChange"  listener="#{fichaCtrl.cambiaProvincia}" render="comboCanton comboParroquia" execute="@this"/>
+                    </h:selectOneMenu>
+
+                    <h:outputLabel value="#{etiquetas['canton.nacimiento']}: "/>
+                    <h:selectOneMenu  id="comboCanton" value="#{fichaCtrl.ficha.datosPersonales.canton.id}" disabled="#{fichaCtrl.cedulaValida == false}" required="true" requiredMessage="#{etiquetas['canton.nacimiento']} #{mensajes['requerido.masculino']}" >
+                        <f:selectItem itemLabel="#{etiquetas['seleccione.una.opcion']}" itemValue="" />
+                        <f:selectItems value="#{fichaCtrl.cantones}"/>
+                        <f:ajax event="valueChange"  listener="#{fichaCtrl.cambiaCanton}" render="comboParroquia" execute="@this"/>
+                    </h:selectOneMenu>
+
+                    <h:outputLabel value="#{etiquetas['parroquia.nacimiento']}: "/>
+                    <h:selectOneMenu  id="comboParroquia" value="#{fichaCtrl.ficha.datosPersonales.parroquia.id}" disabled="#{fichaCtrl.cedulaValida == false}" required="true" requiredMessage="#{etiquetas['parroquia.nacimiento']} #{mensajes['requerido.femenino']}" >
+                        <f:selectItem itemLabel="#{etiquetas['seleccione.una.opcion']}" itemValue="" />
+                        <f:selectItems value="#{fichaCtrl.parroquias}"/>
+                    </h:selectOneMenu>
+                </h:panelGrid>
+                <h:panelGrid columns="2" headerClass="headerPanelBar" columnClasses="infoEtiqueta,infoValor" styleClass="infoTable" rendered="#{!fichaCtrl.compatible}">
+                    <f:facet name="header">
+                        <h:outputText value="#{mensajes['no.se.pudo.integrar.provincia.canton.parroquia']}"/>
+                        <br/>
+                        <h:outputText value="#{mensajes['los.valores.devueltos.por.dinardap.son']}:"/>
+                    </f:facet>
+                    <h:outputLabel value="#{etiquetas['provincia']}" />
+                    <h:outputText value="#{fichaCtrl.ficha.datosPersonales.provinciaRc}" />
+                    <h:outputLabel value="#{etiquetas['canton']}" />
+                    <h:outputText value="#{fichaCtrl.ficha.datosPersonales.cantonRc}" />
+                    <h:outputLabel value="#{etiquetas['parroquia']}" />
+                    <h:outputText value="#{fichaCtrl.ficha.datosPersonales.parroquiaRc}" />
+                </h:panelGrid>    
+            </h:panelGrid>
+        </h:panelGroup>
+
+        <h:panelGrid columns="2" columnClasses="form-label-width,form-input" cellpadding="0" cellspacing="1">
+
+            <h:outputLabel value="#{etiquetas['estado.civil']}: "/>
+            <h:selectOneMenu  value="#{fichaCtrl.ficha.datosPersonales.estadoCivil}" disabled="#{fichaCtrl.cedulaValida == false}">
+                <f:selectItems value="#{selectItemCtrl.estadoCivil}"/>
+            </h:selectOneMenu>
+
+            <h:outputLabel value="#{etiquetas['autodefinicion.etnica']}: "/>
+            <h:selectOneMenu  id="cmbEtnia" value="#{fichaCtrl.ficha.datosPersonales.etnia.id}" disabled="#{fichaCtrl.cedulaValida == false}" required="true" requiredMessage="#{etiquetas['autodefinicion.etnica']} #{mensajes['requerido.masculino']}" >
+                <f:selectItem itemLabel="#{etiquetas['seleccione.una.opcion']}" itemValue="" />
+                <f:selectItems value="#{selectItemCtrl.etnia}"/>
+                <f:selectItem itemLabel="Otra" itemValue="-1" />
+                <p:ajax update="pnOe pnOe2" />
+            </h:selectOneMenu>
+
+            <h:panelGroup id="pnOe">
+                <h:outputLabel value="#{etiquetas['otra.etnia']}: " rendered="#{fichaCtrl.ficha.datosPersonales.etnia.id == '-1'}"/>
+            </h:panelGroup>
+            <h:panelGroup id="pnOe2">
+                <h:inputText value="#{fichaCtrl.ficha.datosPersonales.otraEtnia}" required="true" requiredMessage="#{etiquetas['otra.etnia']} #{mensajes['requerido.femenino']}" rendered="#{fichaCtrl.ficha.datosPersonales.etnia.id == '-1'}" />
+            </h:panelGroup>
+
+            <h:outputLabel value="#{etiquetas['sexo']}: "/>
+            <p:selectOneRadio id="options" value="#{fichaCtrl.ficha.datosPersonales.sexo}" disabled="#{fichaCtrl.cedulaValida == false}" required="true" requiredMessage="#{etiquetas['sexo']} #{mensajes['requerido.masculino']}">  
+                <f:selectItems value="#{fichaCtrl.sexoItems}" />  
+            </p:selectOneRadio>
+
+            <h:outputLabel value="#{etiquetas['cabeza.hogar']}: "/>
+            <p:selectBooleanCheckbox value="#{fichaCtrl.ficha.datosPersonales.cabezaHogar}" disabled="#{fichaCtrl.cedulaValida == false}" >
+                <p:ajax update=":formFicha" />
+            </p:selectBooleanCheckbox>  
+            <h:outputLabel value="#{etiquetas['parentesco.con.jefe.hogar']}: "/>
+            <h:selectOneMenu value="#{fichaCtrl.ficha.datosPersonales.parentesco}" disabled="#{fichaCtrl.cedulaValida == false}">
+                <f:selectItems value="#{selectItemCtrl.parentesco}" />
+            </h:selectOneMenu>
+            <h:outputLabel value="#{etiquetas['celular']}: " rendered="false"/>
+            <h:panelGroup rendered="false">
+                <p:inputText  value="#{fichaCtrl.ficha.datosPersonales.celular}" maxlength="10" onkeypress="return acceptNum(event)" disabled="#{fichaCtrl.cedulaValida == false}"/>
+                <h:outputText value="#{etiquetas['ej.celular']}" styleClass="ejemplo"/>
+            </h:panelGroup>
+            <h:outputLabel value="#{etiquetas['hermanos.menores.edad']}: " rendered="false"/>
+            <p:selectBooleanCheckbox value="#{fichaCtrl.ficha.datosPersonales.tieneHermanosMenores}" disabled="#{fichaCtrl.cedulaValida == false}" rendered="false"/>  
+            <h:outputLabel value="#{etiquetas['tiene.hijos']}: "/>
+            <p:selectBooleanCheckbox value="#{fichaCtrl.ficha.datosPersonales.tieneHijos}" disabled="#{fichaCtrl.cedulaValida == false}" >  
+                <p:ajax event="change" update="panelNumHijos panelNumHijos1" process="@this" partialSubmit="true"/>
+            </p:selectBooleanCheckbox>
+            <h:panelGroup id="panelNumHijos">
+                <h:outputLabel for="numHijos" value="#{etiquetas['numero.hijos']}: " rendered="#{fichaCtrl.ficha.datosPersonales.tieneHijos}" />
+            </h:panelGroup>
+            <h:panelGroup id="panelNumHijos1">
+                <p:inputText id="numHijos" value="#{fichaCtrl.ficha.datosPersonales.num_hijos}" size="2" maxlength="2" onkeypress="return acceptNum(event)" rendered="#{fichaCtrl.ficha.datosPersonales.tieneHijos}" required="true" requiredMessage="#{etiquetas['numero.hijos']} #{mensajes['requerido.masculino']}"/> 
+            </h:panelGroup>
+        </h:panelGrid>
+        <br/>
+        <br/>
+
+        <h:panelGrid columns="2">
+
+            <h:commandLink id="registraBtn" action="#{fichaCtrl.guardar}" disabled="#{fichaCtrl.cedulaValida == false}" rendered="#{sesionCtrl.administrador or sesionCtrl.tecnicoResponsable or sesionCtrl.coordinador}">
+                <h:panelGrid style="text-align:center">
+                    <h:graphicImage value="/img/guardar.png" title="#{etiquetas['guardar']}" />
+                    <h:outputText value="#{etiquetas['guardar']}"/>
+                </h:panelGrid>
+                <p:ajax process=":formPestana" update=":formPestana :formFicha" />
+            </h:commandLink>        
+
+            <h:commandLink action="#{fichaCtrl.finalizarIngresoFicha}" disabled="#{fichaCtrl.cedulaValida == false}" rendered="#{sesionCtrl.administrador or sesionCtrl.tecnicoResponsable or sesionCtrl.coordinador}" onclick="if(!confirm('#{mensajes['mensaje.ficha.finalizar']}'))return false;">
+                <h:panelGrid style="text-align:center">
+                    <h:graphicImage value="/img/finalizar.png" title="#{etiquetas['finalizar.ficha']}" />
+                    <h:outputText value="#{etiquetas['finalizar']}"/>
+                </h:panelGrid>
+                <p:ajax process=":formPestana" update=":formPestana :formFicha" />
+            </h:commandLink>
+
+        </h:panelGrid>
+
+    </h:panelGrid>
+</div>

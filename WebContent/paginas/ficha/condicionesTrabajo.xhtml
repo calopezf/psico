@@ -1,0 +1,36 @@
+<div  xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:ui="http://java.sun.com/jsf/facelets"
+      xmlns:h="http://java.sun.com/jsf/html"
+      xmlns:f="http://java.sun.com/jsf/core"
+      xmlns:p="http://primefaces.org/ui" align="center">
+
+    <h:panelGrid id="grid6" rendered="#{fichaCtrl.areaCargada=='/paginas/ficha/condicionesTrabajo.xhtml'}">
+
+        <!--<p:growl id="growl" autoUpdate="true"/>-->
+        <p:growl id="growl6" showDetail="false" sticky="false" />
+
+        <h:outputText
+            value="#{etiquetas['condiciones.trabajo']}"
+            styleClass="subTitle" />
+        <br/><br/>
+
+        <p:panelGrid id="ctPanel" style="width: 100%;" columns="2" columnClasses="form-label,form-input,form-label,form-input,form-input">
+
+            <h:outputLabel  value="#{etiquetas['tareas.peligrosas']}*: "/>
+            <p:inputText value="#{fichaCtrl.tareasPeligrosas.nombre}" maxlength="70" styleClass="inputUpper"/>
+
+            <h:outputLabel  value="#{etiquetas['acciones.violentas']}*: "/>
+            <p:inputText value="#{fichaCtrl.accionesViolentas.nombre}" maxlength="70" styleClass="inputUpper"/>
+
+        </p:panelGrid>
+
+        <br/>
+        <br/>
+
+        <p:commandLink id="registraCTBtn" action="#{fichaCtrl.guardar}" update="growl6">
+            <h:graphicImage value="/img/guardar.png" title="Guardar" />
+        </p:commandLink>
+
+    </h:panelGrid>
+
+</div>

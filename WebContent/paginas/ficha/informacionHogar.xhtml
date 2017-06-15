@@ -1,0 +1,460 @@
+<div  xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:ui="http://java.sun.com/jsf/facelets"
+      xmlns:h="http://java.sun.com/jsf/html"
+      xmlns:f="http://java.sun.com/jsf/core"
+      xmlns:p="http://primefaces.org/ui" align="center">
+
+    <h:panelGrid id="grid3" rendered="#{fichaCtrl.areaCargada=='/paginas/ficha/informacionHogar.xhtml'}">
+
+        <p:growl id="growl3" showDetail="false" sticky="false" />
+
+        <h:panelGrid id="panelRepLeg" columns="7" columnClasses="form-label-width,form-input">
+            <h:outputLabel value="#{etiquetas['seleccione.cabeza.hogar']}: " />
+            <h:outputLabel for="p" value="#{etiquetas['padre']}: " />
+            <p:selectBooleanCheckbox id="p" value="#{fichaCtrl.ficha.repPadre}" >
+                <p:ajax process="@form" listener="#{fichaCtrl.validarRepresentantesLegales}" update="@form" />
+            </p:selectBooleanCheckbox>
+            <h:outputLabel for="m" value="#{etiquetas['madre']}: " />
+            <p:selectBooleanCheckbox id="m" value="#{fichaCtrl.ficha.repMadre}" >
+                <p:ajax process="@form" listener="#{fichaCtrl.validarRepresentantesLegales}" update="@form" />
+            </p:selectBooleanCheckbox>
+            <h:outputLabel for="rl" value="#{etiquetas['rep.legal']}: " />
+            <p:selectBooleanCheckbox id="rl" value="#{fichaCtrl.ficha.repLegal}" >
+                <p:ajax process="@form" listener="#{fichaCtrl.validarRepresentantesLegales}" update="@form" />
+            </p:selectBooleanCheckbox>
+        </h:panelGrid>
+
+        <h:panelGroup id="panelPadre">
+            <h:panelGrid columns="4" headerClass="headerPanelFicha" columnClasses="form-label-width,form-input,form-label-width,form-input" rendered="#{fichaCtrl.ficha.repPadre}" >
+                <f:facet name="header" >  
+                    <h:outputText
+                        value="#{etiquetas['informacion.del.padre']}" />
+                </f:facet>
+                <h:outputLabel  value="#{etiquetas['tipo.identificacion']}: "/>
+                <h:selectOneMenu   value="#{fichaCtrl.ficha.datosHogarPadre.tipoIdentificacionResp}" >
+                    <f:selectItems value="#{selectItemCtrl.tipoIdentificacion}"/>
+                    <p:ajax event="change" update="@form" /> 
+                </h:selectOneMenu>
+                <h:outputLabel  value="#{etiquetas['identificacion']}: "/>
+                <h:panelGrid columns="2" cellpadding="0" cellspacing="0">
+                    <p:inputText id="txtIdentificacionResp" style="width:128px" value="#{fichaCtrl.ficha.datosHogarPadre.identificacionResp}" maxlength="10" onkeypress="return acceptNum(event)" >
+<!--                        <p:ajax event="blur" listener="#{fichaCtrl.validarCedulaPadre}" update="panelPadre" oncomplete="document.getElementById('formPestana:apPatResp').focus();"/> -->
+                    </p:inputText>
+                </h:panelGrid>
+                <h:outputLabel  value="#{etiquetas['apellido.paterno']}: "/>
+                <p:inputText id="apPatResp"  value="#{fichaCtrl.ficha.datosHogarPadre.primerApellidoResp}" maxlength="50" onkeypress="return acceptText(event)" styleClass="inputUpper"/>
+                <h:outputLabel  value="#{etiquetas['apellido.materno']}: "/>
+                <p:inputText id="apMatResp" value="#{fichaCtrl.ficha.datosHogarPadre.segundoApellidoResp}" maxlength="50" onkeypress="return acceptText(event)" styleClass="inputUpper"/>                
+
+                <h:outputLabel  value="#{etiquetas['primer.nombre']}: "/>
+                <p:inputText id="primNom" value="#{fichaCtrl.ficha.datosHogarPadre.primerNombreResp}" maxlength="50" onkeypress="return acceptText(event)" styleClass="inputUpper"/>                
+                <h:outputLabel  value="#{etiquetas['segundo.nombre']}: "/>
+                <p:inputText id="segNom" value="#{fichaCtrl.ficha.datosHogarPadre.segundoNombreResponsable}" maxlength="50" onkeypress="return acceptText(event)" styleClass="inputUpper"/>
+
+                <h:outputLabel value="#{etiquetas['parentesco']}: "/>
+                <h:selectOneMenu   value="#{fichaCtrl.ficha.datosHogarPadre.repLegal}" disabled="true">
+                    <f:selectItems value="#{selectItemCtrl.representanteLegalItems}"/>
+                </h:selectOneMenu>
+
+                <h:outputLabel value="#{etiquetas['telefono']}: "/>
+                <p:inputText  value="#{fichaCtrl.ficha.datosHogarPadre.telefono}" maxlength="10" onkeypress="return acceptNum(event)"/>
+            </h:panelGrid>                
+
+            <h:panelGrid columns="4" columnClasses="form-label-width,form-input,form-label-width,form-input" rendered="#{fichaCtrl.ficha.repPadre}" >
+                <f:facet name="header">  
+                    #{etiquetas['informacion.familiar']} 
+                </f:facet>
+                <h:outputLabel value="#{etiquetas['cargas.familiares']}: " />
+                <p:inputText  value="#{fichaCtrl.ficha.datosHogarPadre.cargasFamiliaresPadres}" maxlength="2" onkeypress="return acceptNum(event)" />
+
+                <h:outputLabel value="#{etiquetas['cargas.escolares']}: " />
+                <p:inputText  value="#{fichaCtrl.ficha.datosHogarPadre.cargasEscolaresPadres}" maxlength="2" onkeypress="return acceptNum(event)" />
+
+                <h:outputLabel value="#{etiquetas['numero.menores.edad.hogar']}: "/>
+                <p:inputText  value="#{fichaCtrl.ficha.datosHogarPadre.numMenoresEdad}" maxlength="2" onkeypress="return acceptNum(event)"/>
+            </h:panelGrid>
+
+            <h:panelGrid columns="4" columnClasses="form-label-width,form-input,form-label-width,form-input" rendered="#{fichaCtrl.ficha.repPadre}">
+                <f:facet name="header">  
+                    #{etiquetas['informacion.laboral']} 
+                </f:facet>
+                <h:outputLabel value="#{etiquetas['trabaja']}: "/>
+                <p:selectBooleanButton value="#{fichaCtrl.ficha.datosHogarPadre.responsableTrabaja}" onLabel="Si" offLabel="No" style="width:60px" >  
+                    <p:ajax event="change" update="pnMt vvv pnTa vvv2 panelLt panelLt2" process="@this" partialSubmit="true"/>
+                </p:selectBooleanButton>
+                <h:outputLabel value="#{etiquetas['busca.trabajo']}: "/>
+                <p:selectBooleanButton value="#{fichaCtrl.ficha.datosHogarPadre.responsableBuscaTrabajo}" onLabel="Si" offLabel="No" style="width:60px" />
+                <h:panelGroup id="panelLt" >
+                    <h:outputLabel value="#{etiquetas['donde.trabaja']}" styleClass="inputUpper" rendered="#{fichaCtrl.ficha.datosHogarPadre.responsableTrabaja}" />
+                </h:panelGroup>
+                <h:panelGroup id="panelLt2" >
+                    <h:inputText value="#{fichaCtrl.ficha.datosHogarPadre.lugarTrabajo}" maxlength="60" styleClass="inputUpper" rendered="#{fichaCtrl.ficha.datosHogarPadre.responsableTrabaja}"/>
+                </h:panelGroup>
+                <h:panelGroup id="pnMt" >
+                    <h:outputLabel value="#{etiquetas['modalidad.trabajo']}: " rendered="#{fichaCtrl.ficha.datosHogarPadre.responsableTrabaja}"/>
+                </h:panelGroup>
+                <h:panelGrid id="vvv" columns="2" columnClasses="form-label-width,form-input" >
+                    <h:selectOneMenu  value="#{fichaCtrl.ficha.datosHogarPadre.modalidadTrabajo.id}" rendered="#{fichaCtrl.ficha.datosHogarPadre.responsableTrabaja}">
+                        <f:selectItems value="#{selectItemCtrl.modalidad}"/>
+                        <f:selectItem itemLabel="Otra" itemValue="-1" />
+                        <p:ajax update="panelOmp panelOmp2" />
+                    </h:selectOneMenu>
+                </h:panelGrid>
+                <h:panelGroup id="pnTa" >
+                    <h:outputLabel value="#{etiquetas['tipo.actividad']}: " rendered="#{fichaCtrl.ficha.datosHogarPadre.responsableTrabaja}"/>
+                </h:panelGroup>
+                <h:panelGrid id="vvv2" columns="2" columnClasses="form-label-width,form-input" >
+                    <h:selectOneMenu value="#{fichaCtrl.ficha.datosHogarPadre.actividadEconomicaItem.id}" rendered="#{fichaCtrl.ficha.datosHogarPadre.responsableTrabaja}">
+                        <f:selectItems value="#{selectItemCtrl.actividadEconomica}"/>
+                    </h:selectOneMenu>
+                </h:panelGrid>
+                <h:panelGroup id="panelOmp" >
+                    <h:outputLabel value="#{etiquetas['otra.modalidad']}:" styleClass="inputUpper" rendered="#{fichaCtrl.ficha.datosHogarPadre.modalidadTrabajo.id == '-1'}" />
+                </h:panelGroup>
+                <h:panelGroup id="panelOmp2" >
+                    <p:inputText value="#{fichaCtrl.ficha.datosHogarPadre.otraModalidad}" styleClass="inputUpper" rendered="#{fichaCtrl.ficha.datosHogarPadre.modalidadTrabajo.id == '-1'}" />
+                </h:panelGroup>
+            </h:panelGrid>
+            <h:panelGroup rendered="#{fichaCtrl.ficha.repPadre}" >
+                <h:panelGrid columns="2" columnClasses="form-label-width, form-input" >
+                    <f:facet name="header">  
+                        #{etiquetas['informacion.salud']} 
+                    </f:facet>
+                    <h:outputLabel  value="#{etiquetas['discapacidad']}: " />
+                    <p:selectBooleanButton id="value1" value="#{fichaCtrl.ficha.datosHogarPadre.salud.discapacidad}" onLabel="Si" offLabel="No" style="width:60px" >
+                        <p:ajax event="change" update="panelSalud" process="@this" partialSubmit="true"/>
+                    </p:selectBooleanButton>
+                </h:panelGrid>
+                <h:panelGrid id="panelSalud" style="width: 100%;" columns="4" columnClasses="form-label-width,form-input,form-label-width,form-input">
+
+                    <h:outputLabel  value="#{etiquetas['carne.conadis']}: " rendered="#{fichaCtrl.ficha.datosHogarPadre.salud.discapacidad}"/>
+                    <p:inputText value="#{fichaCtrl.ficha.datosHogarPadre.salud.carneConadis}" maxlength="50" styleClass="inputUpper" onkeypress="return acceptNum(event)" rendered="#{fichaCtrl.ficha.datosHogarPadre.salud.discapacidad}"/>
+
+                    <h:outputLabel  value="#{etiquetas['tipo.discapacidad']}: " rendered="#{fichaCtrl.ficha.datosHogarPadre.salud.discapacidad}"/>
+                    <p:inputText value="#{fichaCtrl.ficha.datosHogarPadre.salud.tipoDiscapacidad}" maxlength="70" styleClass="inputUpper" rendered="#{fichaCtrl.ficha.datosHogarPadre.salud.discapacidad}"/>
+
+                    <h:outputLabel  value="#{etiquetas['porcentaje.discapacidad']}: " rendered="#{fichaCtrl.ficha.datosHogarPadre.salud.discapacidad}"/>
+                    <p:inputText value="#{fichaCtrl.ficha.datosHogarPadre.salud.porcentajeDiscapacidad}" maxlength="3" onkeypress="return acceptNum(event)" rendered="#{fichaCtrl.ficha.datosHogarPadre.salud.discapacidad}"/>
+                    
+                    <h:outputLabel value="#{etiquetas['recibe.asistencia.monetaria']}" rendered="#{fichaCtrl.ficha.datosHogarPadre.salud.discapacidad}" />
+                    <p:selectBooleanButton id="value2" value="#{fichaCtrl.ficha.datosHogarPadre.salud.asistenciaMonetaria}" onLabel="Si" offLabel="No" style="width:60px" rendered="#{fichaCtrl.ficha.datosHogarPadre.salud.discapacidad}">
+                        <p:ajax update="pnAmr panelTAM" />
+                    </p:selectBooleanButton>
+                    <h:panelGroup id="pnAmr" >
+                        <h:outputLabel value="#{etiquetas['cual.de.ellas.recibe']}" rendered="#{fichaCtrl.ficha.datosHogarPadre.salud.asistenciaMonetaria and fichaCtrl.ficha.datosHogarPadre.salud.discapacidad}" />
+                    </h:panelGroup>
+                    <h:panelGroup id="panelTAM">
+                        <h:selectManyCheckbox value="#{fichaCtrl.tiposDeAsistenciaMonetariaPadre}" layout="pageDirection" rendered="#{fichaCtrl.ficha.datosHogarPadre.salud.asistenciaMonetaria and fichaCtrl.ficha.datosHogarPadre.salud.discapacidad}" >
+                            <f:selectItems value="#{selectItemCtrl.tipoAsistenciaMonetariaItems}"/>
+                            <p:ajax process="@this" update="panelOTipoAsisPadre panelOTipoAsisPadre2" />
+                        </h:selectManyCheckbox>
+                    </h:panelGroup>
+                    <h:panelGroup id="panelOTipoAsisPadre" >
+                        <h:outputLabel value="#{etiquetas['otro.tipo.asistencia']}:" rendered="#{fichaCtrl.otroTipoAsistenciaMonetariaPadre}" />
+                    </h:panelGroup>
+                    <h:panelGroup id="panelOTipoAsisPadre2" >
+                        <p:inputText value="#{fichaCtrl.ficha.datosHogarPadre.otroTipoAisitencia}" styleClass="inputUpper" rendered="#{fichaCtrl.otroTipoAsistenciaMonetariaPadre}" />
+                    </h:panelGroup>
+                    
+                </h:panelGrid>
+            </h:panelGroup>
+        </h:panelGroup>
+
+        <h:panelGroup id="panelMadre">
+            <h:panelGrid columns="4" headerClass="headerPanelFicha" columnClasses="form-label-width,form-input,form-label-width,form-input" rendered="#{fichaCtrl.ficha.repMadre}" >
+                <f:facet name="header" >  
+                    <h:outputText
+                        value="#{etiquetas['informacion.de.la.madre']}" />
+                </f:facet>
+                <h:outputLabel  value="#{etiquetas['tipo.identificacion']}: "/>
+                <h:selectOneMenu   value="#{fichaCtrl.ficha.datosHogarMadre.tipoIdentificacionResp}" >
+                    <f:selectItems value="#{selectItemCtrl.tipoIdentificacion}"/>
+                    <p:ajax event="change" update="@form" /> 
+                </h:selectOneMenu>
+                <h:outputLabel  value="#{etiquetas['identificacion']}: "/>
+                <h:panelGrid columns="2" cellpadding="0" cellspacing="0">
+                    <p:inputText id="txtIdentificacionResp2" style="width:128px" value="#{fichaCtrl.ficha.datosHogarMadre.identificacionResp}" maxlength="10">
+<!--                        <p:ajax event="blur" listener="#{fichaCtrl.validarCedulaMadre}" update="panelMadre" oncomplete="document.getElementById('formPestana:apPatResp2').focus();"/> -->
+                    </p:inputText>
+                </h:panelGrid>
+                <h:outputLabel  value="#{etiquetas['apellido.paterno']}: "/>
+                <p:inputText id="apPatResp2"  value="#{fichaCtrl.ficha.datosHogarMadre.primerApellidoResp}" maxlength="50" onkeypress="return acceptText(event)" styleClass="inputUpper"/>
+                <h:outputLabel  value="#{etiquetas['apellido.materno']}: "/>
+                <p:inputText id="apMatResp2" value="#{fichaCtrl.ficha.datosHogarMadre.segundoApellidoResp}" maxlength="50" onkeypress="return acceptText(event)" styleClass="inputUpper"/>                
+
+                <h:outputLabel  value="#{etiquetas['primer.nombre']}: "/>
+                <p:inputText id="primNom2" value="#{fichaCtrl.ficha.datosHogarMadre.primerNombreResp}" maxlength="50" onkeypress="return acceptText(event)" styleClass="inputUpper"/>                
+                <h:outputLabel  value="#{etiquetas['segundo.nombre']}: "/>
+                <p:inputText id="segNom2" value="#{fichaCtrl.ficha.datosHogarMadre.segundoNombreResponsable}" maxlength="50" onkeypress="return acceptText(event)" styleClass="inputUpper"/>
+
+                <h:outputLabel value="#{etiquetas['parentesco']}: "/>
+                <h:selectOneMenu   value="#{fichaCtrl.ficha.datosHogarMadre.repLegal}" disabled="true" >
+                    <f:selectItems value="#{selectItemCtrl.representanteLegalItems}"/>
+                </h:selectOneMenu>
+
+                <h:outputLabel value="#{etiquetas['telefono']}: "/>
+                <p:inputText  value="#{fichaCtrl.ficha.datosHogarMadre.telefono}" maxlength="10" onkeypress="return acceptNum(event)"/>
+            </h:panelGrid>                
+
+            <h:panelGrid columns="4" columnClasses="form-label-width,form-input,form-label-width,form-input" rendered="#{fichaCtrl.ficha.repMadre}" >
+                <f:facet name="header">  
+                    #{etiquetas['informacion.familiar']} 
+                </f:facet>
+                <h:outputLabel value="#{etiquetas['cargas.familiares']}: " />
+                <p:inputText  value="#{fichaCtrl.ficha.datosHogarMadre.cargasFamiliaresPadres}" maxlength="2" onkeypress="return acceptNum(event)" />
+
+                <h:outputLabel value="#{etiquetas['cargas.escolares']}: " />
+                <p:inputText  value="#{fichaCtrl.ficha.datosHogarMadre.cargasEscolaresPadres}" maxlength="2" onkeypress="return acceptNum(event)" />
+
+                <h:outputLabel value="#{etiquetas['numero.menores.edad.hogar']}: "/>
+                <p:inputText  value="#{fichaCtrl.ficha.datosHogarMadre.numMenoresEdad}" maxlength="2" onkeypress="return acceptNum(event)"/>
+            </h:panelGrid>
+
+            <h:panelGrid columns="4" columnClasses="form-label-width,form-input,form-label-width,form-input" rendered="#{fichaCtrl.ficha.repMadre}">
+                <f:facet name="header">  
+                    #{etiquetas['informacion.laboral']} 
+                </f:facet>
+                <h:outputLabel value="#{etiquetas['trabaja']}: "/>
+                <p:selectBooleanButton value="#{fichaCtrl.ficha.datosHogarMadre.responsableTrabaja}" onLabel="Si" offLabel="No" style="width:60px" >  
+                    <p:ajax event="change" update="pnMt2 vvv3 pnTa2 vvv4 panelLt3 panelLt4" process="@this" partialSubmit="true"/>
+                </p:selectBooleanButton>
+                <h:outputLabel value="#{etiquetas['busca.trabajo']}: "/>
+                <p:selectBooleanButton value="#{fichaCtrl.ficha.datosHogarMadre.responsableBuscaTrabajo}" onLabel="Si" offLabel="No" style="width:60px" />
+                <h:panelGroup id="panelLt3" >
+                    <h:outputLabel value="#{etiquetas['donde.trabaja']}" rendered="#{fichaCtrl.ficha.datosHogarMadre.responsableTrabaja}" />
+                </h:panelGroup>
+                <h:panelGroup id="panelLt4" >
+                    <h:inputText value="#{fichaCtrl.ficha.datosHogarMadre.lugarTrabajo}" styleClass="inputUpper" rendered="#{fichaCtrl.ficha.datosHogarMadre.responsableTrabaja}" />
+                </h:panelGroup>
+                <h:panelGroup id="pnMt2" >
+                    <h:outputLabel value="#{etiquetas['modalidad.trabajo']}: " rendered="#{fichaCtrl.ficha.datosHogarMadre.responsableTrabaja}"/>
+                </h:panelGroup>
+                <h:panelGrid id="vvv3" columns="2" columnClasses="form-label-width,form-input" >
+                    <h:selectOneMenu  value="#{fichaCtrl.ficha.datosHogarMadre.modalidadTrabajo.id}" rendered="#{fichaCtrl.ficha.datosHogarMadre.responsableTrabaja}">
+                        <f:selectItems value="#{selectItemCtrl.modalidad}"/>
+                        <f:selectItem itemLabel="Otra" itemValue="-1" />
+                        <p:ajax update="panelOmm panelOmm2" />
+                    </h:selectOneMenu>
+                </h:panelGrid>
+                <h:panelGroup id="pnTa2" >
+                    <h:outputLabel value="#{etiquetas['tipo.actividad']}: " rendered="#{fichaCtrl.ficha.datosHogarMadre.responsableTrabaja}"/>
+                </h:panelGroup>
+                <h:panelGrid id="vvv4" columns="2" columnClasses="form-label-width,form-input" >
+                    <h:selectOneMenu value="#{fichaCtrl.ficha.datosHogarMadre.actividadEconomicaItem.id}" rendered="#{fichaCtrl.ficha.datosHogarMadre.responsableTrabaja}">
+                        <f:selectItems value="#{selectItemCtrl.actividadEconomica}"/>
+                        <p:ajax process="@this" />
+                    </h:selectOneMenu>
+                </h:panelGrid>
+                <h:panelGroup id="panelOmm" >
+                    <h:outputLabel value="#{etiquetas['otra.modalidad']}:" rendered="#{fichaCtrl.ficha.datosHogarMadre.modalidadTrabajo.id == '-1'}" />
+                </h:panelGroup>
+                <h:panelGroup id="panelOmm2" >
+                    <p:inputText value="#{fichaCtrl.ficha.datosHogarMadre.otraModalidad}" rendered="#{fichaCtrl.ficha.datosHogarMadre.modalidadTrabajo.id == '-1'}" />
+                </h:panelGroup>
+            </h:panelGrid>
+            <h:panelGroup rendered="#{fichaCtrl.ficha.repMadre}" >
+                <h:panelGrid columns="2" columnClasses="form-label-width, form-input" >
+                    <f:facet name="header">  
+                        #{etiquetas['informacion.salud']} 
+                    </f:facet>
+                    <h:outputLabel  value="#{etiquetas['discapacidad']}: " />
+                    <p:selectBooleanButton id="value3" value="#{fichaCtrl.ficha.datosHogarMadre.salud.discapacidad}" onLabel="Si" offLabel="No" style="width:60px" >
+                        <p:ajax event="change" update="panelSalud2" process="@this" partialSubmit="true"/>
+                    </p:selectBooleanButton>
+                </h:panelGrid>
+                <h:panelGrid id="panelSalud2" style="width: 100%;" columns="4" columnClasses="form-label-width,form-input,form-label-width,form-input">
+
+                    <h:outputLabel  value="#{etiquetas['carne.conadis']}: " rendered="#{fichaCtrl.ficha.datosHogarMadre.salud.discapacidad}"/>
+                    <p:inputText value="#{fichaCtrl.ficha.datosHogarMadre.salud.carneConadis}" maxlength="50" styleClass="inputUpper" onkeypress="return acceptNum(event)" rendered="#{fichaCtrl.ficha.datosHogarMadre.salud.discapacidad}"/>
+
+                    <h:outputLabel  value="#{etiquetas['tipo.discapacidad']}: " rendered="#{fichaCtrl.ficha.datosHogarMadre.salud.discapacidad}"/>
+                    <p:inputText value="#{fichaCtrl.ficha.datosHogarMadre.salud.tipoDiscapacidad}" maxlength="70" styleClass="inputUpper" rendered="#{fichaCtrl.ficha.datosHogarMadre.salud.discapacidad}"/>
+
+                    <h:outputLabel  value="#{etiquetas['porcentaje.discapacidad']}: " rendered="#{fichaCtrl.ficha.datosHogarMadre.salud.discapacidad}"/>
+                    <p:inputText value="#{fichaCtrl.ficha.datosHogarMadre.salud.porcentajeDiscapacidad}" maxlength="3" onkeypress="return acceptNum(event)" rendered="#{fichaCtrl.ficha.datosHogarMadre.salud.discapacidad}"/>
+                    
+                    <h:outputLabel value="#{etiquetas['recibe.asistencia.monetaria']}" rendered="#{fichaCtrl.ficha.datosHogarMadre.salud.discapacidad}" />
+                    <p:selectBooleanButton id="value4" value="#{fichaCtrl.ficha.datosHogarMadre.salud.asistenciaMonetaria}" onLabel="Si" offLabel="No" style="width:60px" rendered="#{fichaCtrl.ficha.datosHogarMadre.salud.discapacidad}">
+                        <p:ajax update="pnAmr2 panelTAM2" />
+                    </p:selectBooleanButton>
+                    <h:panelGroup id="pnAmr2" >
+                        <h:outputLabel value="#{etiquetas['cual.de.ellas.recibe']}" rendered="#{fichaCtrl.ficha.datosHogarMadre.salud.asistenciaMonetaria and fichaCtrl.ficha.datosHogarMadre.salud.discapacidad}" />
+                    </h:panelGroup>
+                    <h:panelGroup id="panelTAM2">
+                        <h:selectManyCheckbox value="#{fichaCtrl.tiposDeAsistenciaMonetariaMadre}" layout="pageDirection" rendered="#{fichaCtrl.ficha.datosHogarMadre.salud.asistenciaMonetaria and fichaCtrl.ficha.datosHogarMadre.salud.discapacidad}" >
+                            <f:selectItems value="#{selectItemCtrl.tipoAsistenciaMonetariaItems}"/>
+                            <p:ajax process="@this" update="panelOTipoAsisMadre panelOTipoAsisMadre2" />
+                        </h:selectManyCheckbox>
+                    </h:panelGroup>
+                    <h:panelGroup id="panelOTipoAsisMadre" >
+                        <h:outputLabel value="#{etiquetas['otro.tipo.asistencia']}:" rendered="#{fichaCtrl.otroTipoAsistenciaMonetariaMadre}" />
+                    </h:panelGroup>
+                    <h:panelGroup id="panelOTipoAsisMadre2" >
+                        <p:inputText value="#{fichaCtrl.ficha.datosHogarMadre.otroTipoAisitencia}" styleClass="inputUpper" rendered="#{fichaCtrl.otroTipoAsistenciaMonetariaMadre}" />
+                    </h:panelGroup>
+                </h:panelGrid>
+            </h:panelGroup>
+        </h:panelGroup>
+
+        <h:panelGroup id="panelRepLegal">
+            <h:panelGrid columns="4" headerClass="headerPanelFicha" columnClasses="form-label-width,form-input,form-label-width,form-input" rendered="#{fichaCtrl.ficha.repLegal}" >
+                <f:facet name="header" >  
+                    <h:outputText
+                        value="#{etiquetas['informacion.del.representante.legal']}" />
+                </f:facet>
+                <h:outputLabel  value="#{etiquetas['tipo.identificacion']}: "/>
+                <h:selectOneMenu   value="#{fichaCtrl.ficha.datosHogarRespLegal.tipoIdentificacionResp}" >
+                    <f:selectItems value="#{selectItemCtrl.tipoIdentificacion}"/>
+                    <p:ajax event="change" update="@form" /> 
+                </h:selectOneMenu>
+                <h:outputLabel  value="#{etiquetas['identificacion']}: "/>
+                <h:panelGrid columns="2" cellpadding="0" cellspacing="0">
+                    <p:inputText id="txtIdentificacionResp3" style="width:128px" value="#{fichaCtrl.ficha.datosHogarRespLegal.identificacionResp}" maxlength="10">
+                        <p:ajax event="blur" listener="#{fichaCtrl.validarCedulaRepLegal}" update="panelRepLegal" oncomplete="document.getElementById('formPestana:apPatResp3').focus();"/> 
+                    </p:inputText>
+                </h:panelGrid>
+                <h:outputLabel  value="#{etiquetas['apellido.paterno']}: "/>
+                <p:inputText id="apPatResp3"  value="#{fichaCtrl.ficha.datosHogarRespLegal.primerApellidoResp}" maxlength="50" onkeypress="return acceptText(event)" styleClass="inputUpper"/>
+                <h:outputLabel  value="#{etiquetas['apellido.materno']}: "/>
+                <p:inputText id="apMatResp3" value="#{fichaCtrl.ficha.datosHogarRespLegal.segundoApellidoResp}" maxlength="50" onkeypress="return acceptText(event)" styleClass="inputUpper"/>                
+
+                <h:outputLabel  value="#{etiquetas['primer.nombre']}: "/>
+                <p:inputText id="primNom3" value="#{fichaCtrl.ficha.datosHogarRespLegal.primerNombreResp}" maxlength="50" onkeypress="return acceptText(event)" styleClass="inputUpper"/>                
+                <h:outputLabel  value="#{etiquetas['segundo.nombre']}: "/>
+                <p:inputText id="segNom3" value="#{fichaCtrl.ficha.datosHogarRespLegal.segundoNombreResponsable}" maxlength="50" onkeypress="return acceptText(event)" styleClass="inputUpper"/>
+
+                <h:outputLabel value="#{etiquetas['parentesco']}: "/>
+                <h:selectOneMenu   value="#{fichaCtrl.ficha.datosHogarRespLegal.repLegal2}" >
+                    <f:selectItems value="#{selectItemCtrl.parentesco}"/>
+                </h:selectOneMenu>
+
+                <h:outputLabel value="#{etiquetas['telefono']}: "/>
+                <p:inputText  value="#{fichaCtrl.ficha.datosHogarRespLegal.telefono}" maxlength="10" onkeypress="return acceptNum(event)"/>
+            </h:panelGrid>                
+
+            <h:panelGrid columns="4" columnClasses="form-label-width,form-input,form-label-width,form-input" rendered="#{fichaCtrl.ficha.repLegal}" >
+                <f:facet name="header">  
+                    #{etiquetas['informacion.familiar']} 
+                </f:facet>
+                <h:outputLabel value="#{etiquetas['cargas.familiares']}: " />
+                <p:inputText  value="#{fichaCtrl.ficha.datosHogarRespLegal.cargasFamiliaresPadres}" maxlength="2" onkeypress="return acceptNum(event)" />
+
+                <h:outputLabel value="#{etiquetas['cargas.escolares']}: " />
+                <p:inputText  value="#{fichaCtrl.ficha.datosHogarRespLegal.cargasEscolaresPadres}" maxlength="2" onkeypress="return acceptNum(event)" />
+
+                <h:outputLabel value="#{etiquetas['numero.menores.edad.hogar']}: "/>
+                <p:inputText  value="#{fichaCtrl.ficha.datosHogarRespLegal.numMenoresEdad}" maxlength="2" onkeypress="return acceptNum(event)"/>
+            </h:panelGrid>
+
+            <h:panelGrid columns="4" columnClasses="form-label-width,form-input,form-label-width,form-input" rendered="#{fichaCtrl.ficha.repLegal}">
+                <f:facet name="header">  
+                    #{etiquetas['informacion.laboral']} 
+                </f:facet>
+                <h:outputLabel value="#{etiquetas['trabaja']}: "/>
+                <p:selectBooleanButton value="#{fichaCtrl.ficha.datosHogarRespLegal.responsableTrabaja}" onLabel="Si" offLabel="No" style="width:60px" >  
+                    <p:ajax event="change" update="pnMt3 vvv5 pnTa3 vvv6 panelLt5 panelLt6" process="@this" partialSubmit="true"/>
+                </p:selectBooleanButton>
+                <h:outputLabel value="#{etiquetas['busca.trabajo']}: "/>
+                <p:selectBooleanButton value="#{fichaCtrl.ficha.datosHogarRespLegal.responsableBuscaTrabajo}" onLabel="Si" offLabel="No" style="width:60px" />
+                <h:panelGroup id="panelLt5" >
+                    <h:outputLabel value="#{etiquetas['donde.trabaja']}" rendered="#{fichaCtrl.ficha.datosHogarRespLegal.responsableTrabaja}" />
+                </h:panelGroup>
+                <h:panelGroup id="panelLt6" >
+                    <h:inputText value="#{fichaCtrl.ficha.datosHogarRespLegal.lugarTrabajo}" styleClass="inputUpper" rendered="#{fichaCtrl.ficha.datosHogarRespLegal.responsableTrabaja}" />
+                </h:panelGroup>
+                <h:panelGroup id="pnMt3" >
+                    <h:outputLabel value="#{etiquetas['modalidad.trabajo']}: " rendered="#{fichaCtrl.ficha.datosHogarRespLegal.responsableTrabaja}"/>
+                </h:panelGroup>
+                <h:panelGrid id="vvv5" columns="2" columnClasses="form-label-width,form-input" >
+                    <h:selectOneMenu  value="#{fichaCtrl.ficha.datosHogarRespLegal.modalidadTrabajo.id}" rendered="#{fichaCtrl.ficha.datosHogarRespLegal.responsableTrabaja}">
+                        <f:selectItems value="#{selectItemCtrl.modalidad}"/>
+                        <f:selectItem itemLabel="Otra" itemValue="-1" />
+                        <p:ajax update="panelOmRespLegal panelOmRespLegal2" />
+                    </h:selectOneMenu>
+                </h:panelGrid>
+                <h:panelGroup id="pnTa3" >
+                    <h:outputLabel value="#{etiquetas['tipo.actividad']}: " rendered="#{fichaCtrl.ficha.datosHogarRespLegal.responsableTrabaja}"/>
+                </h:panelGroup>
+                <h:panelGrid id="vvv6" columns="2" columnClasses="form-label-width,form-input" >
+                    <h:selectOneMenu value="#{fichaCtrl.ficha.datosHogarRespLegal.actividadEconomicaItem.id}" rendered="#{fichaCtrl.ficha.datosHogarRespLegal.responsableTrabaja}">
+                        <f:selectItems value="#{selectItemCtrl.actividadEconomica}"/>
+                        <p:ajax process="@this" />
+                    </h:selectOneMenu>
+                </h:panelGrid>
+                <h:panelGroup id="panelOmRespLegal" >
+                    <h:outputLabel value="#{etiquetas['otra.modalidad']}:" rendered="#{fichaCtrl.ficha.datosHogarRespLegal.modalidadTrabajo.id == '-1'}" />
+                </h:panelGroup>
+                <h:panelGroup id="panelOmRespLegal2" >
+                    <p:inputText value="#{fichaCtrl.ficha.datosHogarRespLegal.otraModalidad}" rendered="#{fichaCtrl.ficha.datosHogarRespLegal.modalidadTrabajo.id == '-1'}" />
+                </h:panelGroup>
+            </h:panelGrid>
+            <h:panelGroup rendered="#{fichaCtrl.ficha.repLegal}" >
+                <h:panelGrid columns="2" columnClasses="form-label-width, form-input" >
+                    <f:facet name="header">  
+                        #{etiquetas['informacion.salud']} 
+                    </f:facet>
+                    <h:outputLabel  value="#{etiquetas['discapacidad']}: " />
+                    <p:selectBooleanButton id="value5" value="#{fichaCtrl.ficha.datosHogarRespLegal.salud.discapacidad}" onLabel="Si" offLabel="No" style="width:60px" >
+                        <p:ajax event="change" update="panelSalud3" process="@this" partialSubmit="true"/>
+                    </p:selectBooleanButton>
+                </h:panelGrid>
+                <h:panelGrid id="panelSalud3" style="width: 100%;" columns="4" columnClasses="form-label-width,form-input,form-label-width,form-input">
+
+                    <h:outputLabel  value="#{etiquetas['carne.conadis']}: " rendered="#{fichaCtrl.ficha.datosHogarRespLegal.salud.discapacidad}"/>
+                    <p:inputText value="#{fichaCtrl.ficha.datosHogarRespLegal.salud.carneConadis}" maxlength="50" styleClass="inputUpper" onkeypress="return acceptNum(event)" rendered="#{fichaCtrl.ficha.datosHogarRespLegal.salud.discapacidad}"/>
+
+                    <h:outputLabel  value="#{etiquetas['tipo.discapacidad']}: " rendered="#{fichaCtrl.ficha.datosHogarRespLegal.salud.discapacidad}"/>
+                    <p:inputText value="#{fichaCtrl.ficha.datosHogarRespLegal.salud.tipoDiscapacidad}" maxlength="70" styleClass="inputUpper" rendered="#{fichaCtrl.ficha.datosHogarRespLegal.salud.discapacidad}"/>
+
+                    <h:outputLabel  value="#{etiquetas['porcentaje.discapacidad']}: " rendered="#{fichaCtrl.ficha.datosHogarRespLegal.salud.discapacidad}"/>
+                    <p:inputText value="#{fichaCtrl.ficha.datosHogarRespLegal.salud.porcentajeDiscapacidad}" maxlength="3" onkeypress="return acceptNum(event)" rendered="#{fichaCtrl.ficha.datosHogarRespLegal.salud.discapacidad}"/>
+                    
+                    <h:outputLabel value="#{etiquetas['recibe.asistencia.monetaria']}" rendered="#{fichaCtrl.ficha.datosHogarRespLegal.salud.discapacidad}" />
+                    <p:selectBooleanButton id="value6" value="#{fichaCtrl.ficha.datosHogarRespLegal.salud.asistenciaMonetaria}" onLabel="Si" offLabel="No" style="width:60px" rendered="#{fichaCtrl.ficha.datosHogarRespLegal.salud.discapacidad}">
+                        <p:ajax update="pnAmr3 panelTAM3" />
+                    </p:selectBooleanButton>
+                    <h:panelGroup id="pnAmr3" >
+                        <h:outputLabel value="#{etiquetas['cual.de.ellas.recibe']}" rendered="#{fichaCtrl.ficha.datosHogarRespLegal.salud.asistenciaMonetaria and fichaCtrl.ficha.datosHogarRespLegal.salud.discapacidad}" />
+                    </h:panelGroup>
+                    <h:panelGroup id="panelTAM3">
+                        <h:selectManyCheckbox value="#{fichaCtrl.tiposDeAsistenciaMonetariaRepLegal}" layout="pageDirection" rendered="#{fichaCtrl.ficha.datosHogarRespLegal.salud.asistenciaMonetaria and fichaCtrl.ficha.datosHogarRespLegal.salud.discapacidad}" >
+                            <f:selectItems value="#{selectItemCtrl.tipoAsistenciaMonetariaItems}"/>
+                            <p:ajax process="@this" update="panelOTipoAsisRespLegal panelOTipoAsisRespLegal2" />
+                        </h:selectManyCheckbox>
+                    </h:panelGroup>
+                    <h:panelGroup id="panelOTipoAsisRespLegal" >
+                        <h:outputLabel value="#{etiquetas['otro.tipo.asistencia']}:" rendered="#{fichaCtrl.otroTipoAsistenciaMonetariaRespLegal}" />
+                    </h:panelGroup>
+                    <h:panelGroup id="panelOTipoAsisRespLegal2" >
+                        <p:inputText value="#{fichaCtrl.ficha.datosHogarRespLegal.otroTipoAisitencia}" styleClass="inputUpper" rendered="#{fichaCtrl.otroTipoAsistenciaMonetariaRespLegal}" />
+                    </h:panelGroup>
+                </h:panelGrid>
+            </h:panelGroup>
+        </h:panelGroup>
+
+        <br/>
+        <br/>
+
+        <h:panelGrid columns="2">
+
+            <h:commandLink id="registraHogBtn" action="#{fichaCtrl.guardar}" rendered="#{sesionCtrl.administrador or sesionCtrl.tecnicoResponsable or sesionCtrl.coordinador}">
+                <h:panelGrid style="text-align:center">
+                    <h:graphicImage value="/img/guardar.png" title="Guardar" />
+                    <h:outputText value="#{etiquetas['guardar']}"/>
+                </h:panelGrid>
+                <p:ajax process=":formPestana" update=":formPestana"/>
+            </h:commandLink> 
+
+            <h:commandLink action="#{fichaCtrl.finalizarIngresoFicha}" disabled="#{fichaCtrl.cedulaValida == false}" rendered="#{sesionCtrl.administrador or sesionCtrl.tecnicoResponsable or sesionCtrl.coordinador}" onclick="if(!confirm('#{mensajes['mensaje.ficha.finalizar']}'))return false;">
+                <h:panelGrid style="text-align:center">
+                    <h:graphicImage value="/img/finalizar.png" title="#{etiquetas['finalizar.ficha']}" />
+                    <h:outputText value="#{etiquetas['finalizar']}"/>
+                </h:panelGrid>
+                <p:ajax process=":formPestana" update=":formPestana :formFicha" />
+            </h:commandLink>
+
+        </h:panelGrid>    
+
+
+    </h:panelGrid>
+</div>

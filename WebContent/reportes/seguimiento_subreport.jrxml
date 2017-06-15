@@ -1,0 +1,145 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<jasperReport xmlns="http://jasperreports.sourceforge.net/jasperreports" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://jasperreports.sourceforge.net/jasperreports http://jasperreports.sourceforge.net/xsd/jasperreport.xsd" name="seguimiento_subreport" pageWidth="842" pageHeight="802" columnWidth="842" leftMargin="0" rightMargin="0" topMargin="0" bottomMargin="0" uuid="bdec66ba-d5b7-4252-ad24-88e83f871124">
+	<property name="ireport.zoom" value="1.2100000000000002"/>
+	<property name="ireport.x" value="186"/>
+	<property name="ireport.y" value="0"/>
+	<parameter name="id" class="java.lang.Integer">
+		<defaultValueExpression><![CDATA[]]></defaultValueExpression>
+	</parameter>
+	<queryString>
+		<![CDATA[select unidad, clase, contenido , actividad, trabajo, evidencia,CASE check_profesor
+         WHEN true THEN 'SI'
+         WHEN false THEN 'NO'
+         ELSE 'NO' end checkprofesor,fecha_profesor,comentario_profesor,
+
+ CASE check_alumno
+         WHEN true THEN 'SI'
+         WHEN false THEN 'NO'
+         ELSE 'NO' end checkalumno ,fecha_alumno,comentario_alumno
+          from seguimiento_syllabus_detalle where codigo_seguimiento=$P{id}]]>
+	</queryString>
+	<field name="unidad" class="java.lang.String"/>
+	<field name="clase" class="java.lang.Integer"/>
+	<field name="contenido" class="java.lang.String"/>
+	<field name="actividad" class="java.lang.String"/>
+	<field name="trabajo" class="java.lang.String"/>
+	<field name="evidencia" class="java.lang.String"/>
+	<field name="checkprofesor" class="java.lang.String"/>
+	<field name="fecha_profesor" class="java.sql.Timestamp"/>
+	<field name="comentario_profesor" class="java.lang.String"/>
+	<field name="checkalumno" class="java.lang.String"/>
+	<field name="fecha_alumno" class="java.sql.Timestamp"/>
+	<field name="comentario_alumno" class="java.lang.String"/>
+	<variable name="unidad_1" class="java.lang.Integer" resetType="Column" calculation="Count">
+		<variableExpression><![CDATA[$F{unidad}]]></variableExpression>
+	</variable>
+	<background>
+		<band splitType="Stretch"/>
+	</background>
+	<title>
+		<band splitType="Stretch"/>
+	</title>
+	<pageHeader>
+		<band splitType="Stretch"/>
+	</pageHeader>
+	<columnHeader>
+		<band height="61" splitType="Stretch">
+			<staticText>
+				<reportElement x="0" y="0" width="100" height="20" uuid="01e50d77-9cd3-461f-bc8c-cb840ffd1c97"/>
+				<text><![CDATA[Unidad]]></text>
+			</staticText>
+			<staticText>
+				<reportElement x="100" y="0" width="48" height="20" uuid="2c29630c-3f6e-40d2-9ac5-d967c995657d"/>
+				<text><![CDATA[Clase]]></text>
+			</staticText>
+			<staticText>
+				<reportElement x="148" y="0" width="100" height="20" uuid="717f43b7-0ff4-4ae9-bc0d-0d195beb3330"/>
+				<text><![CDATA[Contenido]]></text>
+			</staticText>
+			<staticText>
+				<reportElement x="248" y="0" width="100" height="20" uuid="217f34e0-9ee1-4f32-bbd6-fd93b1fac44a"/>
+				<text><![CDATA[Actividad]]></text>
+			</staticText>
+			<staticText>
+				<reportElement x="348" y="0" width="100" height="20" uuid="d3d6bddf-011b-4886-916b-8b6d8253f3a5"/>
+				<text><![CDATA[Trabajo]]></text>
+			</staticText>
+			<staticText>
+				<reportElement x="448" y="0" width="100" height="20" uuid="e6cd2318-7b19-44ac-805c-d7c5d75e1717"/>
+				<text><![CDATA[Evidencia]]></text>
+			</staticText>
+			<staticText>
+				<reportElement x="548" y="0" width="39" height="20" uuid="9854a05d-6288-4901-b6ca-c11887a8cd88"/>
+				<text><![CDATA[Impartió]]></text>
+			</staticText>
+			<staticText>
+				<reportElement x="587" y="0" width="71" height="20" uuid="6404939d-1747-4345-80b2-41c47bf015bd"/>
+				<text><![CDATA[Fecha]]></text>
+			</staticText>
+			<staticText>
+				<reportElement x="658" y="0" width="52" height="20" uuid="8ae6c77c-96e9-4832-9dde-289352d0ebb0"/>
+				<text><![CDATA[Recibió]]></text>
+			</staticText>
+			<staticText>
+				<reportElement x="710" y="1" width="68" height="20" uuid="1fdf1a21-43a0-458e-8dc4-4a22df22ea8e"/>
+				<text><![CDATA[fecha_alumno]]></text>
+			</staticText>
+		</band>
+	</columnHeader>
+	<detail>
+		<band height="123" splitType="Stretch">
+			<textField isStretchWithOverflow="true" isBlankWhenNull="true">
+				<reportElement x="0" y="0" width="100" height="20" uuid="d44afaae-f683-439b-9a75-5b95d24bb590"/>
+				<textFieldExpression><![CDATA[$F{unidad}]]></textFieldExpression>
+			</textField>
+			<textField isStretchWithOverflow="true" isBlankWhenNull="true">
+				<reportElement x="100" y="0" width="48" height="20" uuid="c67db2ec-a8fa-4e0c-b800-3c4f6504370f"/>
+				<textFieldExpression><![CDATA[$F{clase}]]></textFieldExpression>
+			</textField>
+			<textField isStretchWithOverflow="true" isBlankWhenNull="true">
+				<reportElement x="148" y="0" width="100" height="20" uuid="bdc6f407-7ee6-48b6-8ae3-f55d30e560b2"/>
+				<textFieldExpression><![CDATA[$F{contenido}]]></textFieldExpression>
+			</textField>
+			<textField isStretchWithOverflow="true" isBlankWhenNull="true">
+				<reportElement x="248" y="0" width="100" height="20" uuid="f4def18f-00fb-48ac-9068-f6954d764b45"/>
+				<textFieldExpression><![CDATA[$F{actividad}]]></textFieldExpression>
+			</textField>
+			<textField isStretchWithOverflow="true" isBlankWhenNull="true">
+				<reportElement x="348" y="0" width="100" height="20" uuid="346683f7-7af9-471b-a867-fa49f59a94e8"/>
+				<textFieldExpression><![CDATA[$F{trabajo}]]></textFieldExpression>
+			</textField>
+			<textField isStretchWithOverflow="true" isBlankWhenNull="true">
+				<reportElement x="448" y="0" width="100" height="20" uuid="05a31b7b-09ef-4916-be49-211e90e815b1"/>
+				<textFieldExpression><![CDATA[$F{evidencia}]]></textFieldExpression>
+			</textField>
+			<textField isStretchWithOverflow="true" isBlankWhenNull="true">
+				<reportElement x="548" y="0" width="39" height="20" uuid="e0fe9ee9-5898-4dbb-ba6d-bb582fe9e883"/>
+				<textFieldExpression><![CDATA[$F{checkprofesor}]]></textFieldExpression>
+			</textField>
+			<textField isStretchWithOverflow="true" isBlankWhenNull="true">
+				<reportElement x="587" y="0" width="71" height="20" uuid="0149dfd7-410f-4859-8fe1-41a1b6768658"/>
+				<textFieldExpression><![CDATA[$F{fecha_profesor}]]></textFieldExpression>
+			</textField>
+			<textField isStretchWithOverflow="true" isBlankWhenNull="true">
+				<reportElement x="658" y="0" width="52" height="20" uuid="23883480-6fc1-4766-9d67-76ec0d99314a"/>
+				<textFieldExpression><![CDATA[$F{checkalumno}]]></textFieldExpression>
+			</textField>
+			<textField isStretchWithOverflow="true" isBlankWhenNull="true">
+				<reportElement x="710" y="0" width="68" height="20" uuid="c6b5640d-1569-4b89-8e1c-9a7bc719b76d"/>
+				<textFieldExpression><![CDATA[$F{fecha_alumno}]]></textFieldExpression>
+			</textField>
+			<line>
+				<reportElement x="2" y="122" width="776" height="1" uuid="8a64eb06-9295-4057-8660-39492ea87c59"/>
+			</line>
+		</band>
+	</detail>
+	<columnFooter>
+		<band splitType="Stretch"/>
+	</columnFooter>
+	<pageFooter>
+		<band splitType="Stretch"/>
+	</pageFooter>
+	<summary>
+		<band splitType="Stretch"/>
+	</summary>
+</jasperReport>

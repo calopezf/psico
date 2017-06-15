@@ -1,0 +1,63 @@
+<ui:composition xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:ui="http://java.sun.com/jsf/facelets"
+	xmlns:h="http://java.sun.com/jsf/html"
+	xmlns:f="http://java.sun.com/jsf/core"
+	template="/WEB-INF/template.xhtml" xmlns:p="http://primefaces.org/ui">
+
+	<ui:define name="content">
+		<h:form id="formParametros">
+			<h1>#{etiquetas['catalogo']}</h1>
+			<p:growl id="growl" autoUpdate="true" />
+
+			<br />
+			<h:panelGrid id="datosGenerales" columns="2"
+				columnClasses="form-label,form-input">
+				<p:outputLabel value="#{etiquetas['codigo']}*:" />
+				<p:inputText id="codigoParametro"
+					readonly="#{param.idParametro!=null}"
+					value="#{parametroCtrl.parametro.codigo}" required="true"
+					requiredMessage="#{etiquetas['codigo']} #{mensajes['requerido.masculino']}">
+				</p:inputText>
+				<p:outputLabel value="#{etiquetas['nombre']}*:" />
+				<p:inputText id="nombreParametro" maxlength="200"
+					value="#{parametroCtrl.parametro.nombre}" required="true"
+					requiredMessage="#{etiquetas['nombre']} #{mensajes['requerido.masculino']}">
+				</p:inputText>
+				<p:outputLabel value="#{etiquetas['tipo']}*:" />
+				<p:selectOneMenu id="tipoParam"
+					value="#{parametroCtrl.parametro.tipo}">
+					<f:selectItems value="#{selectItemCtrl.tipoParametroEnumItems}" />
+				</p:selectOneMenu>
+				<p:outputLabel value="#{etiquetas['descripcion']}:" />
+				<p:inputTextarea id="descripcionParametro" cols="44"
+					value="#{parametroCtrl.parametro.descripcion}">
+					<f:validateLength maximum="150" />
+				</p:inputTextarea>
+				<p:outputLabel value="#{etiquetas['estado']}*:" />
+				<p:selectOneMenu value="#{parametroCtrl.parametro.estado}">
+					<f:selectItems value="#{selectItemCtrl.estadoEnum}" />
+				</p:selectOneMenu>
+			</h:panelGrid>
+			<br />
+			<br />
+			<h:outputText value="#{etiquetas['campos.obligatorios']}" />
+			<br />
+			<br />
+
+			<div align="center">
+				<p:commandButton value="#{etiquetas.guardar}"
+					action="#{parametroCtrl.guardar}" title="#{etiquetas['guardar']}"
+					update="growl">
+				</p:commandButton>
+				<p:commandButton value="#{etiquetas.atras}" 
+					action="/paginas/parametros/parametroLista?faces-redirect=true" title="#{etiquetas['atras']}"
+					immediate="true">
+				</p:commandButton>
+			</div>
+
+
+		</h:form>
+
+	</ui:define>
+
+</ui:composition>

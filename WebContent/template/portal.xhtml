@@ -1,0 +1,76 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:h="http://java.sun.com/jsf/html"
+      xmlns:f="http://java.sun.com/jsf/core"
+      xmlns:ui="http://java.sun.com/jsf/facelets"
+      xmlns:p="http://primefaces.org/ui">
+    <f:view contentType="text/html">
+        <h:head>
+            <!-- Mimic Internet Explorer 8 -->
+            <meta http-equiv="X-UA-Compatible" content="IE=EmulateIE8" />
+            <title>#{etiquetas['nombre.sistema']}</title>
+            <link type="text/css"
+                  href="#{facesContext.externalContext.requestContextPath}/css/surti-portal.css"
+                  rel="stylesheet" media="screen" />
+            <script src="#{facesContext.externalContext.requestContextPath}/js/generalJs.js" type="text/javascript"></script>
+            <meta http-equiv="Content-Type" content="text/html; charset=iso-8859-1" />
+        </h:head>
+        <h:body>
+
+            <div id="contenedor">
+                
+                <div id="divSuperior" style="width:1024px;height:90px;margin:0 auto;background-color:#539AFF;" >
+                    <div style="float:right;margin-top:10px;margin-right:20px;"><img src="#{facesContext.externalContext.requestContextPath}/img/ninosBanner.png" /></div>
+                    <img src="#{facesContext.externalContext.requestContextPath}/img/logoPeti.png" />
+                </div>
+                
+                <div id="divMenu" style="width:1024px;height:30px;margin:10px auto;border:5px;background-color:#12A8DA" >
+                    <table width="100%" border="0" align="center">
+                        <tr align="center">
+                            <td>
+                                <a href="#{facesContext.externalContext.requestContextPath}/paginas/portal/index.jsf">#{etiquetas['inicio']}</a>
+                            </td>
+                            <td>|</td>
+                            <td>
+                                <a href="#{facesContext.externalContext.requestContextPath}/paginas/portal/infoPortal/infoPortal.jsf?idTipoPaginaHtml=QUIENES_SOMOS">#{etiquetas['quienes.somos']}</a>
+                            </td>
+                            <td>|</td>
+                            <td>
+                                <a href="#{facesContext.externalContext.requestContextPath}/paginas/portal/infoPortal/infoPortal.jsf?idTipoPaginaHtml=NUESTROS_SERVICIOS">#{etiquetas['nuestros.servicios']}</a>
+                            </td>
+                            <td>|</td>
+                            <td>
+                                <a href="#{facesContext.externalContext.requestContextPath}/paginas/portal/infoPortal/infoPortal.jsf?idTipoPaginaHtml=CONTACTENOS">#{etiquetas['contactanos']}</a>
+                            </td>
+                        </tr>
+                    </table>
+
+                </div>
+                
+                 <ui:insert name="content">
+                        Content
+                 </ui:insert>
+
+                
+                <div id="divFooter" align="center">
+                    <img src="#{facesContext.externalContext.requestContextPath}/img/logoAmaVida.png" style="top:10px;position:relative;" />
+                    <img src="#{facesContext.externalContext.requestContextPath}/img/logoSurtiFooter.png" align="left" style="position:relative;top:15px;"/>
+                </div>
+            </div>
+
+
+
+            <script type="text/javascript">
+                var _gaq = _gaq || [];
+                _gaq.push(['_setAccount', 'UA-31995509-1']);
+                _gaq.push(['_trackPageview']);
+
+                (function() {
+                    var ga = document.createElement('script'); ga.type = 'text/javascript'; ga.async = true;
+                    ga.src = ('https:' == document.location.protocol ? 'https://ssl' : 'http://www') + '.google-analytics.com/ga.js';
+                    var s = document.getElementsByTagName('script')[0]; s.parentNode.insertBefore(ga, s);
+                })();
+            </script>
+        </h:body>
+    </f:view>
+</html>

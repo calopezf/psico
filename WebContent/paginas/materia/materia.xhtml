@@ -1,0 +1,98 @@
+<ui:composition xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:ui="http://java.sun.com/jsf/facelets"
+	xmlns:h="http://java.sun.com/jsf/html"
+	xmlns:f="http://java.sun.com/jsf/core"
+	template="/WEB-INF/template.xhtml" xmlns:p="http://primefaces.org/ui">
+
+	<br />
+
+	<ui:define name="content">
+		<h:form id="formUsuario">
+			<h1>#{etiquetas['materia']}</h1>
+			<p:growl id="growl" autoUpdate="true" />
+			<h:panelGrid columns="2" columnClasses="form-label,form-input">
+				<p:outputLabel value="#{etiquetas['codigoMateria']}*:" />
+				<p:inputText id="cedula" size="16"
+					value="#{materiaCtrl.materia.codigo}" required="true"
+					requiredMessage="#{etiquetas['codigoMateria']} #{mensajes['requerido.femenino']}"
+					maxlength="10" />
+
+				<p:outputLabel value="#{etiquetas['nombre']}*:" />
+				<p:inputText id="nombre" value="#{materiaCtrl.materia.nombre}"
+					required="true"
+					requiredMessage="#{etiquetas['nombre']} #{mensajes['requerido.masculino']}"
+					maxlength="200" size="50" />
+
+				<p:outputLabel value="#{etiquetas['area']}*:" />
+				<p:selectOneMenu id="area" required="true"
+					requiredMessage="#{etiquetas['carrera']} #{mensajes['requerido.femenino']}"
+					value="#{materiaCtrl.materia.area.codigo}" style="width:250px">
+					<f:selectItems value="#{materiaCtrl.areaLista}" var="item"
+						itemLabel="#{item.nombre}" itemValue="#{item.codigo}" />
+				</p:selectOneMenu>
+
+				<p:outputLabel value="#{etiquetas['creditos']}*:" />
+				<p:inputText id="creditos" value="#{materiaCtrl.materia.creditos}"
+					required="true"
+					requiredMessage="#{etiquetas['creditos']} #{mensajes['requerido.masculino']}"
+					maxlength="2" size="2" />
+
+				<p:outputLabel value="#{etiquetas['nivel']}*:" />
+				<p:selectOneMenu id="nivel" required="true"
+					requiredMessage="#{etiquetas['nivel']} #{mensajes['requerido.masculino']}"
+					value="#{materiaCtrl.materia.nivel.codigo}" style="width:250px">
+					<f:selectItems value="#{materiaCtrl.nivelLista}" var="item"
+						itemLabel="#{item.nombre}" itemValue="#{item.codigo}" />
+				</p:selectOneMenu>
+
+				<p:outputLabel for="facultad" value="#{etiquetas['carrera']}*:" />
+				<p:selectOneMenu id="facultad" required="true"
+					requiredMessage="#{etiquetas['carrera']} #{mensajes['requerido.femenino']}"
+					value="#{materiaCtrl.materia.carrera.codigo}" style="width:250px">
+					<f:selectItems value="#{materiaCtrl.carreraLista}" var="item"
+						itemLabel="#{item.nombre}" itemValue="#{item.codigo}" />
+				</p:selectOneMenu>
+
+				<p:outputLabel value="#{etiquetas['planEstudio']}:*" />
+				<p:selectOneMenu id="semestre" required="true"
+					requiredMessage="#{etiquetas['planEstudio']} #{mensajes['requerido.masculino']}"
+					value="#{materiaCtrl.materia.plan.codigo}" style="width:250px">
+					<f:selectItems value="#{materiaCtrl.planLista}" var="item"
+						itemLabel="#{item.nombre}" itemValue="#{item.codigo}" />
+				</p:selectOneMenu>
+
+				<p:outputLabel for="estado" value="#{etiquetas['estado']}*:" />
+				<p:selectOneMenu id="estado" value="#{materiaCtrl.materia.estado}">
+					<f:selectItems value="#{selectItemCtrl.estadoEnum}" />
+				</p:selectOneMenu>
+
+			</h:panelGrid>
+			<br />
+			<br />
+			<h:outputText value="#{etiquetas['campos.obligatorios']}" />
+
+			<br />
+			<br />
+
+			<div align="center">
+				<p:commandButton value="#{etiquetas.guardar}"
+					action="#{materiaCtrl.guardar}" title="#{etiquetas['guardar']}"
+					update="growl">
+				</p:commandButton>
+				<p:commandButton value="#{etiquetas.atras}"
+					action="/paginas/materia/materiaLista?faces-redirect=true"
+					title="#{etiquetas['atras']}" immediate="true">
+				</p:commandButton>
+			</div>
+		</h:form>
+		<!--<p:ajaxStatus onstart="loadingDialog.show();" onsuccess="loadingDialog.hide();"/>  
+        <p:dialog modal="true" widgetVar="loadingDialog" header="..." draggable="false" closable="false" width="200" height="50" resizable="false">
+            <br/>
+            <div align="center">
+                <p:graphicImage value="/img/ajax-loader.gif" />  
+            </div>
+            <br/>
+        </p:dialog>-->
+	</ui:define>
+
+</ui:composition>

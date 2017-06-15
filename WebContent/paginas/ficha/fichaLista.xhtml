@@ -1,0 +1,307 @@
+<ui:composition xmlns="http://www.w3.org/1999/xhtml"
+                xmlns:ui="http://java.sun.com/jsf/facelets"
+                xmlns:h="http://java.sun.com/jsf/html"
+                xmlns:f="http://java.sun.com/jsf/core"
+                xmlns:p="http://primefaces.org/ui"
+                template="/template/general.xhtml">
+    <ui:define name="title">
+        <h:outputText value="#{etiquetas['historial']}"/>
+    </ui:define>
+    <ui:define name="content">
+
+        <h:panelGrid columns="2" columnClasses="twoColumns,twoColumns" style="width:100%">
+            <h:panelGrid columns="2" headerClass="headerPanelBar" columnClasses="infoEtiqueta,infoValor" styleClass="infoTable">
+                <f:facet name="header"><h:outputText value="#{etiquetas['datos.generales']}"/></f:facet>
+                <h:outputText value="#{etiquetas['identificacion']}:" />
+                <h:outputText value="#{fichaCtrl.persona.identificacion}" />
+                <h:outputText value="#{etiquetas['nombre']}:" />
+                <h:outputText value="#{fichaCtrl.persona.nombreCompleto}" />
+                <h:outputText value="#{etiquetas['edad']}:" />
+                <h:outputText value="#{fichaCtrl.pagerFicha.list[0].datosPersonales.edad}" />
+                <h:outputLabel value="#{etiquetas['sexo']}: "/>
+                <h:outputText value="#{fichaCtrl.pagerFicha.list[0].datosPersonales.sexo}" />
+                <h:outputText value="#{etiquetas['autodefinicion.etnica']}:" />
+                <h:outputText value="#{fichaCtrl.pagerFicha.list[0].datosPersonales.etnia.nombre}" />
+                <h:outputLabel value="#{etiquetas['nacionalidad']}: "/>
+                <h:outputText value="#{fichaCtrl.pagerFicha.list[0].datosPersonales.pais.nombre}" />
+                <h:outputLabel value="#{etiquetas['canton.domicilio']}: "/>
+                <h:outputText value="#{fichaCtrl.pagerFicha.list[0].domicilo.canton.nombre} - #{fichaCtrl.pagerFicha.list[0].domicilo.canton.provincia.nombre}" />
+<!--                <h:outputLabel  value="#{etiquetas['tipo.zona']}: "/>
+                <h:outputText value="#{fichaCtrl.pagerFicha.list[0].domicilo.tipoZonaEnum}" />-->
+                <h:outputLabel  value="#{etiquetas['calle.principal']}: "/>
+                <h:outputText value="#{fichaCtrl.pagerFicha.list[0].domicilo.callePrincipal}" />
+                <h:outputLabel  value="#{etiquetas['calle.secundaria']}: "/>
+                <h:outputText value="#{fichaCtrl.pagerFicha.list[0].domicilo.calleSecundaria}" />
+                <h:outputLabel value="#{etiquetas['celular']}: "/>
+                <h:outputText value="#{fichaCtrl.pagerFicha.list[0].datosPersonales.celular}" />
+            </h:panelGrid>
+
+            <h:form id="formPersonaLista">
+
+                <p:growl id="growl4" showDetail="false" sticky="false" />
+
+                <input type="hidden" value="#{param.idPersona}" id="idPersona" name="idPersona"/>
+
+                <h:panelGrid headerClass="headerPanelBar" styleClass="infoTable">
+                    <f:facet name="header"><h:outputText value="#{etiquetas['fichas.registradas']}"/></f:facet>
+                </h:panelGrid>
+
+                <p:growl id="msg" autoUpdate="true"/>
+                <h:panelGroup id="itemsPanel">
+                    <h:panelGrid style="margin-bottom:5px;" columns="6"
+                                 rendered="#{fichaCtrl.pagerFicha.panelButtonsOn}">
+                        <p:commandButton action="#{fichaCtrl.pagerFicha.firstPage}"
+                                         value="#{etiquetas.primero}" update="itemsPanel"
+                                         disabled="#{!fichaCtrl.pagerFicha.firstOn}" />
+                        <p:commandButton action="#{fichaCtrl.pagerFicha.previousPage}"
+                                         value="#{etiquetas.anterior}" update="itemsPanel"
+                                         disabled="#{!fichaCtrl.pagerFicha.backOn}" />
+                        <p:commandButton action="#{fichaCtrl.pagerFicha.nextPage}"
+                                         value="#{etiquetas.siguiente}" update="itemsPanel"
+                                         disabled="#{fichaCtrl.pagerFicha.nextOn}" />
+                        <p:commandButton action="#{fichaCtrl.pagerFicha.lastPage}"
+                                         value="#{etiquetas.ultimo}" update="itemsPanel"
+                                         disabled="#{fichaCtrl.pagerFicha.lastOn}" />
+                        <h:outputText
+                            value="Total: #{fichaCtrl.pagerFicha.totalIndex} registros" />
+                        <p:ajaxStatus id="ajaxStatusPanel">  
+                            <f:facet name="start">  
+                                <h:graphicImage value="/img/ajax-loader.gif" />  
+                            </f:facet>  
+
+                            <f:facet name="complete">  
+                                <h:outputText value="" />  
+                            </f:facet>  
+                        </p:ajaxStatus>
+                    </h:panelGrid>
+
+                    <p:dataTable id="itemsTable" emptyMessage="#{etiquetas['no.existen.registros']}"  value="#{fichaCtrl.pagerFicha.list}"  var="f"  style="width:100%" >
+                        <p:column>
+                            <f:facet name="header">
+                                <h:outputText value="#{etiquetas['seleccion']}" />
+                            </f:facet>
+                            <h:selectBooleanCheckbox value="#{f.seleccionada}" rendered="#{not f.estado.nueva}">
+                                <p:ajax update=":itemsAlertasPanel"/>
+                            </h:selectBooleanCheckbox>
+                        </p:column>
+                        <p:column>
+                            <f:facet name="header">
+                                <h:outputText value="#{etiquetas['fecha']}" />
+                            </f:facet>
+                            <h:outputText value="#{f.fechaRegistro}">
+                                <f:convertDateTime pattern="dd/MMM/yyyy HH:mm" timeZone="#{sesionCtrl.timeZone}"/>
+                            </h:outputText>
+                            <h:outputText value=" #{f.estado}" style="font-size:10px;"/>
+                        </p:column>
+
+                        <p:column styleClass="columnaCentrada">
+                            <f:facet name="header">                            
+                                <h:outputText value="#{etiquetas['editar']}" />
+                            </f:facet>
+                            <h:commandLink action="#{fichaCtrl.editarFicha}" title="#{etiquetas.editar}" rendered="#{f.estado.nueva}">
+                                <h:graphicImage value="/img/edit.png" id="editImage" />
+                            </h:commandLink>
+                        </p:column>
+
+                        <p:column styleClass="columnaCentrada" rendered="#{sesionCtrl.administrador or sesionCtrl.tecnicoResponsable}">
+                            <f:facet name="header">                            
+                                <h:outputText value="#{etiquetas['finalizar']}" />
+                            </f:facet>
+                            <h:commandLink action="#{fichaCtrl.finalizarIngresoFichaDesdeListaFichas}" title="#{etiquetas.finalizar}" rendered="#{f.estado.nueva}" onclick="if(confirm('#{mensajes['mensaje.ficha.finalizar']}'))return true; else return false;" >
+                                <h:graphicImage value="/img/finalizarFicha.png" id="finalizarImage" />
+                                <p:ajax listener="#{fichaCtrl.encerarServicioLista}" update=":itemsAlertasPanel :formPersonaLista" />
+                            </h:commandLink>
+                        </p:column>
+
+                        <p:column styleClass="columnaCentrada" headerText="#{etiquetas['eliminar.sistema']}" rendered="#{sesionCtrl.administrador or sesionCtrl.tecnicoResponsable}">
+                            <h:commandLink action="#{fichaCtrl.eliminarFicha}" title="#{etiquetas.borrar}" rendered="#{f.estado.nueva}" onclick="if(confirm('#{mensajes['mensaje.confirma.elimina.registro']}'))return true; else return false;">
+                                <h:graphicImage value="/img/delete.png" id="deleteImage" />
+                                <p:ajax listener="#{fichaCtrl.encerarServicioLista}" update=":formPersonaLista:itemsPanel"/>
+                            </h:commandLink>
+                        </p:column>
+
+                        <p:column styleClass="columnaCentrada" headerText="#{etiquetas['ver.reporte']}" rendered="#{sesionCtrl.administrador or sesionCtrl.tecnicoResponsable}">
+                            <h:commandLink target="_blank" action="#{fichaCtrl.verReporte}" ajax="false" title="#{etiquetas['ver.reporte']}" >
+                                <h:graphicImage value="/img/report_1.png" id="reportImage" />
+                            </h:commandLink>
+                        </p:column>
+
+                    </p:dataTable>                
+                </h:panelGroup>
+
+            </h:form>
+
+
+        </h:panelGrid>
+
+
+        <h:form id="itemsAlertasPanel" >
+
+            <h:panelGrid headerClass="headerPanelBar" styleClass="infoTable">
+                <f:facet name="header"><h:outputText value="#{etiquetas['acciones']}"/></f:facet>
+            </h:panelGrid>
+
+            <h:outputText value="#{etiquetas['no.existen.registros']}" rendered="#{empty fichaCtrl.servicioListaFinal}"/>
+
+            <h:dataTable id="itemsTable" rendered="#{not empty fichaCtrl.servicioListaFinal}" value="#{fichaCtrl.servicioListaFinal}"  var="s"  style="width:100%" columnClasses="serviciosOtraColumna,serviciosOtraColumna,serviciosOtraColumna,serviciosColumnaFoco,serviciosColumnaFoco,serviciosColumnaFoco,serviciosColumnaFoco">
+
+                <h:column>
+                    <f:facet name="header">
+                        <h:outputText value="#{etiquetas['institucion']}"/>
+                    </f:facet>
+                    <h:outputText value="#{s.servicio.institucion.nombre}" />
+                </h:column>
+                <h:column>
+                    <f:facet name="header">
+                        <h:outputText value="#{etiquetas['servicio.solicitado']}"/>
+                    </f:facet>
+                    <h:outputText value="#{s.servicio.nombre}" />
+                </h:column>
+                <h:column>
+                    <f:facet name="header">
+                        <h:outputText value="#{etiquetas['fecha.envio']}"/>
+                    </f:facet>
+                    <h:outputText value="#{s.fechaEnvio}">
+                        <f:convertDateTime pattern="#{sesionCtrl.patronFechaConHoras}" timeZone="#{sesionCtrl.timeZone}"/>
+                    </h:outputText>
+                </h:column>
+
+                <h:column>
+                    <f:facet name="header">
+                        <h:outputText value="#{etiquetas['estado']}"/>
+                    </f:facet>
+                    <h:graphicImage title="#{s.estadoServicio}" value="/img/foco-rojo.png" rendered="#{s.estadoServicio.porEnviar}" />
+                    <h:graphicImage title="#{s.estadoServicio}" value="/img/foco-verde.png" rendered="#{s.estadoServicio.enProceso}" />
+                    <h:graphicImage title="#{s.estadoServicio}" value="/img/foco-gris.png" rendered="#{s.estadoServicio.finalizado}" />
+                </h:column>
+                <h:column>
+                    <f:facet name="header">
+                        <h:outputText value="#{etiquetas['enviar']}"/>
+                    </f:facet>
+                    <h:commandLink action="#{fichaCtrl.enviar}"  title="#{etiquetas['enviar']}" rendered="#{s.estadoServicio.porEnviar}">
+                        <h:graphicImage value="/img/enviar.png" id="enviarServicioImage" />
+                    </h:commandLink>
+
+                    <h:commandLink action="#{fichaCtrl.enviar}"  title="#{etiquetas['reenviar.correo']}" rendered="#{s.estadoServicio.enProceso and s.servicio.tipoNotificacion.email}">
+                        <h:graphicImage value="/img/enviar.png" id="reenviarImage" />
+                    </h:commandLink>
+
+
+                </h:column>
+
+                <h:column>
+                    <f:facet name="header">
+                        <h:outputText value="#{etiquetas['consultar']}"/>
+                    </f:facet>
+                    <h:commandLink action="#{fichaCtrl.consultar}" title="#{etiquetas['consultar']}" rendered="#{s.estadoServicio.enProceso and s.servicio.tipoNotificacion.servicioWeb}">
+                        <h:graphicImage value="/img/view32.png" id="enviarImage" />
+                    </h:commandLink>
+
+                </h:column>
+
+                <h:column>
+                    <f:facet name="header">
+                        <h:outputText value="#{etiquetas['observaciones']}"/>
+                    </f:facet>
+                    <h:commandLink action="#{fichaCtrl.obtenerServicioFicha}" title="#{etiquetas['observaciones']}" >
+                        <h:graphicImage value="/img/view.png" id="observacionImage" />
+                        <p:ajax update=":observaciones" />
+                    </h:commandLink>
+                </h:column>
+                
+                <h:column>
+                    <f:facet name="header">
+                        <h:outputText value="#{etiquetas['finalizar.servicio']}"/>
+                    </f:facet>
+                    <h:commandLink action="#{fichaCtrl.finalizarServicio}" title="#{etiquetas['finalizar.servicio']}" rendered="#{s.estadoServicio.enProceso and s.servicio.tipoNotificacion.email}" >
+                        <h:graphicImage value="/img/finalizarFicha.png" id="finaServicioImage" />
+                        <p:ajax update=":itemsAlertasPanel" />
+                    </h:commandLink>
+                </h:column>
+
+            </h:dataTable>                
+        </h:form>
+        <h:form id="observaciones">
+            <h:panelGrid headerClass="headerPanelBar" styleClass="infoTable" rendered="#{fichaCtrl.mostrarPopUp}">
+                <f:facet name="header"><h:outputText value="#{etiquetas['observaciones']}"/></f:facet>
+            </h:panelGrid>
+            <h:panelGrid columns="2" rendered="#{fichaCtrl.mostrarPopUp}">
+                <h:inputTextarea value="#{fichaCtrl.observacion}" rows="3" cols="100" />
+                <p:commandButton action="#{fichaCtrl.guardarObservacion}" value="#{etiquetas['agregar']}" update="observaciones" >
+<!--                    <f:ajax render="observaciones" />                    -->
+                </p:commandButton>
+            </h:panelGrid>
+            <p:dataTable id="obs" value="#{fichaCtrl.obsXServicioXficha}" var="ob" emptyMessage="#{etiquetas['no.existen.registros']}" rendered="#{fichaCtrl.mostrarPopUp}" >
+                <p:column>
+                    <f:facet name="header">
+                        <h:outputText value="#{etiquetas['fecha']}"/>
+                    </f:facet>
+                    <h:outputText value="#{ob.fecha}" />
+                </p:column>
+                <p:column>
+                    <f:facet name="header">
+                        <h:outputText value="#{etiquetas['observacion']}"/>
+                    </f:facet>
+                    <h:outputText value="#{ob.observacion}" />
+                </p:column>
+                <p:column>
+                    <f:facet name="header">
+                        <h:outputText value="#{etiquetas['usuario']}"/>
+                    </f:facet>
+                    <h:outputText value="#{ob.usuarioRegistra.identificacion}" />
+                </p:column>
+            </p:dataTable>
+<!--            <p:commandButton action="#{fichaCtrl.finalizarServicioEnObservacion}" value="#{etiquetas['finalizar.alerta']}" update="observaciones" />-->
+        </h:form>
+        <h:panelGroup id="panel1" >
+            <p:dialog id="obssf" widgetVar="obsPopUp" modal="true" visible="#{fichaCtrl.mostrarPopUp}" height="400px" width="650px">
+                <h:form id="popup">
+                    <f:facet name="header" >  
+                        <h:outputText
+                            value="#{etiquetas['observaciones']}" />
+                    </f:facet>
+                    <p:dataTable id="obs" value="#{fichaCtrl.obsXServicioXficha}" var="ob" emptyMessage="#{etiquetas['no.existen.registros']}" >
+                        <p:column>
+                            <f:facet name="header">
+                                <h:outputText value="#{etiquetas['fecha']}"/>
+                            </f:facet>
+                            <h:outputText value="#{ob.fecha}" />
+                        </p:column>
+                        <p:column>
+                            <f:facet name="header">
+                                <h:outputText value="#{etiquetas['observacion']}"/>
+                            </f:facet>
+                            <h:outputText value="#{ob.observacion}" />
+                        </p:column>
+                        <p:column>
+                            <f:facet name="header">
+                                <h:outputText value="#{etiquetas['usuario']}"/>
+                            </f:facet>
+                            <h:outputText value="#{ob.usuarioRegistra.identificacion}" />
+                        </p:column>
+                    </p:dataTable>
+                    <p:panelGrid columns="1" >
+                        <p:commandButton action="#{fichaCtrl.mostrarPp2}" value="#{etiquetas['agregar']}" >
+                            <f:ajax render=":panel2" />
+                        </p:commandButton>
+                    </p:panelGrid>
+                </h:form>
+            </p:dialog>
+        </h:panelGroup>
+        <h:panelGroup id="panel2" >
+            <p:dialog id="obssf2" widgetVar="obsPopUp2" modal="true" visible="#{fichaCtrl.mostrarPopUp2}" height="150px" width="300px">
+                <h:form id="popup2">
+                    <h:panelGrid columns="2" >
+                        <h:outputLabel value="#{etiquetas['observacion']}" />
+                        <h:inputTextarea value="#{fichaCtrl.observacion}" rows="6" cols="25" />
+                    </h:panelGrid>
+                    <h:panelGrid columns="1" >
+                        <p:commandButton action="#{fichaCtrl.guardarObservacion}" value="#{etiquetas['guardar']}" >
+                            <!--                            <f:ajax render=":panel2 :panel1" />-->
+                        </p:commandButton>
+                    </h:panelGrid>
+                </h:form>
+            </p:dialog>
+        </h:panelGroup>
+    </ui:define>
+</ui:composition>

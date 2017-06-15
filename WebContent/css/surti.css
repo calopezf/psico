@@ -1,0 +1,510 @@
+/* 
+    Document   : surti.css
+    Created on : Sep 7, 2012, 9:26:21 AM
+    Author     : Cristian
+    Description:
+        Purpose of the stylesheet follows.
+*/
+*{
+    font-family: "Arial","sans";
+}
+
+body {
+    background-color: #fff;
+    font-size: 12px;
+    color: #333;
+    padding: 0;
+    margin: 0;
+    display: block;
+}
+
+a, a:link, a:visited, a:active{
+    /*color:#9f302c;*/
+    color:#777;
+    text-decoration: none;
+}
+
+a:hover{
+    color:#3d5f94;
+    text-decoration: underline;
+}
+
+#container {
+    width: 1200px;
+    margin: 0 auto;
+    margin: 0 auto;
+    background-color: #fff;
+}
+
+#content {
+    min-height: 360px;
+    height: auto;
+    padding-left: 2px;
+    padding-right: 2px;
+}
+/* for Internet Explorer */
+/*\*/
+* html #content {
+    height: 360px;
+}
+/**/
+div.titlePage {
+    font-size: 18px;
+    margin-top: 5px;
+    margin-bottom: 10px;
+    color: #fff;
+    font-weight: bold;
+    padding:4px;
+    /*border-bottom: 1px dotted #a9ccec;*/
+}
+
+.twoColumns{
+    vertical-align: top;
+    width:50%;
+}
+
+.infoTable{
+    width:100%;
+    margin-top: 16px;
+}
+
+.infoEtiqueta {
+    width:148px;
+    font-size: 16px;
+    font-weight: bold;
+}
+
+.infoValor {
+    font-size: 16px;
+}
+
+.subTitleEspecial {
+    font-size: 16px;
+    margin-top: 5px;
+    margin-bottom: 10px;
+    /*color: #1d6caf;*/
+    font-weight: bold;
+
+}
+
+.textEspecial {
+    font-size: 12px;
+    margin-top: 5px;
+    margin-bottom: 10px;
+    font-weight: bold;
+}
+.miniTitle {
+    font-size: 9px;
+    /*color: #1d2d59;*/
+    margin-top: 5px;
+}
+
+#copyright {
+    margin-top: 4px;
+    font-size: 10px;
+}
+
+#header {
+    /*color: #fff;*/
+}
+#topHeader {
+    background-color: #2263a3;
+    /*color: #fff;*/
+    display: block;
+
+    height: 16px;
+}
+
+#topSubHeader {
+    background-color: #2263a3 ;/*#1d6caf;*/ 
+    /*color: #fff;*/
+    display: block;
+    min-height: 22px;
+    height:auto;
+    font-size: 12px;
+}
+
+#topSubHeader a{
+    /*color:#999;*/
+    text-decoration: none;
+}
+
+#topSubHeader a:hover{
+    /*color:#8ac9f9;*/
+}
+
+#subHeadRight{
+    float: right;
+    background-color: #1d6caf; 
+    height: 25px;
+}
+
+/* Estilo de los formularios */
+.form-label {
+    text-align: right;
+    /*color: #444;*/
+    padding: 3px;
+    vertical-align: middle;
+    background-color: #aed0ea;
+}
+
+.form-label2 {
+    text-align: right;
+    font-weight: bold;
+    padding: 3px;
+    /*color: #1d6caf;*/
+}
+
+/* Estilo de los formularios */
+.form-labelgrande {
+
+    text-align: right;
+    /*color: #fff;*/
+    font-weight: bold;
+    padding: 1px;
+    vertical-align: top;
+    background-color: #1d6caf;
+    font-size: 12px;
+}
+.form-input {
+    text-align: left;
+    padding: 3px;
+    vertical-align: middle;
+}
+.form-inputgrande {
+    text-align: left;
+    padding: 1px;
+    vertical-align: top;
+    font-size: 14px;
+}
+.form-input-right {
+    text-align: right;
+    padding: 3px;
+    vertical-align: top;
+}
+
+.error-message {
+    color: red;
+}
+.info-message {
+    color: buttonface;
+    font-size: 15px;
+}
+
+.cell-hoja-vida {
+    text-align: center;
+    vertical-align: top;
+    padding: 5px;
+    border: 1px solid #fdedbd;
+}
+
+.cell-hoja-vida-sel {
+    text-align: center;
+    vertical-align: top;
+    padding: 5px;
+    border: 1px solid #fdedbd;
+    font-size: 18px;
+}
+
+
+.caja-inicio{
+    border: 1px #c3c4cb solid;
+}
+.caja-inicio-left{
+    float: left;
+    width: 350px;
+    text-align: left;
+    padding-left: 5px;
+}
+
+.caja-inicio-right{
+    float: right;
+    width: 350px;
+    text-align: left;
+}
+
+.titulo-caja {
+    font-size: 14px;
+    margin-top: 5px;
+    margin-bottom: 10px;
+    margin-left: 0px;
+    margin-right: 20px;
+    color: #000000;
+}
+
+.caja-inicio-registro {
+    font-size: 14px;
+    margin-top: 5px;
+    margin-bottom: 10px;
+    margin-left: 10px;
+    margin-right: 20px;
+    color: #000000;
+}
+
+.recuperaClave{
+    color: #1d6caf;
+    font-size: 9px;
+}
+
+.letraPeque{
+    font-size: 9px;
+}
+.letraPequeRoja{
+    color: red;
+    font-size: 9px;
+}
+.letraGrandeRoja{
+    color: red;
+    font-size: 18px;
+}
+.columa-centrada-color{
+    text-align: center;
+    background-color: #f2f5f9;
+    border: 1px solid #1d2d59;
+}
+.columa-centrada-transparente{
+    text-align: center;
+    border: 1px solid #1d2d59;
+}
+.filaEspaciada{
+    margin: 10px;
+}
+.celda-tomate {
+    clear: both;
+    background-color: #1d6caf;
+}
+.inputUpper{
+    text-transform: uppercase;
+}
+.filaAlerta{
+    background-color: #1d6caf;
+    color:#ffffff;
+}
+.filaOficial{
+    background-color: #888888;
+    font-weight: bold;
+    border: solid 2px #666666;
+    color: #ffffff;
+}
+.filaRanking{
+    background-color: #5ADF18;
+    font-weight: bold;
+    border: solid 2px #666666;
+    color: #000000;
+}
+
+.ui-widget{
+    font-family: "Arial","sans";
+}
+
+/* Se sobreescribe el estilo de las tablas de primefaces */
+.ui-datatable th div.ui-dt-c, .ui-datatable .ui-datatable-data td div.ui-dt-c, .ui-datatable .ui-datatable-data-empty td div.ui-dt-c, .ui-datatable tfoot td div.ui-dt-c{
+    padding: 4px;
+}
+.ui-state-disabled, .ui-widget-content .ui-state-disabled, .ui-widget-header .ui-state-disabled {
+    background-image: none;
+    opacity: 1;
+}
+.ui-datalist-data{
+    margin-left: -25px;
+    font-size: 9px;
+}
+.ui-datalist-content, ui-widget-content{
+    border: none;
+    background-color: transparent;
+}
+/* Se sobreescribre ele estilo de todos los selec desactivados */
+select[disabled] { 
+    font-size: 9px;
+    color: #000000; 
+    background-color: #ffffff;
+    border: 1px dotted;    
+}
+input[disabled], textarea[disabled]{ 
+    color: #000000; 
+    background-color: #ffffff;
+    border: none;    
+}
+.columnaCentrada{
+    text-align: center;
+}
+.form-label-simple {
+    font-weight: bold;
+    padding: 3px;
+    vertical-align: top;
+}
+
+.lineaAzul{
+    width: 100%; 
+    height: 2px; 
+    background-color: #0d69ae
+}
+
+.registraTrabajadorCaja{
+    background: url("../img/registroBuscoEmpleoInicio.png") no-repeat;
+    width: 410px; 
+    height: 80px;
+}
+
+.registraEmpresaCaja{
+    background: url("../img/registroBuscoTalentoHumanoInicio.png") no-repeat;
+    width: 410px; 
+    height: 80px;
+}
+
+.botonRegistra{
+    margin-left: 295px;
+    margin-top: 15px;
+    position: absolute;
+}
+
+/**Se sobreescribe el estilo de las cajas de oferas*/
+#anunciosIndex .ui-widget-content .ui-state-default {
+    background-color: #0d69ae;
+    color: #ffffff;
+    font-weight: normal;
+    border:none;
+    text-shadow:none;
+}
+
+.cajaInnicioInstitucion{
+    width: 200px; 
+    height: 100px; 
+    vertical-align: middle; 
+    padding-left: 20px;
+    padding-right: 20px;
+}
+
+.hide-column-names table thead tr {
+    display: none;
+}
+.quienesSomosDiv {
+    text-align: justify;
+    font-size: 13px;
+    padding-left: 10px;
+    padding-right: 10px;
+}
+.quienesSomosFieldSetBorder{
+    border: 1px #0D69AE solid;
+}
+.serviciosDiv {
+    font-size: 13px;
+    padding: 10px;
+    background-color: #1D6CAF;
+    color: #FFFFFF;
+    display: block;
+    padding: 5px;
+    margin: 2px;
+    height: 30px;
+    vertical-align: middle;
+    -moz-border-radius: 15px;
+    border-radius: 15px;
+}
+
+.columna-grid-top{
+    vertical-align: top;
+}
+.estiloServicio{
+    background-color: #FFFF99; 
+    color: #1D6CAF; 
+    font-size: 12px;
+    font-weight: bold;
+}
+
+.loginPanel{
+    background-color: #fff;
+
+    border-top: 16px solid #3d5f94;
+    border-bottom: 16px solid #3d5f94;
+    border-right: 64px solid #3d5f94;
+    border-left: 64px solid #3d5f94;
+}
+
+.headerPanel{
+    background-color: #999;/*#fdcf45;*/
+    color:#fff;
+    padding:16px;
+    font-size:16px;
+}
+
+.headerPanelBar{
+    background-color: #ccddff;/*#fdcf45;*/
+    padding:8px;
+    font-size:16px;
+}
+
+.headerPanelFicha{
+    background-color: #FFFF99;/*#fdcf45;*/
+    padding:8px;
+    font-size:14px;
+    color:#888888;
+}
+
+.columnaLoginRow{
+    font-size:14px;
+    padding:5px;
+    color:#888888;
+}
+
+.mensajeError{
+    font-size:12px;
+    color:#e3342d;
+    font-weight: bold;
+    padding:12px;
+    background-color: #ffbcbc;
+}
+
+.headerSegundaColumna{
+    text-align: right;
+    width:50%;
+    font-size:12px;
+}
+
+.botonHome{
+    text-align:center;
+    font-size: 16px;
+    width:130px;
+    /*color:gray;*/
+    margin-bottom: 0px; 
+}
+
+.botonHome td{
+    padding-bottom:0px; 
+}
+
+.etiquetaDatosMCDS{
+    font-weight: bold;
+}
+
+.ejemplo{
+    margin-left: 3px;
+}
+
+.tachado{
+    text-decoration:line-through;
+}
+
+.columnHome{
+    width:184px;
+    text-align: center;
+}
+
+.serviciosColumnaFoco{
+    text-align: center;
+}
+
+.serviciosOtraColumna{
+    text-align: left;
+}
+
+.ui-growl-icon-close{
+    background-color:white;
+}
+
+.form-label-width {
+    width: 160px;
+    text-align: right;
+    padding: 3px;
+    vertical-align: middle;
+    background-color: #eee;
+}

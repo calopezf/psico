@@ -1,0 +1,131 @@
+<ui:composition xmlns="http://www.w3.org/1999/xhtml"
+                xmlns:ui="http://java.sun.com/jsf/facelets"
+                xmlns:h="http://java.sun.com/jsf/html"
+                xmlns:f="http://java.sun.com/jsf/core"
+                xmlns:p="http://primefaces.org/ui"
+                template="/template/general.xhtml">
+    <ui:define name="title">
+        <h:outputText value="#{etiquetas['consulta.fichas']}"/>
+    </ui:define>
+    <ui:define name="content">
+        <h:form id="formPersonaLista">
+            <p:growl id="msg" autoUpdate="true"/>
+
+            <h:panelGrid columns="3" id="gridFiltros" style="width: 100%">
+                <h:panelGrid columns="6" >
+                    <h:outputText value="#{etiquetas['primer.nombre']}:"  />
+                    <h:inputText
+                        value="#{fichaCtrl.filtroPrimerNombre2}" style="width:120px"/>
+                    <h:outputText value="#{etiquetas['segundo.nombre']}:"  />
+                    <h:inputText
+                        value="#{fichaCtrl.filtroSegundoNombre2}" style="width:120px"/>
+                    <h:outputText value="#{etiquetas['apellido.paterno']}:" />
+                    <h:inputText style="width:120px"
+                                 value="#{fichaCtrl.filtroApellidoPaterno2}" />
+                    <h:outputText value="#{etiquetas['apellido.materno']}:" />
+                    <h:inputText style="width:120px"
+                                 value="#{fichaCtrl.filtroApellidoMaterno2}" />
+                    <h:outputText value="#{etiquetas['fecha.nac.desde']}:"  />
+                    <p:calendar value="#{fichaCtrl.filtroFechaNacimientoDesde2}" />
+                    <h:outputText value="#{etiquetas['fecha.nac.hasta']}:"  />
+                    <p:calendar value="#{fichaCtrl.filtroFechaNacimientoHasta2}" />
+                    <h:outputText value="#{etiquetas['fecha.fin.desde']}:"  />
+                    <p:calendar value="#{fichaCtrl.filtroFechaFinDesde}" />
+                    <h:outputText value="#{etiquetas['fecha.fin.hasta']}:"  />
+                    <p:calendar value="#{fichaCtrl.filtroFechaFinHasta}" />
+                    <h:outputText value="#{etiquetas['identificacion']}:" />
+                    <h:inputText style="width:120px"
+                                 value="#{fichaCtrl.filtroIdentificacion2}" />
+                </h:panelGrid>
+                <h:panelGrid columns="2">
+                    <h:commandButton image="/img/view.png" action="#{fichaCtrl.searchTodasLasFichas}"
+                                     title="#{etiquetas.buscar}">
+                        <p:ajax update="@form" process="gridFiltros" />
+                    </h:commandButton>
+                </h:panelGrid>
+
+                <h:commandLink action="/paginas/ficha/ficha?faces-redirect=true" title="#{etiquetas['crear.nueva.ficha']}" rendered="#{sesionCtrl.administrador or sesionCtrl.tecnicoResponsable or sesionCtrl.coordinador}">
+                    <h:panelGrid style="text-align:center">
+                        <h:graphicImage value="/img/nueva-ficha.png" id="crearImage" />
+                        <h:outputText value="#{etiquetas['nueva.ficha']}"/>
+                    </h:panelGrid>
+                </h:commandLink>
+
+                <!--<h:panelGrid columns="1">
+                    <h:outputLabel value="#{etiquetas['ordenar.por']}"
+                                   for="orderCriteria" />
+                    <h:panelGrid columns="2">
+                        <h:selectOneMenu value="#{fichaCtrl.criteriaOrderBy}"
+                                         id="orderCriteria">
+                            <f:selectItems value="#{buscarItemsCtrl.personasItems}" />
+                        </h:selectOneMenu>
+                        <h:selectOneMenu value="#{fichaCtrl.criteriaOrderByAsc}"
+                                         id="orderAsc">
+                            <f:selectItems value="#{buscarItemsCtrl.orderByItems}" />
+                        </h:selectOneMenu>
+                    </h:panelGrid>
+                </h:panelGrid>-->
+            </h:panelGrid>
+            <h:panelGroup id="itemsPanel">
+                <h:panelGrid style="margin-bottom:5px;" columns="6"
+                             rendered="#{fichaCtrl.todasLasFichasPager.panelButtonsOn and fichaCtrl.mostrarBusqueda}">
+                    <p:commandButton action="#{fichaCtrl.todasLasFichasPager.firstPage}"
+                                     value="#{etiquetas.primero}" update="itemsPanel"
+                                     disabled="#{!fichaCtrl.todasLasFichasPager.firstOn}" />
+                    <p:commandButton action="#{fichaCtrl.todasLasFichasPager.previousPage}"
+                                     value="#{etiquetas.anterior}" update="itemsPanel"
+                                     disabled="#{!fichaCtrl.todasLasFichasPager.backOn}" />
+                    <p:commandButton action="#{fichaCtrl.todasLasFichasPager.nextPage}"
+                                     value="#{etiquetas.siguiente}" update="itemsPanel"
+                                     disabled="#{fichaCtrl.todasLasFichasPager.nextOn}" />
+                    <p:commandButton action="#{fichaCtrl.todasLasFichasPager.lastPage}"
+                                     value="#{etiquetas.ultimo}" update="itemsPanel"
+                                     disabled="#{fichaCtrl.todasLasFichasPager.lastOn}" />
+                    <h:outputText
+                        value="Total: #{fichaCtrl.todasLasFichasPager.totalIndex} registros" />
+                    <p:ajaxStatus id="ajaxStatusPanel">  
+                        <f:facet name="start">  
+                            <h:graphicImage value="/img/ajax-loader.gif" />  
+                        </f:facet>  
+
+                        <f:facet name="complete">  
+                            <h:outputText value="" />  
+                        </f:facet>  
+                    </p:ajaxStatus>
+                </h:panelGrid>
+
+
+                <p:dataTable id="itemsTable" emptyMessage="#{etiquetas['no.existen.registros']}" rendered="#{fichaCtrl.mostrarBusqueda}" value="#{fichaCtrl.todasLasFichasPager.list}"  var="item"  style="width:100%" >
+                    <p:column>
+                        <f:facet name="header">
+                            <h:outputText value="#{etiquetas['identificacion']}" />
+                        </f:facet>
+                        <h:outputText value="#{item.identificacion}"   />
+                    </p:column>
+                    <p:column>
+                        <f:facet name="header">
+                            <h:outputText value="#{etiquetas['nombres.y.apellidos']}" />
+                        </f:facet>
+                        <h:outputText value="#{item.nombreCompleto}" styleClass="inputUpper"/>
+                    </p:column>
+                    <p:column>
+                        <f:facet name="header">
+                            <h:outputText value="#{etiquetas['fecha.registro']}"/>
+                        </f:facet>
+                        <h:outputText value="#{item.fechaIngreso}" styleClass="inputUpper"/>
+                    </p:column>
+                    <p:column styleClass="columnaCentrada">
+                        <p:commandButton value="#{etiquetas['ver.ficha']}" action="#{fichaCtrl.verFicha}"   
+                                         ajax="false" />
+                    </p:column>
+
+                    <!--<p:column styleClass="columnaCentrada" rendered="#{sesionCtrl.administrador or sesionCtrl.tecnicoResponsable}">
+                        <p:commandButton value="#{etiquetas['nueva.ficha']}" action="#{fichaCtrl.nuevaFicha}"   
+                                         ajax="false" />
+                    </p:column>-->
+
+                </p:dataTable>
+            </h:panelGroup>             
+        </h:form>
+    </ui:define>
+</ui:composition>

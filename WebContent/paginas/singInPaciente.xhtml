@@ -1,0 +1,94 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:h="http://java.sun.com/jsf/html"
+	xmlns:f="http://java.sun.com/jsf/core"
+	xmlns:ui="http://java.sun.com/jsf/facelets"
+	xmlns:p="http://primefaces.org/ui">
+<style>
+body {
+	background: url('../img/login.jpg') no-repeat fixed center center;
+	background-size: cover;
+	font-family: Montserrat;
+}
+
+.logo {
+	width: 213px;
+	height: 36px;
+	background: url('img/tapps.png') no-repeat;
+	margin: 30px auto;
+}
+
+.login-block {
+	width: 400px;
+	height: 500px;
+	background: #fff;
+	border-radius: 50px;
+	border-top: 5px solid #354d9b;
+	margin: 0 auto;
+	overflow: hidden;
+}
+</style>
+<h:head>
+	<f:facet name="first">
+		<meta http-equiv="X-UA-Compatible" content="IE=edge" />
+		<meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
+		<meta name="viewport"
+			content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=0" />
+		<meta name="apple-mobile-web-app-capable" content="yes" />
+	</f:facet>
+	<title>MEDICUS</title>
+	<h:outputScript name="js/ripple.js" library="ultima-layout" />
+	<h:outputScript name="js/layout.js" library="ultima-layout" />
+</h:head>
+
+<h:body styleClass="login-body">
+
+<br />
+	<table style="width: 100%">
+		<tr>
+			<th colspan="2"><div class="login-block">
+					<a href="http://www.facebook.com"> <img src="../img/medico.jpg"
+						width="400px" height="400px" />
+					</a> <br /> <br />
+					<p:commandButton action="/paginas/tipoSignIn?faces-redirect=true"
+						value="Regístrate como Médico" styleClass="secondary"  />
+				</div></th>
+			<th><div class="login-block">
+					<a href="http://www.facebook.com"> <img
+						src="../img/paciente.jpg" width="400px" height="400px" />
+					</a> <br /> <br />
+					<p:commandButton action="/paginas/tipoSignIn?faces-redirect=true"
+						value="Regístrate como Paciente" styleClass="secondary" />
+				</div></th>
+		</tr>
+	</table>
+
+	<h:outputStylesheet name="css/ripple.css" library="ultima-layout" />
+	<h:outputStylesheet name="css/layout-#{guestPreferences.theme}.css"
+		library="ultima-layout" />
+		<table style="width: 100%">
+		<tr>
+			<th><div align="left">
+					<h:graphicImage value="../img/tappslogo.png" title="Tapps"
+						style="width:300px; height:120px;" />
+				</div></th>
+			<th><h:form id="formRedes">
+
+					<font size="4" color="black">Búscanos en:</font>
+
+					<a href="http://www.facebook.com"> <img
+						src="../img/facebook-b.png" width="30px" height="30px" />
+					</a>
+					<a href="http://www.twitter.com"> <img
+						src="../img/twitter-b.png" width="30px" height="30px" />
+					</a>
+					<a href="https://plus.google.com/?hl=es"> <img
+						src="../img/google-b.png" width="30px" height="30px" />
+					</a>
+				</h:form></th>
+		</tr>
+	</table>
+</h:body>
+
+
+</html>

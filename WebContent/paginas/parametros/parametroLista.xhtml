@@ -1,0 +1,78 @@
+<ui:composition xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:ui="http://java.sun.com/jsf/facelets"
+	xmlns:h="http://java.sun.com/jsf/html"
+	xmlns:f="http://java.sun.com/jsf/core"
+	xmlns:p="http://primefaces.org/ui" template="/WEB-INF/template.xhtml">
+	<ui:define name="content">
+		<h:form id="formParametroLista">
+			<h1>#{etiquetas['catalogoLista']}</h1>
+			<p:growl id="msg" autoUpdate="true" />
+			<h:panelGrid columns="1">
+				<h:panelGrid id="gridFiltros" columns="2"
+					columnClasses="form-label,form-input">
+					<p:outputLabel value="#{etiquetas['codigo']}" />
+					<p:inputText value="#{parametroCtrl.parametroFiltro.codigo}"
+						style="width:120px" />
+					<p:outputLabel value="#{etiquetas['nombre']}" />
+					<p:inputText value="#{parametroCtrl.parametroFiltro.nombre}"
+						style="width:120px" />
+				</h:panelGrid>
+				<h:panelGrid columns="2">
+					<p:commandButton value="Nuevo Registro"
+						action="/paginas/parametros/parametro?faces-redirect=true"
+						title="#{etiquetas['crear.nuevo']}" immediate="true">
+					</p:commandButton>
+					<p:commandButton value="Buscar" action="#{parametroCtrl.buscar}"
+						title="#{etiquetas.buscar}">
+						<p:ajax update="itemsPanel" process="gridFiltros" />
+					</p:commandButton>
+				</h:panelGrid>
+			</h:panelGrid>
+
+			<h:panelGroup id="itemsPanel">
+
+
+				<p:dataTable id="itemsTable"
+					emptyMessage="#{etiquetas['no.existen.registros']}"
+					value="#{parametroCtrl.parametros}" var="item" style="width:100%"
+					paginatorTemplate="{CurrentPageReport}  {FirstPageLink} {PreviousPageLink} {PageLinks} {NextPageLink} {LastPageLink} "
+					paginator="true" rows="10">
+					<p:column headerText="#{etiquetas['codigo']}" style="width:150px;">
+						<h:outputText value="#{item.codigo}" />
+					</p:column>
+					<p:column headerText="#{etiquetas['nombre']}" style="width:150px;">
+						<h:outputText value="#{item.nombre}" />
+					</p:column>
+					<p:column headerText="#{etiquetas['descripcion']}"
+						style="width:150px;">
+						<h:outputText value="#{item.descripcion}" />
+					</p:column>
+					<p:column headerText="#{etiquetas['tipo']}" style="width:150px;">
+						<h:outputText value="#{item.tipo}" />
+					</p:column>
+					<p:column headerText="#{etiquetas['estado']}" style="width:150px;">
+						<h:outputText value="#{etiquetas[item.estado.etiqueta]}" />
+					</p:column>
+					<p:column headerText="#{etiquetas['editar']}" style="width:70px;"
+						styleClass="columnaCentrada">
+						<h:commandLink action="#{parametroCtrl.editar}"
+							title="#{etiquetas.editar}">
+							<h:graphicImage value="/img/edit.png" id="editImage"
+								style="width:20px; height:20px" />
+						</h:commandLink>
+					</p:column>
+					<p:column style="width:70px;" styleClass="columnaCentrada"
+						headerText="#{etiquetas['eliminar.sistema']}">
+						<h:commandLink actionListener="#{parametroCtrl.eliminarParametro}"
+							title="#{etiquetas['eliminar.sistema']}"
+							onclick="if(!confirm('#{mensajes['esta.seguro']}'))return false;">
+							<h:graphicImage value="/img/delete.png" id="trashImage"
+								style="width:20px; height:20px" />
+							<f:ajax render="@form" />
+						</h:commandLink>
+					</p:column>
+				</p:dataTable>
+			</h:panelGroup>
+		</h:form>
+	</ui:define>
+</ui:composition>

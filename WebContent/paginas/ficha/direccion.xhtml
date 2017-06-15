@@ -1,0 +1,91 @@
+<div  xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:ui="http://java.sun.com/jsf/facelets"
+      xmlns:h="http://java.sun.com/jsf/html"
+      xmlns:f="http://java.sun.com/jsf/core"
+      xmlns:p="http://primefaces.org/ui" align="center">
+
+    <h:panelGrid id="grid2" rendered="#{fichaCtrl.areaCargada=='/paginas/ficha/direccion.xhtml'}">
+
+        <p:growl id="growl2" showDetail="false" />
+
+        <h:panelGrid style="width: 100%;" columns="2" columnClasses="form-label,form-input" >
+
+            <h:outputLabel value="#{etiquetas['provincia.domicilio']}: "/>
+            <h:selectOneMenu   value="#{fichaCtrl.ficha.domicilo.canton.provincia.id}" >
+                <f:selectItem itemLabel="#{etiquetas['elija.provincia']}" itemValue=""></f:selectItem>
+                <f:selectItems value="#{fichaCtrl.provinciasDireccion}"/>
+                <f:ajax event="valueChange"  listener="#{fichaCtrl.cambiaProvinciaDireccion}" render="comboCantonDireccion comboParroquiaDireccion" execute="@this"/>
+            </h:selectOneMenu>
+
+            <h:outputLabel value="#{etiquetas['canton.domicilio']}: "/>
+            <h:selectOneMenu  id="comboCantonDireccion" value="#{fichaCtrl.ficha.domicilo.canton.id}" >
+                <f:selectItem itemLabel="#{etiquetas['elija.canton']}" itemValue=""></f:selectItem>
+                <f:selectItems value="#{fichaCtrl.cantonesDireccion}"/>
+                <f:ajax event="valueChange"  listener="#{fichaCtrl.cambiaCantonDireccion}" render="comboParroquiaDireccion" execute="@this"/>
+            </h:selectOneMenu>
+
+            <h:outputLabel value="#{etiquetas['parroquia.domicilio']}: "/>
+            <h:selectOneMenu  id="comboParroquiaDireccion" value="#{fichaCtrl.ficha.domicilo.parroquia.id}" >
+                <!--<f:selectItem itemLabel="#{etiquetas['elija.canton']}" value="-1"></f:selectItem>-->
+                <f:selectItem itemValue="" itemLabel="#{etiquetas['no.disponible']}"/>
+                <f:selectItems value="#{fichaCtrl.parroquiasDireccion}"/>
+            </h:selectOneMenu>
+
+            <h:outputLabel  value="#{etiquetas['tipo.zona']}: " rendered="false"/>
+            <h:selectOneMenu   value="#{fichaCtrl.ficha.domicilo.tipoZonaEnum}" rendered="false" >
+                <f:selectItems value="#{selectItemCtrl.tipoZona}"/>
+            </h:selectOneMenu>
+
+            <h:outputLabel  value="#{etiquetas['barrio']}: "/>
+            <p:inputText value="#{fichaCtrl.ficha.domicilo.barrio}" maxlength="25" styleClass="inputUpper"/>
+
+            <h:outputLabel  value="#{etiquetas['sector']}: " rendered="false"/>
+            <p:inputText value="#{fichaCtrl.ficha.domicilo.sector}" maxlength="70" styleClass="inputUpper" rendered="false"/>
+
+            <h:outputLabel  value="#{etiquetas['calle.principal']}: "/>
+            <p:inputText value="#{fichaCtrl.ficha.domicilo.callePrincipal}" maxlength="50" styleClass="inputUpper"/>
+
+            <h:outputLabel  value="#{etiquetas['calle.secundaria']}: "/>
+            <p:inputText value="#{fichaCtrl.ficha.domicilo.calleSecundaria}" maxlength="50" styleClass="inputUpper"/>
+
+            <h:outputLabel  value="#{etiquetas['numero.vivienda']}: "/>
+            <p:inputText value="#{fichaCtrl.ficha.domicilo.numeroVivienda}" size="5" maxlength="7" styleClass="inputUpper"/>
+
+            <h:outputLabel  value="#{etiquetas['lugar.referencia']}: "/>
+            <p:inputText value="#{fichaCtrl.ficha.domicilo.lugarReferencia}" maxlength="60" styleClass="inputUpper"/>
+
+            <h:outputLabel  value="#{etiquetas['telefono.residencia']}: "/>
+            <p:inputText value="#{fichaCtrl.ficha.domicilo.telefono}" maxlength="10" onkeypress="return acceptNum(event)" />
+            
+            <h:outputLabel value="#{etiquetas['num.celular']}: " />
+            <p:inputText value="#{fichaCtrl.ficha.datosPersonales.celular}" maxlength="10" onkeypress="return acceptNum(event)"/>
+            
+            <h:outputLabel value="#{etiquetas['email.nna']}: " />
+            <p:inputText value="#{fichaCtrl.ficha.datosPersonales.email}" >
+                <f:validator validatorId="MailValidator" />
+            </p:inputText>
+        </h:panelGrid>
+
+        <br/>
+        <br/>
+
+        <h:panelGrid columns="2">
+
+            <h:commandLink id="registrarDirBtn" action="#{fichaCtrl.guardar}" rendered="#{sesionCtrl.administrador or sesionCtrl.tecnicoResponsable or sesionCtrl.coordinador}">
+                <h:panelGrid style="text-align:center">
+                    <h:graphicImage value="/img/guardar.png" title="Guardar" />
+                    <h:outputText value="#{etiquetas['guardar']}"/>
+                </h:panelGrid>
+                <p:ajax process=":formPestana" update=":formPestana :formFicha " />
+            </h:commandLink>
+
+            <h:commandLink action="#{fichaCtrl.finalizarIngresoFicha}" disabled="#{fichaCtrl.cedulaValida == false}" rendered="#{sesionCtrl.administrador or sesionCtrl.tecnicoResponsable or sesionCtrl.coordinador}" onclick="if(!confirm('#{mensajes['mensaje.ficha.finalizar']}'))return false;">
+                <h:panelGrid style="text-align:center">
+                    <h:graphicImage value="/img/finalizar.png" title="#{etiquetas['finalizar.ficha']}" />
+                    <h:outputText value="#{etiquetas['finalizar']}"/>
+                </h:panelGrid>
+                <p:ajax process=":formPestana" update=":formPestana :formFicha" />
+            </h:commandLink>
+        </h:panelGrid>
+    </h:panelGrid>
+</div>

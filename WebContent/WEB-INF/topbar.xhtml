@@ -1,0 +1,48 @@
+<ui:composition xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:f="http://java.sun.com/jsf/core"
+	xmlns:h="http://java.sun.com/jsf/html"
+	xmlns:ui="http://java.sun.com/jsf/facelets"
+	xmlns:p="http://primefaces.org/ui"
+	xmlns:pu="http://primefaces.org/ultima">
+
+	<div class="topbar clearfix">
+		<div class="topbar-left"></div>
+
+		<div class="topbar-right">
+			<a id="menu-button" href="#"> <i></i>
+			</a> <a id="topbar-menu-button" href="#"> <i class="material-icons">&#xE5D2;</i>
+			</a>
+			<ul class="topbar-items fadeInDown animated">
+				<ui:fragment
+					rendered="#{guestPreferences.profileMode == 'overlay'||guestPreferences.menuLayout == 'menu-layout-static menu-layout-horizontal'}">
+					<li class="profile-item"><a href="#">
+							<div class="profile-image"></div> <span class="topbar-item-name">#{sesionCtrl.usuarioLogueado.nombre}
+								#{sesionCtrl.usuarioLogueado.apellido}"</span>
+					</a>
+
+						<ul class="ultima-menu animated">
+							<li role="menuitem"><a href="#"> <i
+									class="material-icons">&#xE8AC;</i> <span>Salir</span>
+							</a></li>
+						</ul></li>
+				</ui:fragment>
+				<li><a href="#"> <i class="topbar-icon material-icons">&#xE8B8;</i>
+						<span class="topbar-item-name">Opciones</span>
+				</a>
+					<ul class="ultima-menu animated">
+						<li role="menuitem"><a
+							href="#{facesContext.externalContext.requestContextPath}/paginas/index.jsf">
+								<i class="material-icons">&#xE871;</i> <span>Inicio</span>
+						</a></li>
+						<li role="menuitem"><a
+							href="#{facesContext.externalContext.requestContextPath}/admin/index.jsp"
+							class="ripplelink"> <i class="material-icons">&#xE897;</i> <span>Salir</span>
+						</a></li>
+
+					</ul></li>
+
+			</ul>
+		</div>
+	</div>
+
+</ui:composition>

@@ -1,0 +1,129 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:h="http://java.sun.com/jsf/html"
+      xmlns:f="http://java.sun.com/jsf/core"
+      xmlns:ui="http://java.sun.com/jsf/facelets"
+      xmlns:p="http://primefaces.org/ui">
+    <f:view contentType="text/html">
+        <h:head>
+            <!-- Mimic Internet Explorer 8 -->
+            <meta http-equiv="X-UA-Compatible" content="IE=EmulateIE8" />
+            <title>#{etiquetas['nombre.sistema']}</title>
+            <link type="text/css"
+                  href="#{facesContext.externalContext.requestContextPath}/css/socioempleo.css"
+                  rel="stylesheet" media="screen" />
+            <script src="#{facesContext.externalContext.requestContextPath}/js/generalJs.js" type="text/javascript"></script>
+            <meta http-equiv="Content-Type" content="text/html; charset=iso-8859-1" />
+        </h:head>
+        <h:body>
+            <p:idleMonitor timeout="2700000">
+                <p:ajax event="idle" listener="#{idleMonitorCtrl.idleListener}" oncomplete="idleDialog.show()"/>  
+            </p:idleMonitor>
+            <div id="container">
+                <ui:include src="/template/comun/header.xhtml" />
+                <div id="topSubHeader">
+                    <div id="subHeadRight">
+                        <h:form id="goHomeForm">
+                            <h:panelGrid columns="5">
+                                <h:commandLink action="/paginas/aspirante/inicioAspirante.xhtml?faces-redirect=true" value="#{etiquetas['volver.pagina.inicial']}" immediate="true"/>
+
+                                <p:separator style="width:5px; height: 10px" />
+
+                                <p:commandLink value="#{etiquetas['modificar.contrasena']}" immediate="true" partialSubmit="true" onclick="cambiarClaveDgl.show();"/>
+
+                                <p:separator style="width:5px; height: 10px" />
+
+                                <h:outputLink value="#{facesContext.externalContext.requestContextPath}/logout"> <h:outputText value="#{etiquetas['cerrar.sesion']}"/></h:outputLink>
+                            </h:panelGrid>
+                        </h:form> 
+                    </div>
+
+                    <div id="subHeadLeft">
+                        <h:panelGrid columns="2">
+                            <h:outputText value="#{etiquetas['bienvenido.usuario']}: " style="font-weight: bold"/>
+                            <h:outputText value="#{aspiranteLogInDm.aspiranteConectado.nombresApellidos}"/>
+                        </h:panelGrid>
+                    </div>
+                </div>
+                <div id="content">
+                    <div class="titlePage">
+                        <ui:insert name="title">
+                        </ui:insert>
+                    </div>
+
+                    <ui:insert name="content">
+                    </ui:insert>
+                </div>
+
+                <ui:include src="/template/comun/footer.xhtml" />
+            </div>
+
+            <p:dialog  id="cambiarClaveMp" header="#{etiquetas['cambio.contrasena']}" widgetVar="cambiarClaveDgl" modal="true" height="220" width="450">  
+                <div align="center">
+                    <div class="titulo-caja">
+                        <h:outputText value="#{etiquetas['cambio.contrasena']}"/>
+                    </div>
+                    <br/>
+                    <h:form id="cambiarClaveForm">
+                        <p:growl id="growMp" /> 
+                        <h:panelGrid columns="2" columnClasses="form-label,form-input">
+                            <h:outputLabel for="claveActual" value="#{etiquetas['contrasena.actual']}: "/>
+                            <h:inputSecret id="claveActual" value="#{cambiaClaveCtrl.claveActual}" maxlength="15" required="true" requiredMessage="#{etiquetas['contrasena.actual']} #{mensajes['requerido.femenino']}" validator="#{cambiaClaveCtrl.validaClaveActualAspirante}"/>
+
+                            <h:outputLabel for="claveNueva" value="#{etiquetas['contrasena.nueva']}: "/>
+                            <h:inputSecret id="claveNueva" value="#{cambiaClaveCtrl.claveNueva}" maxlength="15" required="true" requiredMessage="#{etiquetas['contrasena.nueva']} #{mensajes['requerido.femenino']}"/>
+
+                            <h:outputLabel for="claveNuevaConfirma" value="#{etiquetas['confirme.contrasena.nueva']}: "/>
+                            <h:inputSecret id="claveNuevaConfirma" value="#{cambiaClaveCtrl.confirmaClaveNueva}" maxlength="15" required="true" requiredMessage="#{etiquetas['confirme.contrasena.nueva']} #{mensajes['requerido.femenino']}"/>
+                        </h:panelGrid>
+                        <br/>
+                        <p:commandButton value="#{etiquetas['cambiar']}" actionListener="#{cambiaClaveCtrl.cambiarClaveAspirante}" update="growMp :exitoModalLi" />
+                    </h:form>
+                </div> 
+            </p:dialog> 
+
+            <p:dialog id="exitoModalLi" visible="#{cambiaClaveCtrl.habreExito}" header="#{etiquetas['exito']}" widgetVar="exitoDlgLi" modal="true" closable="false">  
+                <div align="center">
+                    <h:form>
+                        <h:outputText value="#{mensajes['clave.modificada.exito']} "/>
+                        <br/><br/>
+                        <h:commandButton value="#{etiquetas['continuar']}" action="#{cambiaClaveCtrl.cerrarExitoMp}"/>
+                    </h:form>
+                </div>
+            </p:dialog> 
+
+            <p:dialog id="expiraSesionModal" header="#{etiquetas['exito']}" widgetVar="expiraSesionDlg" modal="true" closable="false">  
+                <div align="center">
+                    <h:form>
+                        <h:outputText value="#{mensajes['clave.modificada.exito']} "/>
+                        <br/><br/>
+                        <h:commandButton value="#{etiquetas['continuar']}" action="#{cambiaClaveCtrl.cerrarExitoMp}"/>
+                    </h:form>
+                </div>
+            </p:dialog> 
+
+            <p:dialog header="#{mensajes['session.caducada']}" resizable="false"  widgetVar="idleDialog" modal="true" closable="false">  
+                <h:form id="sesionCaducaForm">
+                    <div class="titlePage">
+                        <h:outputText value="#{mensajes['sesion.caducada.red']} "/>
+                        <h:outputLink value="#{facesContext.externalContext.requestContextPath}/index.jsp">
+                            <h:outputText value=" #{etiquetas['aqui.mayuscula']}"/>
+                        </h:outputLink>
+                    </div>
+                </h:form>
+            </p:dialog>
+
+            <script type="text/javascript">
+                var _gaq = _gaq || [];
+                _gaq.push(['_setAccount', 'UA-31995509-1']);
+                _gaq.push(['_trackPageview']);
+
+                (function() {
+                    var ga = document.createElement('script'); ga.type = 'text/javascript'; ga.async = true;
+                    ga.src = ('https:' == document.location.protocol ? 'https://ssl' : 'http://www') + '.google-analytics.com/ga.js';
+                    var s = document.getElementsByTagName('script')[0]; s.parentNode.insertBefore(ga, s);
+                })();
+            </script>
+        </h:body>
+    </f:view>
+</html>

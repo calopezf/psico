@@ -1,0 +1,218 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:h="http://java.sun.com/jsf/html"
+	xmlns:f="http://java.sun.com/jsf/core"
+	xmlns:ui="http://java.sun.com/jsf/facelets"
+	xmlns:p="http://primefaces.org/ui">
+<style>
+body {
+	background: url('../img/profile.png') no-repeat fixed center center;
+	background-size: cover;
+	font-family: Montserrat;
+}
+
+.logo {
+	width: 213px;
+	height: 36px;
+	background: url('img/tapps.png') no-repeat;
+	margin: 30px auto;
+}
+
+.login-block {
+	width: 280px;
+	height: 455px;
+	background: #fff;
+	border-radius: 5px;
+	overflow: hidden;
+	display: inline-block;
+	margin: 30px;
+}
+
+.login-block2 {
+	width: 280px;
+	height: 455px;
+	background: #fff;
+	border-radius: 5px;
+	overflow: hidden;
+	display: inline-block;
+	margin: 30px;
+}
+</style>
+<h:head>
+	<f:facet name="first">
+		<meta http-equiv="X-UA-Compatible" content="IE=edge" />
+		<meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
+		<meta name="viewport"
+			content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=0" />
+		<meta name="apple-mobile-web-app-capable" content="yes" />
+	</f:facet>
+	<title>MEDICUS</title>
+	<h:outputScript name="js/ripple.js" library="ultima-layout" />
+	<h:outputScript name="js/layout.js" library="ultima-layout" />
+</h:head>
+
+<h:body>
+	<h:form id="formBoton">
+		<div align="left" style="margin: 30px; display: inline-block;">
+			<h:commandLink action="/paginas/login?faces-redirect=true"
+				title="Regresar a Login">
+				<h:graphicImage value="/img/back.png"
+					style="width:35px; height:35px;" />
+			</h:commandLink>
+		</div>
+		<div align="center">
+			<font size="6" color="white">Seleccione su Perfil</font>
+		</div>
+	</h:form>
+
+
+	<h:form id="formTabla">
+		<div style="text-align: center;">
+			<div class="login-block">
+				<br />
+				<p:commandLink onclick="PF('dlg2').show();">
+					<h:graphicImage value="../img/tipomedico.png" />
+				</p:commandLink>
+				<br />
+				<p:commandButton onclick="PF('dlg2').show();" value="Médico"
+					styleClass="secondary" />
+
+			</div>
+			<div class="login-block2">
+				<br />
+				<p:commandLink onclick="PF('dlg1').show();">
+					<h:graphicImage value="../img/tipopaciente.png" />
+				</p:commandLink>
+				<br />
+				<p:commandButton onclick="PF('dlg1').show();" value="Paciente"
+					styleClass="secondary" />
+			</div>
+		</div>
+	</h:form>
+
+	<p:dialog widgetVar="dlg2" modal="true" height="450" width="600">
+		<h:form id="formUsuarioMedico">
+			<div align="center">
+				<font size="6" color="#3F51B5">Médico</font>
+			</div>
+			<p:growl id="growl" autoUpdate="true" />
+			<p:panelGrid columns="2" columnClasses="ui-grid-col-6,ui-grid-col-4"
+				layout="grid" styleClass="ui-panelgrid-blank form-group"
+				style="border:0px none; background-color:transparent;">
+
+				<p:outputLabel value="#{etiquetas['nombres']}*:" />
+				<p:inputText id="nombres" value="#{usuarioRegistroCtrl.usuario.nombre}"
+					required="true"
+					requiredMessage="#{etiquetas['nombres']} #{mensajes['requerido.masculino']}"
+					maxlength="250" size="25" />
+				<p:outputLabel value="#{etiquetas['apellidos']}*:" />
+				<p:inputText id="apellidos" value="#{usuarioRegistroCtrl.usuario.apellido}"
+					required="true"
+					requiredMessage="#{etiquetas['apellidos']} #{mensajes['requerido.masculino']}"
+					maxlength="250" size="25" />
+				<p:outputLabel value="#{etiquetas['correoElectronico']}*:" />
+				<p:inputText id="correoElectronico"
+					value="#{usuarioRegistroCtrl.usuario.email}" required="true"
+					requiredMessage="#{etiquetas['correoElectronico']} #{mensajes['requerido.masculino']}"
+					size="25">
+					<f:validator validatorId="MailValidator" />
+				</p:inputText>
+				<p:outputLabel value="#{etiquetas['especialidad']}*:" />
+				<p:selectOneMenu id="area" required="true"
+					requiredMessage="#{etiquetas['especialidad']} #{mensajes['requerido.masculino']}"
+					value="#{usuarioRegistroCtrl.usuario.especialidad.codigo}" style="width:250px">
+					<f:selectItems value="#{usuarioRegistroCtrl.especialidadesLista}" var="item"
+						itemLabel="#{item.nombre}" itemValue="#{item.codigo}" />
+				</p:selectOneMenu>
+				<p:outputLabel value="#{etiquetas['contrasena.nueva']}*:" />
+				<p:password id="contrasenia" value="#{usuarioRegistroCtrl.usuario.password}"
+					required="true"
+					requiredMessage="#{etiquetas['contrasena.nueva']} #{mensajes['requerido.femenino']}"
+					maxlength="250" size="25" />
+				<p:outputLabel value="#{etiquetas['confirme.contrasena.nueva']}*:" />
+				<p:password id="contraseniaNueva"
+					value="#{usuarioRegistroCtrl.usuario.confirmaPassword}" required="true"
+					requiredMessage="#{etiquetas['confirme.contrasena.nueva']} #{mensajes['requerido.femenino']}"
+					maxlength="250" size="25" />
+			</p:panelGrid>
+
+			<br />
+			<br />
+
+			<div align="center">
+				<p:commandButton value="#{etiquetas.crearCuenta}" 
+					action="#{usuarioRegistroCtrl.guardarPerfilMedico}" title="#{etiquetas['crearCuenta']}"
+					update="growl">
+				</p:commandButton>
+				<p:commandButton value="#{etiquetas.cancelar}"
+					onclick="PF('dlg2').close();" title="#{etiquetas['cancelar']}"
+					immediate="true">
+				</p:commandButton>
+			</div>
+
+		</h:form>
+	</p:dialog>
+
+	<p:dialog widgetVar="dlg1" modal="true" height="450" width="600">
+		<h:form id="formUsuarioPaciente">
+			<div align="center">
+				<font size="6" color="#3F51B5">Paciente</font>
+			</div>
+			<p:growl id="growl" autoUpdate="true" />
+			<p:panelGrid columns="2" columnClasses="ui-grid-col-6,ui-grid-col-4"
+				layout="grid" styleClass="ui-panelgrid-blank form-group"
+				style="border:0px none; background-color:transparent;">
+
+				<p:outputLabel value="#{etiquetas['nombres']}*:" />
+				<p:inputText id="nombres" value="#{usuarioRegistroCtrl.usuario.nombre}"
+					required="true"
+					requiredMessage="#{etiquetas['nombres']} #{mensajes['requerido.masculino']}"
+					maxlength="250" size="25" />
+				<p:outputLabel value="#{etiquetas['apellidos']}*:" />
+				<p:inputText id="apellidos" value="#{usuarioRegistroCtrl.usuario.apellido}"
+					required="true"
+					requiredMessage="#{etiquetas['apellidos']} #{mensajes['requerido.masculino']}"
+					maxlength="250" size="25" />
+				<p:outputLabel value="#{etiquetas['correoElectronico']}*:" />
+				<p:inputText id="correoElectronico"
+					value="#{usuarioRegistroCtrl.usuario.email}" required="true"
+					requiredMessage="#{etiquetas['correoElectronico']} #{mensajes['requerido.masculino']}"
+					size="25">
+					<f:validator validatorId="MailValidator" />
+				</p:inputText>
+				<p:outputLabel value="#{etiquetas['contrasena.nueva']}*:" />
+				<p:password id="contrasenia" value="#{usuarioRegistroCtrl.usuario.password}"
+					required="true"
+					requiredMessage="#{etiquetas['contrasena.nueva']} #{mensajes['requerido.femenino']}"
+					maxlength="250" size="25" />
+				<p:outputLabel value="#{etiquetas['confirme.contrasena.nueva']}*:" />
+				<p:password id="contrasenianueva" value="#{usuarioRegistroCtrl.usuario.confirmaPassword}"
+					required="true"
+					requiredMessage="#{etiquetas['contrasena.nueva']} #{mensajes['requerido.femenino']}"
+					maxlength="250" size="25" />
+			</p:panelGrid>
+
+			<br />
+			<br />
+
+			<div align="center">
+				<p:commandButton value="#{etiquetas.crearCuenta}"
+					action="#{usuarioRegistroCtrl.guardarPerfilPaciente}" title="#{etiquetas['crearCuenta']}"
+					update="growl">
+				</p:commandButton>
+				<p:commandButton value="#{etiquetas.cancelar}"
+					onclick="PF('dlg1').close();" title="#{etiquetas['cancelar']}"
+					immediate="true">
+				</p:commandButton>
+			</div>
+
+		</h:form>
+	</p:dialog>
+
+	<h:outputStylesheet name="css/ripple.css" library="ultima-layout" />
+	<h:outputStylesheet name="css/layout-#{guestPreferences.theme}.css"
+		library="ultima-layout" />
+</h:body>
+
+
+</html>

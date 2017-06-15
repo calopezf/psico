@@ -1,0 +1,144 @@
+<ui:composition xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:ui="http://java.sun.com/jsf/facelets"
+	xmlns:h="http://java.sun.com/jsf/html"
+	xmlns:f="http://java.sun.com/jsf/core"
+	template="/WEB-INF/template.xhtml" xmlns:p="http://primefaces.org/ui">
+
+	<br />
+
+	<ui:define name="content">
+		<h:form id="formUsuario">
+		<h1>#{etiquetas['contenido']}</h1>
+			<p:growl id="growl" autoUpdate="true" />
+			<h:panelGrid columns="2" columnClasses="form-label,form-input">
+				<p:outputLabel for="materia" value="#{etiquetas['materia']}:" />
+				<p:outputLabel id="materia"
+					value="#{syllabusCtrl.syllabus.materia.codigo} - #{syllabusCtrl.syllabus.materia.nombre}"  />
+			</h:panelGrid>
+
+			<br />
+			<br />
+
+			<h:panelGrid columns="2" id="gridDetalle" style="width: 700px">
+				<h:commandLink actionListener="#{syllabusCtrl.agregarDetalle}"
+					title="#{etiquetas['eliminar.sistema']}">
+					<h:graphicImage value="/img/addList.png" id="addImage" />
+					<f:ajax render="itemsTable gridDetalle" execute="gridDetalle" />
+				</h:commandLink>
+			</h:panelGrid>
+			<p:dataTable id="itemsTable" 
+					paginator="true" rows="30"
+				emptyMessage="#{etiquetas['no.existen.registros']}"
+				value="#{syllabusCtrl.syllabusDetalleLista}" var="item"
+				style="width:100%">
+				<p:column style="width:60px;">
+					<f:facet name="header">
+						<h:outputText value="#{etiquetas['claseNumero']}" />
+					</f:facet>
+					<p:inputText value="#{item.clase}" style="width:20px;"
+						maxlength="3">
+						<f:ajax />
+					</p:inputText>
+				</p:column>
+				<p:column style="width:100px;">
+					<f:facet name="header">
+						<h:outputText value="#{etiquetas['unidad']}" />
+					</f:facet>
+					<p:inputTextarea value="#{item.unidad}"
+						style="width:100px;height:80px;">
+						<f:ajax />
+					</p:inputTextarea>
+				</p:column>
+				<p:column style="width:100px;">
+					<f:facet name="header">
+						<h:outputText value="#{etiquetas['contenidos']}" />
+					</f:facet>
+					<p:inputTextarea style="width:100px; height:80px;"
+						value="#{item.contenido}">
+						<f:ajax />
+					</p:inputTextarea>
+				</p:column>
+				<p:column style="width:100px;">
+					<f:facet name="header">
+						<h:outputText value="#{etiquetas['actividadClase']}" />
+					</f:facet>
+					<p:inputTextarea style="width:100px;height:80px;"
+						value="#{item.actividad}">
+						<f:ajax />
+					</p:inputTextarea>
+				</p:column>
+				<p:column style="width:100px;">
+					<f:facet name="header">
+						<h:outputText value="#{etiquetas['trabajoAutonomo']}" />
+					</f:facet>
+					<p:inputTextarea style="width:100px;height:80px;"
+						value="#{item.trabajo}">
+						<f:ajax />
+					</p:inputTextarea>
+
+				</p:column>
+				<p:column style="width:100px;">
+					<f:facet name="header">
+						<h:outputText value="#{etiquetas['evidencias']}" />
+					</f:facet>
+					<p:inputTextarea style="width:100px;height:80px;"
+						value="#{item.evidencia}">
+						<f:ajax />
+					</p:inputTextarea>
+				</p:column>
+				<p:column style="width:100px;">
+					<f:facet name="header">
+						<h:outputText value="#{etiquetas['tipoContenido']}" />
+					</f:facet>
+					<p:selectOneMenu id="estado" value="#{item.tipo}" style="width:90px;">
+						<f:selectItems value="#{selectItemCtrl.tipoContenidoEnumItems}" />
+						<f:ajax />
+					</p:selectOneMenu>
+				</p:column>
+				<p:column style="width:100px;">
+					<f:facet name="header">
+						<h:outputText value="#{etiquetas['bimestre']}" />
+					</f:facet>
+					<div align="center">
+					<p:inputText style="width:30px;" maxlength="3"
+						value="#{item.bimestre}">
+						<f:ajax />
+					</p:inputText>
+					</div>
+				</p:column>
+				<p:column styleClass="columnaCentrada" style="width:100px;"
+					headerText="#{etiquetas['eliminar.sistema']}">
+					<h:commandLink actionListener="#{syllabusCtrl.eliminarDetalle}"
+						title="#{etiquetas['eliminar.sistema']}">
+						<h:graphicImage value="/img/delete.png" id="trashImage" />
+						<f:ajax render="itemsTable" />
+					</h:commandLink>
+				</p:column>
+			</p:dataTable>
+
+			<br />
+			<br />
+			
+			<div align="center">
+				<p:commandButton value="#{etiquetas.guardar}"
+					action="#{syllabusCtrl.guardar}" title="#{etiquetas['guardar']}"
+					update="growl">
+				</p:commandButton>
+				<p:commandButton value="#{etiquetas.atras}" 
+					action="/paginas/materia/materiaLista?faces-redirect=true" title="#{etiquetas['atras']}"
+					immediate="true">
+				</p:commandButton>
+			</div>
+
+		</h:form>
+		<!--<p:ajaxStatus onstart="loadingDialog.show();" onsuccess="loadingDialog.hide();"/>  
+        <p:dialog modal="true" widgetVar="loadingDialog" header="..." draggable="false" closable="false" width="200" height="50" resizable="false">
+            <br/>
+            <div align="center">
+                <p:graphicImage value="/img/ajax-loader.gif" />  
+            </div>
+            <br/>
+        </p:dialog>-->
+	</ui:define>
+
+</ui:composition>

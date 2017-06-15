@@ -1,0 +1,259 @@
+<ui:composition xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:ui="http://java.sun.com/jsf/facelets"
+	xmlns:h="http://java.sun.com/jsf/html"
+	xmlns:f="http://java.sun.com/jsf/core"
+	xmlns:p="http://primefaces.org/ui" template="/WEB-INF/template.xhtml">
+	<ui:define name="title">
+		<h:outputText value="#{etiquetas['seguimiento']}" />
+	</ui:define>
+	<ui:define name="content">
+		<h:form id="formSeguimientoLista">
+			<p:growl id="growl" autoUpdate="true" />
+			<h:panelGrid columns="2" columnClasses="form-label,form-input">
+				<p:outputLabel value="#{etiquetas['semestre']}:*" />
+				<p:selectOneMenu id="semestre" required="true" requiredMessage="#{etiquetas['semestre']} #{mensajes['requerido.masculino']}"
+					disabled="#{not usuarioCtrl.administrador}"
+					value="#{seguimientoCtrl.seguimiento.semestre.codigo}"
+					style="width:250px">
+					<f:selectItem />
+					<f:selectItems value="#{seguimientoCtrl.semestreLista}" var="item"
+						itemLabel="#{item.nombre}" itemValue="#{item.codigo}" />
+				</p:selectOneMenu>
+				<p:outputLabel for="facultad" value="#{etiquetas['carrera']}:" />
+				<p:selectOneMenu id="facultad" required="true" requiredMessage="#{etiquetas['carrera']} #{mensajes['requerido.masculino']}"
+					disabled="#{not usuarioCtrl.administrador}"
+					value="#{seguimientoCtrl.seguimiento.carrera.codigo}"
+					style="width:250px">
+					<f:selectItem />
+					<f:selectItems value="#{seguimientoCtrl.carreraLista}" var="item"
+						itemLabel="#{item.nombre}" itemValue="#{item.codigo}" />
+					<f:ajax event="change" render="pagMateria"
+						listener="#{seguimientoCtrl.cambiaCarrera}" />
+				</p:selectOneMenu>
+				<p:outputLabel value="#{etiquetas['materia']}:*" />
+				<h:panelGroup id="pagMateria">
+					<p:selectOneMenu id="materia" required="true" requiredMessage="#{etiquetas['materia']} #{mensajes['requerido.femenino']}"
+						disabled="#{not usuarioCtrl.administrador}"
+						value="#{seguimientoCtrl.seguimiento.materia.codigo}"
+						style="width:250px">
+						<f:selectItems value="#{seguimientoCtrl.materiaLista}" var="item"
+							itemLabel="#{item.codigo} - #{item.nombre}"
+							itemValue="#{item.codigo}" />
+					</p:selectOneMenu>
+				</h:panelGroup>
+				<p:outputLabel value="#{etiquetas['profesor']}:*" />
+				<p:selectOneMenu id="profesor" required="true" requiredMessage="#{etiquetas['profesor']} #{mensajes['requerido.masculino']}"
+					disabled="#{not usuarioCtrl.administrador}"
+					value="#{seguimientoCtrl.seguimiento.profesor.identificacion}"
+					style="width:250px">
+					<f:selectItems value="#{seguimientoCtrl.profesorLista}" var="item"
+						itemLabel="#{item.apellido} #{item.nombre}"
+						itemValue="#{item.identificacion}" />
+				</p:selectOneMenu>
+				<p:outputLabel value="#{etiquetas['alumno']}:*"
+					rendered="#{not usuarioCtrl.profesor}" />
+				<p:selectOneMenu id="alumno" required="true" requiredMessage="#{etiquetas['alumno']} #{mensajes['requerido.masculino']}"
+					rendered="#{not usuarioCtrl.profesor}"
+					disabled="#{not usuarioCtrl.administrador}"
+					value="#{seguimientoCtrl.seguimiento.alumno.identificacion}"
+					style="width:250px">
+					<f:selectItems value="#{seguimientoCtrl.alumnoLista}" var="item"
+						itemLabel="#{item.apellido} #{item.nombre}"
+						itemValue="#{item.identificacion}" />
+				</p:selectOneMenu>
+				<p:outputLabel value="#{etiquetas['coordinador']}:*"
+					rendered="#{not usuarioCtrl.profesor and not usuarioCtrl.alumno}" />
+				<p:selectOneMenu id="coordinador" required="true" requiredMessage="#{etiquetas['coordinador']} #{mensajes['requerido.masculino']}"
+					rendered="#{not usuarioCtrl.profesor and not usuarioCtrl.alumno}"
+					disabled="#{not usuarioCtrl.administrador}"
+					value="#{seguimientoCtrl.seguimiento.coordinador.identificacion}"
+					style="width:250px">
+					<f:selectItems value="#{seguimientoCtrl.coordinadorLista}"
+						var="item"
+						itemLabel="#{item.apellido} #{item.nombre}"
+						itemValue="#{item.identificacion}" />
+				</p:selectOneMenu>
+				<p:outputLabel value="#{etiquetas['director']}:*"
+					rendered="#{not usuarioCtrl.profesor and not usuarioCtrl.alumno and not usuarioCtrl.coordinador}" />
+				<p:selectOneMenu id="director" required="true" requiredMessage="#{etiquetas['director']} #{mensajes['requerido.masculino']}"
+					rendered="#{not usuarioCtrl.profesor and not usuarioCtrl.alumno and not usuarioCtrl.coordinador}"
+					disabled="#{not usuarioCtrl.administrador}"
+					value="#{seguimientoCtrl.seguimiento.director.identificacion}"
+					style="width:250px">
+					<f:selectItems value="#{seguimientoCtrl.directorLista}" var="item"
+						itemLabel="#{item.apellido} #{item.nombre}"
+						itemValue="#{item.identificacion}" />
+				</p:selectOneMenu>
+				<p:outputLabel value="#{etiquetas['fecha']}:*" />
+				<p:calendar id="fecha"
+					value="#{seguimientoCtrl.seguimiento.fechaCreacion}"
+					disabled="true" style="width:250px" />
+				<p:outputLabel value="#{etiquetas['estado']}:*"
+					rendered="#{not usuarioCtrl.profesor and not usuarioCtrl.alumno}" />
+				<p:selectOneMenu id="estado" required="true" 
+					rendered="#{not usuarioCtrl.profesor and not usuarioCtrl.alumno}"
+					disabled="#{not usuarioCtrl.administrador}"
+					value="#{seguimientoCtrl.seguimiento.estado}" style="width:250px">
+					<f:selectItems value="#{selectItemCtrl.estadoEnum}" />
+				</p:selectOneMenu>
+				<p:outputLabel value="#{etiquetas['descripcion']}:*" />
+				<p:inputTextarea style="width:600px; height:100px;" required="true"
+					requiredMessage="#{etiquetas['descripcion']} #{mensajes['requerido.masculino']}"
+					disabled="#{not usuarioCtrl.administrador}"
+					value="#{seguimientoCtrl.seguimiento.descripcion}"></p:inputTextarea>
+			</h:panelGrid>
+			<br />
+			<br />
+			<h:outputText value="#{etiquetas['campos.obligatorios']}" />
+
+			<br />
+			<br />
+
+			<p:dataTable id="itemsTable"
+				paginatorTemplate="{CurrentPageReport}  {FirstPageLink} {PreviousPageLink} {PageLinks} {NextPageLink} {LastPageLink} "
+				paginator="true" rows="10"
+				rendered="#{seguimientoCtrl.seguimientoListaDetalle.size()>0}"
+				emptyMessage="#{etiquetas['no.existen.registros']}"
+				value="#{seguimientoCtrl.seguimientoListaDetalle}" var="item"
+				style="width:100%">
+				<p:column style="width:180px;">
+					<f:facet name="header">
+						<h:outputText value="#{etiquetas['unidad']}" />
+					</f:facet>
+					<h:outputText value="#{item.unidad}" />
+				</p:column>
+				<p:column style="width:50px;">
+					<f:facet name="header">
+						<h:outputText value="#{etiquetas['claseNumero']}" />
+					</f:facet>
+					<h:outputText value="#{item.clase}" />
+				</p:column>
+				<p:column style="width:180px;">
+					<f:facet name="header">
+						<h:outputText value="#{etiquetas['contenidos']}" />
+					</f:facet>
+					<h:outputText value="#{item.contenido}" />
+				</p:column>
+				<p:column style="width:180px;">
+					<f:facet name="header">
+						<h:outputText value="#{etiquetas['actividadClase']}" />
+					</f:facet>
+					<h:outputText value="#{item.actividad}" />
+				</p:column>
+				<p:column style="width:180px;">
+					<f:facet name="header">
+						<h:outputText value="#{etiquetas['trabajoAutonomo']}" />
+					</f:facet>
+					<h:outputText value="#{item.trabajo}" />
+				</p:column>
+				<p:column style="width:180px;">
+					<f:facet name="header">
+						<h:outputText value="#{etiquetas['evidencias']}" />
+					</f:facet>
+					<h:outputText value="#{item.evidencia}" />
+				</p:column>
+				<p:column style="width:180px;">
+					<f:facet name="header">
+						<h:outputText value="#{etiquetas['tipoContenido']}" />
+					</f:facet>
+					<h:outputText id="estado" value="#{etiquetas[item.tipo.etiqueta]}" />
+				</p:column>
+				<p:column style="width:180px;">
+					<f:facet name="header">
+						<h:outputText value="#{etiquetas['bimestre']}" />
+					</f:facet>
+					<h:outputText value="#{item.bimestre}" />
+				</p:column>
+				<p:column style="width:50px;"
+					rendered="#{usuarioCtrl.profesor or usuarioCtrl.administrador or usuarioCtrl.coordinador or usuarioCtrl.director}">
+					<f:facet name="header">
+						<h:outputText value="#{etiquetas['profesor']}" />
+					</f:facet>
+					<p:selectBooleanCheckbox value="#{item.checkProfesor}"
+						disabled="#{not usuarioCtrl.profesor}" />
+				</p:column>
+				<p:column style="width:180px;"
+					rendered="#{usuarioCtrl.profesor or usuarioCtrl.administrador or usuarioCtrl.coordinador or usuarioCtrl.director}">
+					<f:facet name="header">
+						<h:outputText value="#{etiquetas['fecha']}" />
+					</f:facet>
+					<p:calendar value="#{item.fechaProfesor}"
+						disabled="#{not usuarioCtrl.profesor}" />
+				</p:column>
+				<p:column style="width:180px;"
+					rendered="#{usuarioCtrl.profesor or usuarioCtrl.administrador or usuarioCtrl.coordinador or usuarioCtrl.director}">
+					<f:facet name="header">
+						<h:outputText value="#{etiquetas['horaEntrada']}" />
+					</f:facet>
+					<p:calendar value="#{item.horaEntrada}" pattern="HH:mm"
+						timeOnly="true" disabled="#{not usuarioCtrl.profesor}" />
+				</p:column>
+				<p:column style="width:180px;"
+					rendered="#{usuarioCtrl.profesor or usuarioCtrl.administrador or usuarioCtrl.coordinador or usuarioCtrl.director}">
+					<f:facet name="header">
+						<h:outputText value="#{etiquetas['horaSalida']}" />
+					</f:facet>
+					<p:calendar value="#{item.horaSalida}" pattern="HH:mm"
+						timeOnly="true" disabled="#{not usuarioCtrl.profesor}" />
+				</p:column>
+				<p:column style="width:180px;"
+					rendered="#{usuarioCtrl.profesor or usuarioCtrl.administrador or usuarioCtrl.coordinador or usuarioCtrl.director}">
+					<f:facet name="header">
+						<h:outputText value="#{etiquetas['comentarioProfesor']}" />
+					</f:facet>
+					<p:inputTextarea value="#{item.comentarioProfesor}"
+						disabled="#{not usuarioCtrl.profesor}" />
+				</p:column>
+				<p:column styleClass="columnaCentrada"
+					rendered="#{usuarioCtrl.profesor}"
+					headerText="#{etiquetas['copiarClase']}" style="width:100px;">
+					<h:commandLink actionListener="#{seguimientoCtrl.copiarClase}"
+						title="#{etiquetas['copiarClase']}"
+						onclick="if(!confirm('#{mensajes['seguroCopiar']}'))return false;">
+						<h:graphicImage value="/img/copiar.png" id="trashImage"
+							style="width:20px; height:20px" />
+						<f:ajax render="@form" />
+					</h:commandLink>
+				</p:column>
+				<p:column style="width:50px;"
+					rendered="#{usuarioCtrl.alumno or usuarioCtrl.administrador or usuarioCtrl.coordinador or usuarioCtrl.director}">
+					<f:facet name="header">
+						<h:outputText value="#{etiquetas['alumno']}" />
+					</f:facet>
+					<p:selectBooleanCheckbox value="#{item.checkAlumno}"
+						disabled="#{not usuarioCtrl.alumno}" />
+				</p:column>
+				<p:column style="width:180px;"
+					rendered="#{usuarioCtrl.alumno or usuarioCtrl.administrador or usuarioCtrl.coordinador or usuarioCtrl.director}">
+					<f:facet name="header" style="width:180px;">
+						<h:outputText value="#{etiquetas['fecha']}" />
+					</f:facet>
+					<p:calendar value="#{item.fechaAlumno}"
+						disabled="#{not usuarioCtrl.alumno}" />
+				</p:column>
+				<p:column style="width:180px;"
+					rendered="#{usuarioCtrl.alumno or usuarioCtrl.administrador or usuarioCtrl.coordinador or usuarioCtrl.director}">
+					<f:facet name="header">
+						<h:outputText value="#{etiquetas['comentarioAlumno']}" />
+					</f:facet>
+					<p:inputTextarea value="#{item.comentarioAlumno}"
+						disabled="#{not usuarioCtrl.alumno}" />
+				</p:column>
+			</p:dataTable>
+
+			<br />
+
+			<div align="center">
+				<p:commandButton value="#{etiquetas.guardar}"
+					action="#{seguimientoCtrl.guardar}" title="#{etiquetas['guardar']}"
+					update="growl">
+				</p:commandButton>
+				<p:commandButton value="#{etiquetas.atras}"
+					action="/paginas/seguimiento/seguimientoLista?faces-redirect=true"
+					title="#{etiquetas['atras']}" immediate="true">
+				</p:commandButton>
+			</div>
+
+		</h:form>
+	</ui:define>
+</ui:composition>

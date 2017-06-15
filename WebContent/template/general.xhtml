@@ -1,0 +1,73 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:h="http://java.sun.com/jsf/html"
+      xmlns:f="http://java.sun.com/jsf/core"
+      xmlns:ui="http://java.sun.com/jsf/facelets"
+      xmlns:p="http://primefaces.org/ui">
+    <f:view contentType="text/html">
+        <h:head>
+            <!-- Mimic Internet Explorer 8 -->
+            <meta http-equiv="X-UA-Compatible" content="IE=EmulateIE8" />
+            <title>#{etiquetas['nombre.sistema']}</title>
+            <link type="text/css"
+                  href="#{facesContext.externalContext.requestContextPath}/css/surti.css"
+                  rel="stylesheet" media="screen" />
+            <script src="#{facesContext.externalContext.requestContextPath}/js/generalJs.js" type="text/javascript"></script>
+            <meta http-equiv="Content-Type" content="text/html; charset=iso-8859-1" />
+        </h:head>
+        <h:body>
+            <div id="container">
+                <ui:include src="/template/comun/header.xhtml" />
+                <div id="topSubHeader">
+
+                    <div class="titlePage">
+                        <ui:insert name="title">
+                        </ui:insert>
+                    </div>
+
+                   
+                  
+
+                    <p:idleMonitor timeout="600000" id="idleSesion">
+                        <p:ajax event="idle" listener="#{sesionCtrl.idleListener}" oncomplete="idleDialog.show()"/>
+                    </p:idleMonitor>
+
+                    <p:dialog header="#{mensajes['sesion.caducada']}" resizable="false"  widgetVar="idleDialog" modal="true" closable="false">
+                        <h:form id="sesionCaducaForm">
+                            <div class="titlePage">
+                                <h:outputText value="#{mensajes['sesion.caducada']} "/>
+                                <h:outputLink value="#{facesContext.externalContext.requestContextPath}/paginas/index.jsf">
+                                    <h:outputText value=" #{etiquetas['aqui.mayuscula']}"/>
+                                </h:outputLink>
+                            </div>
+
+                            <h:outputText value="#{sesionCtrl.usuarioLogueado.identificacion}"/>
+                        </h:form>
+                    </p:dialog>
+
+                </div>
+
+
+                <div id="content">
+
+                    <ui:insert name="content">
+                        contenido por defecto
+                    </ui:insert>
+                </div>
+
+                <ui:include src="/template/comun/footer.xhtml" />
+            </div>
+            <script type="text/javascript">
+                var _gaq = _gaq || [];
+                _gaq.push(['_setAccount', 'UA-31995509-1']);
+                _gaq.push(['_trackPageview']);
+
+                (function() {
+                    var ga = document.createElement('script'); ga.type = 'text/javascript'; ga.async = true;
+                    ga.src = ('https:' == document.location.protocol ? 'https://ssl' : 'http://www') + '.google-analytics.com/ga.js';
+                    var s = document.getElementsByTagName('script')[0]; s.parentNode.insertBefore(ga, s);
+                })();
+            </script>
+        </h:body>
+    </f:view>
+</html>

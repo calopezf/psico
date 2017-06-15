@@ -1,0 +1,112 @@
+<ui:composition xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:ui="http://java.sun.com/jsf/facelets"
+	xmlns:h="http://java.sun.com/jsf/html"
+	xmlns:f="http://java.sun.com/jsf/core"
+	xmlns:p="http://primefaces.org/ui" template="/WEB-INF/template.xhtml">
+	<ui:define name="content">
+		<h:form id="formUsuarioLista">
+		<h1>#{etiquetas['usuarios']}</h1>
+			<p:growl id="msg" autoUpdate="true" />
+			<h:panelGrid columns="1">
+				<h:panelGrid columns="2" id="gridFiltros" style="width: 700px">
+					<h:panelGrid columns="2" columnClasses="form-label,form-input">
+						<p:outputLabel value="#{etiquetas['nombre']}" />
+						<p:inputText value="#{usuarioCtrl.usuarioFiltro.nombre}"
+							style="width:120px" />
+						<p:outputLabel value="#{etiquetas['apellido']}" />
+						<p:inputText style="width:120px"
+							value="#{usuarioCtrl.usuarioFiltro.apellido}"></p:inputText>
+						<p:outputLabel value="#{etiquetas['identificacion']}" />
+						<p:inputText style="width:120px"
+							value="#{usuarioCtrl.usuarioFiltro.identificacion}"></p:inputText>
+					</h:panelGrid>
+				</h:panelGrid>
+				<h:panelGrid columns="2">
+					<p:commandButton value="Nuevo Registro"
+						action="/paginas/usuarios/usuario?faces-redirect=true"
+						title="#{etiquetas['crear.nuevo']}" immediate="true">
+					</p:commandButton>
+					<p:commandButton value="Buscar" action="#{usuarioCtrl.buscar}"
+						title="#{etiquetas.buscar}">
+						<p:ajax update="itemsPanel" process="gridFiltros" />
+					</p:commandButton>
+				</h:panelGrid>
+			</h:panelGrid>
+
+			<h:panelGroup id="itemsPanel">
+
+
+				<p:dataTable id="itemsTable"
+					emptyMessage="#{etiquetas['no.existen.registros']}"
+					value="#{usuarioCtrl.usuarios}" var="item" 
+					paginatorTemplate="{CurrentPageReport}  {FirstPageLink} {PreviousPageLink} {PageLinks} {NextPageLink} {LastPageLink} "
+					paginator="true" rows="10" style="width:100%; margin-bottom:20px">
+					<p:column style="width:100px;">
+						<f:facet name="header">
+							<h:outputText value="#{etiquetas['cedula']}" />
+						</f:facet>
+						<h:outputText value="#{item.identificacion}" />
+					</p:column>
+					<p:column style="width:150px;">
+						<f:facet name="header">
+							<h:outputText value="#{etiquetas['nombres']}" />
+						</f:facet>
+						<h:outputText value="#{item.nombre}"
+							styleClass="inputUpper tachado" />
+					</p:column>
+					<p:column style="width:150px;">
+						<f:facet name="header">
+							<h:outputText value="#{etiquetas['apellidos']}" />
+						</f:facet>
+						<h:outputText value="#{item.apellido}"
+							styleClass="inputUpper tachado"/>
+					</p:column>
+					<p:column style="width:100px;">
+						<f:facet name="header">
+							<h:outputText value="#{etiquetas['estado']}" />
+						</f:facet>
+						<h:outputText value="#{etiquetas[item.estado.etiqueta]}" />
+					</p:column>
+					<!--<p:column headerText="#{etiquetas['rol']}">
+                        <h:outputText value="#{item.rol}"/>
+                    </p:column>
+                    <p:column headerText="#{etiquetas['direccion.domicilio']}" styleClass="columnaCentrada">
+                        <h:selectBooleanCheckbox value="#{item.direccion}" disabled="true"/>
+                    </p:column>-->
+					<p:column headerText="#{etiquetas['correoElectronico']}"
+						style="width:200px;">
+						<h:outputText value="#{item.email}" />
+					</p:column>
+					<p:column style="width:70px;" styleClass="columnaCentrada">
+						<f:facet name="header">
+							<h:outputText value="#{etiquetas['editar']}" />
+						</f:facet>
+						<h:commandLink action="#{usuarioCtrl.editar}"
+							title="#{etiquetas.editar}">
+							<h:graphicImage value="/img/edit.png" id="editImage" style="width:20px; height:20px;"/>
+						</h:commandLink>
+					</p:column>
+					<p:column style="width:70px;" styleClass="columnaCentrada"
+						headerText="#{etiquetas['eliminar.sistema']}">
+						<h:commandLink actionListener="#{usuarioCtrl.eliminarUsuario}"
+							title="#{etiquetas['eliminar.sistema']}"
+							onclick="if(!confirm('#{mensajes['esta.seguro']}'))return false;">
+							<h:graphicImage value="/img/delete.png" id="trashImage" style="width:20px; height:20px;"/>
+							<f:ajax render="@form" />
+						</h:commandLink>
+					</p:column>
+					<p:column style="width:150px;" styleClass="columnaCentrada">
+						<f:facet name="header">
+							<h:outputText value="#{etiquetas['resetear.contrasena']}" />
+						</f:facet>
+						<h:commandLink action="#{usuarioCtrl.resetearContrasenia}"
+							title="#{etiquetas.editar}"
+							onclick="if(!confirm('#{mensajes['usuario.confirma.genera']}'))return false;">
+							<h:graphicImage value="/img/reset.png" id="resetImage" style="width:20px; height:20px;"/>
+						</h:commandLink>
+					</p:column>
+				</p:dataTable>
+			</h:panelGroup>
+		</h:form>
+	</ui:define>
+</ui:composition>

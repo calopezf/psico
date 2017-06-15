@@ -1,0 +1,153 @@
+<div  xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:ui="http://java.sun.com/jsf/facelets"
+      xmlns:h="http://java.sun.com/jsf/html"
+      xmlns:f="http://java.sun.com/jsf/core"
+      xmlns:p="http://primefaces.org/ui" align="center">
+
+    <h:panelGrid id="grid4" rendered="#{fichaCtrl.areaCargada=='/paginas/ficha/informacionEducacion.xhtml'}">
+
+        <p:growl id="growl4" showDetail="false" sticky="false" />
+
+        <h:panelGrid columns="4" headerClass="headerPanelFicha" columnClasses="form-label-width,form-input,form-label,form-input" >
+            <f:facet name="header">  
+                #{etiquetas['informacion.educacion']} 
+            </f:facet> 
+            <h:outputLabel value="#{etiquetas['asiste.clases']}: "/>
+            <p:selectOneRadio value="#{fichaCtrl.ficha.educacion.asiste}">
+                <f:selectItem itemLabel="Si" itemValue="s" />
+                <f:selectItem itemLabel="No" itemValue="n" />
+                <p:ajax update="panelAec panelAec2 pq1 pq2" />
+            </p:selectOneRadio>
+
+            <h:panelGroup id="pq1" >
+                <h:outputLabel value="#{etiquetas['por.que']}: " rendered="#{fichaCtrl.ficha.educacion.asiste == 'n'}" />
+            </h:panelGroup>
+            <h:panelGroup id="pq2" >
+                <h:selectManyCheckbox value="#{fichaCtrl.razonesPorLasQueNoEstudia}" layout="pageDirection" rendered="#{fichaCtrl.ficha.educacion.asiste == 'n'}" >
+                    <f:selectItems value="#{selectItemCtrl.razonesNoEstudiaItems}"/>
+                    <p:ajax process="@this" update="panelOtraRazonNe panelOtraRazonNe2" />
+                </h:selectManyCheckbox>
+            </h:panelGroup>
+            <h:panelGroup id="panelOtraRazonNe" >
+                <h:outputLabel value="#{etiquetas['otra.razon.no.estudia']}:" rendered="#{fichaCtrl.otraRazonNoEstudia}" />
+            </h:panelGroup>
+            <h:panelGroup id="panelOtraRazonNe2" >
+                <p:inputText value="#{fichaCtrl.ficha.educacion.otraRazonNoEstudia}" rendered="#{fichaCtrl.otraRazonNoEstudia}" />
+            </h:panelGroup>
+
+<!--            <h:outputLabel  value="#{etiquetas['ultimo.anio.escolar.aprobado']}: " />
+            <p:inputText value="#{fichaCtrl.ficha.educacion.ultimoAnio}" maxlength="20" styleClass="inputUpper"/>-->
+
+            <h:outputLabel value="#{etiquetas['desea.estudiar']}:" />
+            <p:selectOneRadio value="#{fichaCtrl.ficha.educacion.deseaEstudiar}">
+                <f:selectItem itemLabel="Si" itemValue="true" />
+                <f:selectItem itemLabel="No" itemValue="false" />
+            </p:selectOneRadio>
+
+            <h:panelGroup id="panelAec" >
+                <h:outputLabel value="#{etiquetas['anio.escolar.en.curso']}:" rendered="#{fichaCtrl.ficha.educacion.asiste == 's'}"/>
+            </h:panelGroup>
+            <h:panelGroup id="panelAec2" >
+                <p:inputText value="#{fichaCtrl.ficha.educacion.anioEnCurso}" rendered="#{fichaCtrl.ficha.educacion.asiste == 's'}" />
+            </h:panelGroup>
+
+            <h:outputLabel  value="#{etiquetas['jornada']}: "/>
+            <h:selectOneMenu   value="#{fichaCtrl.ficha.educacion.jornada}" >
+                <f:selectItems value="#{selectItemCtrl.tipoJornada}"/>
+            </h:selectOneMenu>
+
+            <h:outputLabel  value="#{etiquetas['modalidad']}: "/>
+            <h:selectOneMenu   value="#{fichaCtrl.ficha.educacion.modalidad}" >
+                <f:selectItems value="#{selectItemCtrl.modalidadEducacion}"/>
+            </h:selectOneMenu>
+
+            <h:outputLabel value="#{etiquetas['establecimiento.donde.se.matriculo']}:" />
+            <h:selectOneMenu value="#{fichaCtrl.ficha.educacion.tipoEstablecimiento}" >
+                <f:selectItems value="#{selectItemCtrl.tipoEstablecimientoItems}"/>
+            </h:selectOneMenu>
+
+            <h:outputLabel value="#{etiquetas['nivel.de.instruccion.anio.mas.alto.aprobo']}:" />
+            <h:selectOneMenu value="#{fichaCtrl.ficha.educacion.nivelInstruccion.id}" >
+                <f:selectItems value="#{selectItemCtrl.nivelInstruccionItems}"/>
+            </h:selectOneMenu>
+
+            <h:outputLabel value="#{etiquetas['capacitacion.oficio']}: "/>
+            <!--<p:selectBooleanCheckbox value="#{fichaCtrl.ficha.educacion.capacitacionOficio}">  
+                <p:ajax event="change" update="oficio oficio2" process="@this" partialSubmit="true"/>
+            </p:selectBooleanCheckbox>
+            <h:panelGroup id="oficio">
+                <h:outputLabel  value="#{etiquetas['oficio']}: " rendered="#{fichaCtrl.ficha.educacion.capacitacionOficio}"/>
+            </h:panelGroup>
+            <h:panelGroup id="oficio2">
+                <h:selectOneMenu value="#{fichaCtrl.ficha.educacion.actividadEconomicaItem.id}" styleClass="inputUpper" rendered="#{fichaCtrl.ficha.educacion.capacitacionOficio}">
+                    <f:selectItems value="#{selectItemCtrl.actividadEconomica}"/>
+                </h:selectOneMenu>
+            </h:panelGroup>-->
+            <p:inputText value="#{fichaCtrl.ficha.educacion.oficio}" styleClass="inputUpper" />
+        </h:panelGrid>   
+
+        <h:panelGrid columns="2" headerClass="headerPanelFicha" columnClasses="form-label-width,form-input,form-label,form-input" cellpadding="0" cellspacing="1" rendered="#{fichaCtrl.ficha.datosPersonales.pais.id eq fichaCtrl.ecuadorId}">
+            <f:facet name="header">  
+                #{etiquetas['centro.educativo.al.que.asiste']} 
+            </f:facet>
+            <h:outputLabel  value="#{etiquetas['nombre.centro']}: "/>
+            <p:inputText value="#{fichaCtrl.ficha.educacion.nombreCentro}" maxlength="50" styleClass="inputUpper"/>
+            <h:outputLabel value="#{etiquetas['provincia']}: "/>
+            <h:selectOneMenu   value="#{fichaCtrl.ficha.educacion.direccionCE.canton.provincia.id}" >
+                <f:selectItem itemValue="" itemLabel="#{etiquetas['elija.provincia']}"/>
+                <f:selectItems value="#{fichaCtrl.provinciasCE}"/>
+                <f:ajax event="valueChange"  listener="#{fichaCtrl.cambiaProvinciaCE}" render="comboCantonCE comboParroquiaCE" execute="@this"/>
+            </h:selectOneMenu>
+
+            <h:outputLabel value="#{etiquetas['canton']}: "/>
+            <h:selectOneMenu  id="comboCantonCE" value="#{fichaCtrl.ficha.educacion.direccionCE.canton.id}" >
+                <f:selectItem itemValue="" itemLabel="#{etiquetas['elija.canton']}"/>
+                <f:selectItems value="#{fichaCtrl.cantonesCE}"/>
+                <f:ajax event="valueChange"  listener="#{fichaCtrl.cambiaCantonCE}" render="comboParroquiaCE" execute="@this"/>
+            </h:selectOneMenu>
+
+            <h:outputLabel value="#{etiquetas['parroquia']}: "/>
+            <h:selectOneMenu  id="comboParroquiaCE" value="#{fichaCtrl.ficha.educacion.direccionCE.parroquia.id}" >
+                <f:selectItem itemValue="" itemLabel="#{etiquetas['elija.parroquia']}"/>
+                <f:selectItems value="#{fichaCtrl.parroquiasCE}"/>
+            </h:selectOneMenu>
+
+            <h:outputLabel value="#{etiquetas['direccion.centro']}" />
+            <p:inputTextarea value="#{fichaCtrl.ficha.educacion.direccionCentro}" styleClass="inputUpper" cols="20" rows="5"/>
+
+            <!--<h:outputLabel  value="#{etiquetas['calle.principal']}: "/>
+            <p:inputText value="#{fichaCtrl.ficha.educacion.direccionCE.callePrincipal}" maxlength="50" styleClass="inputUpper"/>
+
+            <h:outputLabel  value="#{etiquetas['calle.secundaria']}: "/>
+            <p:inputText value="#{fichaCtrl.ficha.educacion.direccionCE.calleSecundaria}" maxlength="50" styleClass="inputUpper"/>
+
+            <h:outputLabel  value="#{etiquetas['lugar.referencia']}: "/>
+            <p:inputText value="#{fichaCtrl.ficha.educacion.direccionCE.lugarReferencia}" maxlength="50" styleClass="inputUpper"/>-->
+
+        </h:panelGrid>
+        <br/>
+        <br/>
+
+        <h:panelGrid columns="2">
+
+            <h:commandLink id="registraEduBtn" action="#{fichaCtrl.guardar}" rendered="#{sesionCtrl.administrador or sesionCtrl.tecnicoResponsable or sesionCtrl.coordinador}">
+                <h:panelGrid style="text-align:center">
+                    <h:graphicImage value="/img/guardar.png" title="Guardar" />
+                    <h:outputText value="#{etiquetas['guardar']}"/>
+                </h:panelGrid>
+                <p:ajax process=":formPestana" update=":formPestana"/>
+            </h:commandLink>
+
+            <h:commandLink action="#{fichaCtrl.finalizarIngresoFicha}" disabled="#{fichaCtrl.cedulaValida == false}" rendered="#{sesionCtrl.administrador or sesionCtrl.tecnicoResponsable or sesionCtrl.coordinador}" onclick="if(!confirm('#{mensajes['mensaje.ficha.finalizar']}'))return false;">
+                <h:panelGrid style="text-align:center">
+                    <h:graphicImage value="/img/finalizar.png" title="#{etiquetas['finalizar.ficha']}" />
+                    <h:outputText value="#{etiquetas['finalizar']}"/>
+                </h:panelGrid>
+                <p:ajax process=":formPestana" update=":formPestana :formFicha" />
+            </h:commandLink>
+
+        </h:panelGrid>
+
+    </h:panelGrid>
+
+</div>

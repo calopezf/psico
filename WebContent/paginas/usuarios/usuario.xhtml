@@ -1,0 +1,112 @@
+<ui:composition xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:ui="http://java.sun.com/jsf/facelets"
+	xmlns:h="http://java.sun.com/jsf/html"
+	xmlns:f="http://java.sun.com/jsf/core"
+	template="/WEB-INF/template.xhtml" xmlns:p="http://primefaces.org/ui">
+
+	<br />
+
+	<ui:define name="content">
+		<h:form id="formUsuario">
+			<p:growl id="growl" autoUpdate="true" />
+			<h:panelGrid columns="2">
+				<h:panelGrid columns="2" columnClasses="form-label,form-input">
+					<p:outputLabel value="#{etiquetas['cedula']}*:" />
+					<p:inputText id="cedula" size="16"
+						value="#{usuarioCtrl.usuario.identificacion}" required="true"
+						requiredMessage="#{etiquetas['numero.cedula']} #{mensajes['requerido.masculino']}"
+						maxlength="10">
+					</p:inputText>
+					<p:outputLabel value="#{etiquetas['nombres']}*:" />
+					<p:inputText id="nombres" value="#{usuarioCtrl.usuario.nombre}"
+						required="true"
+						requiredMessage="#{etiquetas['nombres']} #{mensajes['requerido.masculino']}"
+						maxlength="250" size="25" />
+					<p:outputLabel value="#{etiquetas['apellidos']}*:" />
+					<p:inputText id="apellidos" value="#{usuarioCtrl.usuario.apellido}"
+						required="true"
+						requiredMessage="#{etiquetas['apellidos']} #{mensajes['requerido.masculino']}"
+						maxlength="250" size="25" />
+
+					<p:outputLabel value="#{etiquetas['direccion.domicilio']}:" />
+					<p:inputText id="residencia" size="48"
+						value="#{usuarioCtrl.usuario.direccion}" maxlength="250" />
+					<p:outputLabel value="#{etiquetas['correoElectronico']}*:" />
+					<p:inputText id="correoElectronico"
+						value="#{usuarioCtrl.usuario.email}" required="true"
+						requiredMessage="#{etiquetas['correoElectronico']} #{mensajes['requerido.masculino']}"
+						size="25">
+						<f:validator validatorId="MailValidator" />
+					</p:inputText>
+
+					<p:outputLabel value="#{etiquetas['rol']}*:"
+						rendered="#{usuarioCtrl.administrador}" />
+					<p:pickList id="pickList" value="#{usuarioCtrl.componenteRoles}"
+						rendered="#{usuarioCtrl.administrador}" var="roles"
+						itemLabel="#{roles}" itemValue="#{roles}">
+						<f:ajax event="transfer" render="semestre"
+							listener="#{usuarioCtrl.cambiaRoles}" />
+					</p:pickList>
+
+					<!--  >p:selectCheckboxMenu value="#{usuarioCtrl.rolesSeleccionados}"
+						label="Roles" required="true"
+						requiredMessage="#{etiquetas['rol']} #{mensajes['requerido.masculino']}">
+						<f:selectItems value="#{usuarioCtrl.roles}" />
+						<f:ajax event="change" render="semestre"
+							listener="#{usuarioCtrl.cambiaRoles}" />
+					</p:selectCheckboxMenu-->
+
+
+					<p:outputLabel for="estado" value="#{etiquetas['estado']}*:" />
+					<p:selectOneMenu id="estado" value="#{usuarioCtrl.usuario.estado}">
+						<f:selectItems value="#{selectItemCtrl.estadoEnum}" />
+					</p:selectOneMenu>
+
+					<p:outputLabel for="foto" value="#{etiquetas['foto']}:" />
+
+					<h:panelGroup id="panFoto">
+						<h:panelGrid columns="2">
+							<p:graphicImage id="foto" value="#{usuarioCtrl.imagePath}"
+								rendered="#{usuarioCtrl.imagePath != null}"
+								style="width:120px; height:120px;" />
+						</h:panelGrid>
+						<p:fileUpload fileUploadListener="#{usuarioCtrl.upload}"
+							allowTypes="/(\.|\/)(gif|jpe?g|png)$/" sizeLimit="10000000"
+							update="growl panFoto"></p:fileUpload>
+					</h:panelGroup>
+
+
+				</h:panelGrid>
+
+
+			</h:panelGrid>
+			<p:outputLabel value="#{etiquetas['campos.obligatorios']}" />
+
+
+
+			<br />
+			<br />
+
+			<div align="center">
+				<p:commandButton value="#{etiquetas.guardar}"
+					action="#{usuarioCtrl.guardar}" title="#{etiquetas['guardar']}"
+					update="growl">
+				</p:commandButton>
+				<p:commandButton value="#{etiquetas.atras}"
+					action="/paginas/usuarios/usuarioLista?faces-redirect=true"
+					title="#{etiquetas['atras']}" immediate="true">
+				</p:commandButton>
+			</div>
+
+		</h:form>
+		<!--<p:ajaxStatus onstart="loadingDialog.show();" onsuccess="loadingDialog.hide();"/>  
+        <p:dialog modal="true" widgetVar="loadingDialog" header="..." draggable="false" closable="false" width="200" height="50" resizable="false">
+            <br/>
+            <div align="center">
+                <p:graphicImage value="/img/ajax-loader.gif" />  
+            </div>
+            <br/>
+        </p:dialog>-->
+	</ui:define>
+
+</ui:composition>

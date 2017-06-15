@@ -1,0 +1,242 @@
+<div  xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:ui="http://java.sun.com/jsf/facelets"
+      xmlns:h="http://java.sun.com/jsf/html"
+      xmlns:f="http://java.sun.com/jsf/core"
+      xmlns:p="http://primefaces.org/ui" align="center">
+
+    <h:panelGrid id="grid5" rendered="#{fichaCtrl.areaCargada=='/paginas/ficha/actividadEconomica.xhtml'}">
+
+        <p:growl id="growl5" showDetail="false" sticky="false" />
+
+        <!--        <h:panelGrid style="100%" columns="2">-->
+        <h:panelGrid id="logroPanel" headerClass="headerPanelFicha"  columns="2" columnClasses="form-label,form-input">
+
+            <f:facet name="header">
+                <h:outputText
+                    value="#{etiquetas['actividad.economica.nna']}" />
+            </f:facet>
+
+            <h:outputLabel value="#{etiquetas['actividad']}: "/>
+            <h:selectOneMenu  value="#{fichaCtrl.actividadEconomica.actividadEconomicaItem.id}" >
+                <f:selectItems value="#{selectItemCtrl.actividadEconomica}"/>
+                <f:selectItem itemLabel="Otra" itemValue="-1" />
+                <p:ajax update="panelOa panelOa2" />
+            </h:selectOneMenu>
+
+            <h:panelGroup id="panelOa" >
+                <h:outputLabel value="#{etiquetas['otra.actividad']}:" rendered="#{fichaCtrl.actividadEconomica.actividadEconomicaItem.id == '-1'}" />
+            </h:panelGroup>
+            <h:panelGroup id="panelOa2" >
+                <p:inputText value="#{fichaCtrl.actividadEconomica.otraActividad}" styleClass="inputUpper" rendered="#{fichaCtrl.actividadEconomica.actividadEconomicaItem.id == '-1'}" />
+            </h:panelGroup>
+
+            <h:outputLabel value="#{etiquetas['ramas.actividad']}: "/>
+            <h:selectOneMenu  value="#{fichaCtrl.actividadEconomica.ramaActividad.id}" >
+                <f:selectItems value="#{selectItemCtrl.ramaActividadItems}"/>
+                <f:selectItem itemLabel="Otra" itemValue="-1" />
+                <f:ajax render="panelOra panelOra2"/>
+            </h:selectOneMenu>
+
+            <h:panelGroup id="panelOra" > 
+                <h:outputLabel value="#{etiquetas['otra.rama.actividad']}:" rendered="#{fichaCtrl.actividadEconomica.ramaActividad.id == '-1'}" />
+            </h:panelGroup>
+            <h:panelGroup id="panelOra2" >
+                <p:inputText value="#{fichaCtrl.actividadEconomica.otraRamaActividad}" styleClass="inputUpper" rendered="#{fichaCtrl.actividadEconomica.ramaActividad.id == '-1'}" />
+            </h:panelGroup>
+
+            <h:outputLabel value="#{etiquetas['condiciones.perjudiciales']}: "/>
+            <p:selectManyCheckbox value="#{fichaCtrl.actividadEconomica.condicionesPerjudicialesIdsSeleccionadas}" 
+                                  label="#{etiquetas['condiciones.perjudiciales']}" layout="grid" columns="1" >  
+                <f:selectItems value="#{fichaCtrl.condicionesPerjudicialesItems}" />  
+            </p:selectManyCheckbox>
+
+            <h:outputLabel value="#{etiquetas['sitio.trabajo']}: " />
+            <h:selectOneMenu value="#{fichaCtrl.actividadEconomica.lugarTrabajo.id}" >
+                <f:selectItems value="#{selectItemCtrl.lugaresTrabajo}"/>
+                <f:selectItem itemLabel="Otro" itemValue="-1" />
+                <p:ajax update="pnos pnlOtro" event="valueChange"  />
+            </h:selectOneMenu>
+
+            <h:panelGroup id="pnos" >
+                <h:outputLabel id="oa" value="#{etiquetas['otro.sitio.de.trabajo']}: " rendered="#{fichaCtrl.actividadEconomica.lugarTrabajo.id == '-1'}" />
+            </h:panelGroup>
+            <h:panelGroup id="pnlOtro">
+                <h:panelGrid columns="1" columnClasses="form-label" rendered="#{fichaCtrl.actividadEconomica.lugarTrabajo.id == '-1'}">
+                    <p:inputText id="oai" value="#{fichaCtrl.actividadEconomica.otroLugarTrabajo}" maxlength="50" styleClass="inputUpper" />
+                </h:panelGrid>
+            </h:panelGroup>
+
+            <h:outputLabel value="#{etiquetas['realiza.actividades.peligrosas']}:" rendered="#{fichaCtrl.ficha.datosPersonales.rangoEdad eq 'De 15 a 17 anios'}" />
+            <p:selectBooleanCheckbox value="#{fichaCtrl.actividadEconomica.realizaActividadesPeligrosas}" rendered="#{fichaCtrl.ficha.datosPersonales.rangoEdad eq 'De 15 a 17 anios'}" />
+
+            <h:outputLabel value="#{etiquetas['tiene.contrato.con.mrl']}:" rendered="#{fichaCtrl.ficha.datosPersonales.rangoEdad eq 'De 15 a 17 anios'}" />
+            <p:selectBooleanCheckbox value="#{fichaCtrl.actividadEconomica.tieneContratoRegistradoConMrl}" rendered="#{fichaCtrl.ficha.datosPersonales.rangoEdad eq 'De 15 a 17 anios'}" />
+
+            <h:outputLabel  value="#{etiquetas['dias.trabaja.a.la.semana']}: "/>
+            <p:selectManyCheckbox value="#{fichaCtrl.diasTrabajaEnLaSemana}" layout="pageDirection">  
+                <f:selectItems value="#{selectItemCtrl.diaSemanaItems}" />
+            </p:selectManyCheckbox>
+
+            <h:outputLabel  value="#{etiquetas['cuanto.gana.diaramente']}: "/>
+            <p:selectOneRadio value="#{fichaCtrl.actividadEconomica.cuantoGanaDiaramente}" layout="pageDirection">  
+                <f:selectItems value="#{selectItemCtrl.rangoGananciaItems}" />
+            </p:selectOneRadio>
+
+<!--                <h:outputLabel  value="#{etiquetas['pago']}: "/>
+                <p:inputText value="#{fichaCtrl.actividadEconomica.valorPago}" maxlength="50" styleClass="inputUpper" onkeypress="return acceptNum(event)"/>-->
+
+            <h:outputLabel  value="#{etiquetas['forma.pago']}: "/>
+            <p:selectOneRadio value="#{fichaCtrl.actividadEconomica.formaPago}" layout="pageDirection">  
+                <f:selectItem itemLabel="Diario" itemValue="DIARIO" />
+                <f:selectItem itemLabel="Semanal" itemValue="SEMANAL" />  
+                <f:selectItem itemLabel="Quincenal" itemValue="QUINCENAL" />  
+                <f:selectItem itemLabel="Mensual" itemValue="MENSUAL" />  
+                <f:selectItem itemLabel="Otros" itemValue="OTROS" />  
+            </p:selectOneRadio>
+
+            <h:outputLabel  value="#{etiquetas['numero.horas.x.dia']}: "/>
+            <p:inputText size="2" value="#{fichaCtrl.actividadEconomica.horasXDia}" maxlength="3" onkeypress="return acceptNum(event)"/>
+
+            <h:outputLabel  value="#{etiquetas['numero.horas.x.dia.6pm']}: "/>
+            <p:inputText size="2" value="#{fichaCtrl.actividadEconomica.horasXDiaDespues6PM}" maxlength="3" onkeypress="return acceptNum(event)"/>
+
+            <h:outputLabel  value="#{etiquetas['trabajo.antes']}: "/>
+            <p:selectBooleanButton value="#{fichaCtrl.actividadEconomica.trabajoAntes}" onLabel="Si" offLabel="No" style="width:60px" >
+                <p:ajax update="pndta pndta2" />
+            </p:selectBooleanButton>                    
+
+            <h:panelGroup id="pndta" >
+                <h:outputLabel  value="#{etiquetas['datos.trabajo.anterior']}: " rendered="#{fichaCtrl.actividadEconomica.trabajoAntes}"/>
+            </h:panelGroup>
+            <h:panelGroup id="pndta2" >
+                <p:inputTextarea value="#{fichaCtrl.actividadEconomica.datosTrabajoAnterior}" styleClass="inputUpper" rendered="#{fichaCtrl.actividadEconomica.trabajoAntes}" />
+            </h:panelGroup>
+
+        </h:panelGrid>
+
+        <h:panelGrid  headerClass="headerPanelFicha" columns="1" >
+
+            <f:facet name="header">  
+                #{etiquetas['datos.empresa']} 
+            </f:facet>
+
+            <!--                <h:panelGrid columns="4" columnClasses="form-label">
+                                <h:outputLabel for="chkTrabajaEmpresa" value="#{etiquetas['trabaja.para.empresa']}: "/>
+                                <h:selectBooleanCheckbox id="chkTrabajaEmpresa" value="#{fichaCtrl.actividadEconomica.trabajaParaEmpresa}">
+                                    <p:ajax process="@this" update=":formPestana:infEmpresa"/>
+                                </h:selectBooleanCheckbox>
+                            </h:panelGrid>-->
+
+            <h:panelGrid columns="1" id="infEmpresa">
+
+                <h:panelGrid columns="2" columnClasses="form-label" >
+                    <h:outputLabel id="outMod" value="#{etiquetas['modalidad.trabajo']}: " />
+                    <h:selectOneMenu id="selMod" value="#{fichaCtrl.actividadEconomica.modalidadTrabajo.id}" >
+                        <f:selectItems value="#{selectItemCtrl.modalidad}"/>
+                        <f:selectItem itemLabel="Otra" itemValue="-1" />
+                        <p:ajax update="pnOm pnOm2" event="valueChange" process="@this" />
+                    </h:selectOneMenu>
+
+                    <h:panelGroup id="pnOm" >
+                        <h:outputLabel value="#{etiquetas['otra.modalidad']}: " rendered="#{fichaCtrl.actividadEconomica.modalidadTrabajo.id == '-1'}" />
+                    </h:panelGroup>
+                    <h:panelGroup id="pnOm2">
+                        <p:inputText value="#{fichaCtrl.actividadEconomica.otraModalidad}" maxlength="50" styleClass="inputUpper" rendered="#{fichaCtrl.actividadEconomica.modalidadTrabajo.id == '-1'}"/>
+                    </h:panelGroup>
+
+                    <h:outputLabel value="#{etiquetas['tiempo.trabajo.actual']}: " />
+                    <p:inputText value="#{fichaCtrl.actividadEconomica.tiempoTrabajoActual}" onkeypress="return acceptNum(event)" maxlength="4" />
+
+                    <h:outputLabel  value="#{etiquetas['ruc']}: "/>
+                    <h:panelGrid columns="3" id="gridRuc">
+                        <h:inputText id="txtRucEmpresa" value="#{fichaCtrl.actividadEconomica.rucEmpresa}" onkeypress="return acceptNum(event)" size="13" maxlength="15" />
+<!--                            <h:selectBooleanCheckbox id="chkNoAplica" value="#{fichaCtrl.actividadEconomica.rucNoAplica}">
+                            <p:ajax process="@this" update=":formPestana:gridRuc" />
+                        </h:selectBooleanCheckbox>
+                        <h:outputLabel for="chkNoAplica" value="Se desconoce RUC"/>-->
+                    </h:panelGrid>
+
+                    <h:outputLabel id="outNom" value="#{etiquetas['nombre']}: " />
+                    <h:inputText id="inpNom" style="width:150px" value="#{fichaCtrl.actividadEconomica.nombreEmpresa}" styleClass="inputUpper" maxlength="100" />
+
+
+                </h:panelGrid>
+                <h:panelGrid columns="2" columnClasses="form-label">
+
+                    <h:outputLabel value="#{etiquetas['provincia']}: " />
+                    <h:selectOneMenu value="#{fichaCtrl.actividadEconomica.direccion.canton.provincia.id}"  >
+                        <f:selectItem itemValue="" itemLabel="#{etiquetas['elija.provincia']}"/>
+                        <f:selectItems value="#{fichaCtrl.provinciasAE}"/>
+                        <f:ajax event="valueChange"  listener="#{fichaCtrl.cambiaProvinciaAE}" render="comboCantonAE comboParroquiaAE" execute="@this"/>
+                    </h:selectOneMenu>
+
+                    <h:outputLabel value="#{etiquetas['canton']}: "  />
+                    <h:selectOneMenu  id="comboCantonAE" value="#{fichaCtrl.actividadEconomica.direccion.canton.id}"  >
+                        <f:selectItem itemValue="" itemLabel="#{etiquetas['elija.canton']}"/>
+                        <f:selectItems value="#{fichaCtrl.cantonesAE}"/>
+                        <f:ajax event="valueChange"  listener="#{fichaCtrl.cambiaCantonAE}" render="comboParroquiaAE" execute="@this"/>
+                    </h:selectOneMenu>
+
+                    <h:outputLabel value="#{etiquetas['parroquia']}: "  />
+                    <h:selectOneMenu  id="comboParroquiaAE" value="#{fichaCtrl.actividadEconomica.direccion.parroquia.id}" >
+                        <f:selectItem itemValue="" itemLabel="#{etiquetas['elija.parroquia']}"/>
+                        <f:selectItems value="#{fichaCtrl.parroquiasAE}"/>
+                    </h:selectOneMenu>
+
+                    <h:outputLabel id="outPrin" value="#{etiquetas['calle.principal']}: " />
+                    <p:inputText id="inpPrin" value="#{fichaCtrl.actividadEconomica.direccion.callePrincipal}" maxlength="70" styleClass="inputUpper" />
+
+                    <h:outputLabel value="#{etiquetas['numero.vivienda']}" />
+                    <p:inputText value="#{fichaCtrl.actividadEconomica.direccion.numeroVivienda}" styleClass="inputUpper" maxlength="7" />
+
+                    <h:outputLabel  value="#{etiquetas['calle.secundaria']}: " />
+                    <p:inputText value="#{fichaCtrl.actividadEconomica.direccion.calleSecundaria}" maxlength="70" styleClass="inputUpper" />
+
+                    <h:outputLabel  value="#{etiquetas['lugar.referencia']}: " />
+                    <p:inputText value="#{fichaCtrl.actividadEconomica.direccion.lugarReferencia}" maxlength="70" styleClass="inputUpper" />
+
+<!--                        <h:outputLabel value="#{etiquetas['sector']}: " />
+                        <p:inputText value="#{fichaCtrl.actividadEconomica.direccion.sector}" maxlength="70" styleClass="inputUpper" />-->
+                </h:panelGrid>
+
+                <!--                    <h:panelGrid columns="2" columnClasses="form-label">
+                                        <h:outputLabel value="#{etiquetas['lugar.trabajo']}: " />
+                                        <h:selectOneMenu value="#{fichaCtrl.actividadEconomica.lugarTrabajo.id}" >
+                                            <f:selectItems value="#{selectItemCtrl.lugaresTrabajo}"/>
+                                            <p:ajax update=":formPestana:pnlOtro" event="valueChange"  />
+                                        </h:selectOneMenu>
+                                    </h:panelGrid>-->
+                <!--                    <h:panelGroup id="pnlOtro">
+                                        <h:panelGrid columns="2" columnClasses="form-label" rendered="#{fichaCtrl.actividadEconomica.lugarTrabajo.id eq 14}">
+                                            <h:outputLabel id="oa" value="#{etiquetas['otro']}: "  />
+                                            <p:inputText id="oai" value="#{fichaCtrl.actividadEconomica.otroLugarTrabajo}" maxlength="50" styleClass="inputUpper" />
+                                        </h:panelGrid>
+                                    </h:panelGroup>-->
+            </h:panelGrid>
+        </h:panelGrid>
+        <!--        </h:panelGrid>-->
+
+        <br/>
+        <br/>
+
+        <h:panelGrid columns="2">
+
+            <h:commandLink id="registraLabBtn" action="#{fichaCtrl.guardar}" rendered="#{sesionCtrl.administrador or sesionCtrl.tecnicoResponsable or sesionCtrl.coordinador}">
+                <h:panelGrid style="text-align:center">
+                    <h:graphicImage value="/img/guardar.png" title="Guardar" />
+                    <h:outputText value="#{etiquetas['guardar']}"/>
+                </h:panelGrid>
+                <p:ajax process=":formPestana" update=":formPestana :formFicha"/>
+            </h:commandLink>
+
+            <h:commandLink action="#{fichaCtrl.finalizarIngresoFicha}" disabled="#{fichaCtrl.cedulaValida == false}" rendered="#{sesionCtrl.administrador or sesionCtrl.tecnicoResponsable or sesionCtrl.coordinador}" onclick="if(!confirm('#{mensajes['mensaje.ficha.finalizar']}'))return false;">
+                <h:panelGrid style="text-align:center">
+                    <h:graphicImage value="/img/finalizar.png" title="#{etiquetas['finalizar.ficha']}" />
+                    <h:outputText value="#{etiquetas['finalizar']}"/>
+                </h:panelGrid>
+                <p:ajax process=":formPestana" update=":formPestana :formFicha" />
+            </h:commandLink>
+        </h:panelGrid>
+    </h:panelGrid>
+
+</div>

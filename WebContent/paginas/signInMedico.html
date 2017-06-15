@@ -1,0 +1,47 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01//EN" "http://www.w3.org/TR/html4/strict.dtd">
+<html>
+<head>
+<title></title>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8">
+<style>
+/*reset*/ h1,h4 {margin:0;}
+
+/* basic styles */
+h1 { margin-bottom: 10px; }
+div { 
+  width: 680px;
+  padding: 10px 25px;
+  margin: 50px auto;
+  border-radius: 7px;
+  background: rgba(255, 255, 255, 0.4); 
+  color: #1F1F1F;
+}
+
+/* backgrounds */
+.day { background: url('../img/medico.jpg'); }
+.sunset { background: url('http://www.naturewallpaper.eu/desktopwallpapers/sky/1366x768/after-sunset-sky-1366x768.jpg'); }
+.night { background: url('../img/paciente.jpg'); }
+</style>
+<script type="text/javascript">
+$(document).ready(function(){
+	var d = new Date();
+	var n = d.getHours();
+	if (n > 19 || n < 6)
+	  // If time is after 7PM or before 6AM, apply night theme to ‘body’
+	  document.body.className = "night";
+	else if (n > 16 && n < 19)
+	  // If time is between 4PM – 7PM sunset theme to ‘body’
+	  document.body.className = "sunset";
+	else
+	  // Else use ‘day’ theme
+	  document.body.className = "day";
+});
+</script>
+</head>
+<body>
+  <div>
+    <h1>Background based on time of day</h1>
+    <h4>JavaScript applies a CSS class to change the background image based on the time of day of the user's browser.</h4>
+  </div>
+</body>
+</html>

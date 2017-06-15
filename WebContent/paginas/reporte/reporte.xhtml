@@ -1,0 +1,175 @@
+<ui:composition xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:ui="http://java.sun.com/jsf/facelets"
+	xmlns:h="http://java.sun.com/jsf/html"
+	xmlns:f="http://java.sun.com/jsf/core"
+	xmlns:p="http://primefaces.org/ui" template="/WEB-INF/template.xhtml">
+	<ui:define name="title">
+		<h:outputText value="#{etiquetas['seguimiento']}" />
+	</ui:define>
+	<ui:define name="content">
+		<h:form id="formSeguimientoLista">
+			<p:growl id="msg" autoUpdate="true" />
+			<h:panelGrid columns="1">
+				<h:panelGrid columns="1" id="gridFiltros" style="width: 700px">
+					<h:panelGrid columns="2" columnClasses="form-label,form-input">
+						<p:outputLabel value="#{etiquetas['semestre']}" />
+						<p:selectOneMenu id="semestre"
+							value="#{reporteCtrl.seguimientoFiltro.semestre.codigo}"
+							style="width:250px">
+							<f:selectItem />
+							<f:selectItems value="#{seguimientoCtrl.semestreLista}"
+								var="item" itemLabel="#{item.nombre}" itemValue="#{item.codigo}" />
+						</p:selectOneMenu>
+						<p:outputLabel value="#{etiquetas['estado']}" />
+						<p:selectOneMenu id="estado"
+							value="#{reporteCtrl.seguimientoFiltro.estado}">
+							<f:selectItem />
+							<f:selectItems value="#{selectItemCtrl.estadoEnum}" />
+						</p:selectOneMenu>
+						<p:outputLabel for="facultad" value="#{etiquetas['carrera']}" />
+						<p:selectOneMenu id="facultad"
+							value="#{reporteCtrl.seguimientoFiltro.carrera.codigo}"
+							style="width:250px">
+							<f:selectItem />
+							<f:selectItems value="#{seguimientoCtrl.carreraLista}" var="item"
+								itemLabel="#{item.nombre}" itemValue="#{item.codigo}" />
+							<f:ajax event="change" render="pagMateria"
+								listener="#{reporteCtrl.cambiaCarrera}" />
+						</p:selectOneMenu>
+						<p:outputLabel value="#{etiquetas['materia']}" />
+						<h:panelGroup id="pagMateria">
+							<p:selectOneMenu id="materia"
+								value="#{reporteCtrl.seguimientoFiltro.materia.codigo}"
+								style="width:250px">
+								<f:selectItem />
+								<f:selectItems value="#{reporteCtrl.materiaLista}" var="item"
+									itemLabel="#{item.codigo} - #{item.nombre}"
+									itemValue="#{item.codigo}" />
+							</p:selectOneMenu>
+						</h:panelGroup>
+						<p:outputLabel value="#{etiquetas['profesor']}" />
+						<p:selectOneMenu id="profesor"
+							value="#{reporteCtrl.seguimientoFiltro.profesor.identificacion}"
+							style="width:250px">
+							<f:selectItem />
+							<f:selectItems value="#{reporteCtrl.profesorLista}" var="item"
+								itemLabel="#{item.identificacion} - #{item.nombre} #{item.apellido}"
+								itemValue="#{item.identificacion}" />
+						</p:selectOneMenu>
+						<p:outputLabel value="#{etiquetas['alumno']}" />
+						<p:selectOneMenu id="alumno"
+							value="#{reporteCtrl.seguimientoFiltro.alumno.identificacion}"
+							style="width:250px">
+							<f:selectItem />
+							<f:selectItems value="#{reporteCtrl.alumnoLista}" var="item"
+								itemLabel="#{item.identificacion} - #{item.nombre} #{item.apellido}"
+								itemValue="#{item.identificacion}" />
+						</p:selectOneMenu>
+					</h:panelGrid>
+					<p:commandButton value="Buscar" action="#{reporteCtrl.buscar}"
+						title="#{etiquetas.buscar}">
+						<p:ajax update="grupo" process="gridFiltros" />
+					</p:commandButton>
+				</h:panelGrid>
+			</h:panelGrid>
+
+			<h:panelGroup id="grupo">
+				<p:chart type="bar" model="#{reporteCtrl.profesorAlumnoModel}"
+					style="height:300px" />
+				<br />
+				<br />
+				<p:dataTable id="itemsTable"
+					emptyMessage="#{etiquetas['no.existen.registros']}"
+					value="#{reporteCtrl.seguimientoLista}" var="item"
+					paginatorTemplate="{CurrentPageReport}  {FirstPageLink} {PreviousPageLink} {PageLinks} {NextPageLink} {LastPageLink} {Exporters}"
+					paginator="true" rows="10" style="width:100%; margin-bottom:20px">
+					<f:facet name="{Exporters}">
+						<h:commandLink>
+							<h:graphicImage value="/img/excel.png" width="24" />
+							<p:dataExporter type="xls" target="itemsTable"
+								fileName="materias" />
+						</h:commandLink>
+
+						<h:commandLink>
+							<p:graphicImage value="/img/pdf.png" width="24" />
+							<p:dataExporter type="pdf" target="itemsTable"
+								fileName="materias" />
+						</h:commandLink>
+					</f:facet>
+
+					<p:column style="width:100px;">
+						<f:facet name="header">
+							<h:outputText value="#{etiquetas['semestre']}" />
+						</f:facet>
+						<h:outputText value="#{item.semestre.nombre}" />
+					</p:column>
+					<p:column style="width:200px;">
+						<f:facet name="header">
+							<h:outputText value="#{etiquetas['carrera']}" />
+						</f:facet>
+						<h:outputText value="#{item.carrera.nombre}" />
+					</p:column>
+					<p:column style="width:250px;">
+						<f:facet name="header">
+							<h:outputText value="#{etiquetas['materia']}" />
+						</f:facet>
+						<h:outputText
+							value="#{item.materia.codigo} - #{item.materia.nombre}" />
+					</p:column>
+					<p:column style="width:100px;">
+						<f:facet name="header">
+							<h:outputText value="#{etiquetas['estado']}" />
+						</f:facet>
+						<h:outputText value="#{etiquetas[item.estado.etiqueta]}" />
+					</p:column>
+					<p:column style="width:250px;">
+						<f:facet name="header">
+							<h:outputText value="#{etiquetas['profesor']}" />
+						</f:facet>
+						<h:outputText
+							value="#{item.profesor.identificacion} - #{item.profesor.nombre} #{item.profesor.apellido}" />
+					</p:column>
+					<p:column style="width:250px;">
+						<f:facet name="header">
+							<h:outputText value="#{etiquetas['alumno']}" />
+						</f:facet>
+						<h:outputText
+							value="#{item.alumno.identificacion} - #{item.alumno.nombre} #{item.alumno.apellido}" />
+					</p:column>
+					<p:column style="width:100px;">
+						<f:facet name="header">
+							<h:outputText value="Porcentaje Profesor" />
+						</f:facet>
+						<h:outputText value="#{item.profesorPorcentaje}" />
+					</p:column>
+					<p:column style="width:100px;">
+						<f:facet name="header">
+							<h:outputText value="Porcentaje Alumno" />
+						</f:facet>
+						<h:outputText value="#{item.alumnoPorcentaje}" />
+					</p:column>
+					<p:column style="width:150px;"
+						headerText="#{etiquetas['generarReporte']}">
+						<div align="center">
+							<h:commandButton action="#{reporteCtrl.generarReporte}"
+								value="#{etiquetas['generarReporte']}"
+								title="#{etiquetas['generarReporte']}">
+							</h:commandButton>
+						</div>
+					</p:column>
+				</p:dataTable>
+			</h:panelGroup>
+
+			<br />
+			<br />
+			<br />
+			<div align="center">
+
+				<p:commandButton value="#{etiquetas.atras}"
+					action="/paginas/index?faces-redirect=true"
+					title="#{etiquetas['atras']}" immediate="true">
+				</p:commandButton>
+			</div>
+		</h:form>
+	</ui:define>
+</ui:composition>

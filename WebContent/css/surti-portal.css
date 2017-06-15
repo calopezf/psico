@@ -1,0 +1,57 @@
+body{
+	font-family:Verdana, Geneva, sans-serif;
+	font-size:14px;
+	font:Verdana, Geneva, sans-serif;
+	color:#FFFFFF;
+    margin-top: 0px; margin-bottom: 0px; margin-left: 0px; margin-right: 0px;
+    padding: 0;
+	background: #e5e5e5; /* Old browsers */
+	background: -moz-radial-gradient(center, ellipse cover,  #e5e5e5 0%, #46bfdc 100%); /* FF3.6+ */
+	background: -webkit-gradient(radial, center center, 0px, center center, 100%, color-stop(0%,#e5e5e5), color-stop(100%,#46bfdc)); /* Chrome,Safari4+ */
+	background: -webkit-radial-gradient(center, ellipse cover,  #e5e5e5 0%,#46bfdc 100%); /* Chrome10+,Safari5.1+ */
+	background: -o-radial-gradient(center, ellipse cover,  #e5e5e5 0%,#46bfdc 100%); /* Opera 12+ */
+	background: -ms-radial-gradient(center, ellipse cover,  #e5e5e5 0%,#46bfdc 100%); /* IE10+ */
+	background: radial-gradient(ellipse at center,  #e5e5e5 0%,#46bfdc 100%); /* W3C */
+	filter: progid:DXImageTransform.Microsoft.gradient( startColorstr='#e5e5e5', endColorstr='#46bfdc',GradientType=1 ); /* IE6-9 fallback on horizontal gradient */
+}
+
+#contenedor{
+	background-image: url('../img/nubes.png');
+	background-repeat: repeat-x;
+	background-position: bottom;
+	background-attachment: fixed;
+	height: 100%;
+
+}
+
+
+#divSuperior{
+	background: -moz-linear-gradient(top,  rgba(126,169,168,1) 0%, rgba(126,169,168,1) 1%, rgba(126,169,168,0) 100%); /* FF3.6+ */
+	background: -webkit-gradient(linear, left top, left bottom, color-stop(0%,rgba(126,169,168,1)), color-stop(1%,rgba(126,169,168,1)), color-stop(100%,rgba(126,169,168,0))); /* Chrome,Safari4+ */
+	background: -webkit-linear-gradient(top,  rgba(126,169,168,1) 0%,rgba(126,169,168,1) 1%,rgba(126,169,168,0) 100%); /* Chrome10+,Safari5.1+ */
+	background: -o-linear-gradient(top,  rgba(126,169,168,1) 0%,rgba(126,169,168,1) 1%,rgba(126,169,168,0) 100%); /* Opera 11.10+ */
+	background: -ms-linear-gradient(top,  rgba(126,169,168,1) 0%,rgba(126,169,168,1) 1%,rgba(126,169,168,0) 100%); /* IE10+ */
+	background: linear-gradient(to bottom,  rgba(126,169,168,1) 0%,rgba(126,169,168,1) 1%,rgba(126,169,168,0) 100%); /* W3C */
+	filter: progid:DXImageTransform.Microsoft.gradient( startColorstr='#7ea9a8', endColorstr='#007ea9a8',GradientType=0 ); /* IE6-9 */
+}
+
+#divMenu{
+	background: rgb(124,181,221); /* Old browsers */
+background: -moz-linear-gradient(top,  rgba(124,181,221,1) 0%, rgba(82,162,216,1) 100%); /* FF3.6+ */
+background: -webkit-gradient(linear, left top, left bottom, color-stop(0%,rgba(124,181,221,1)), color-stop(100%,rgba(82,162,216,1))); /* Chrome,Safari4+ */
+background: -webkit-linear-gradient(top,  rgba(124,181,221,1) 0%,rgba(82,162,216,1) 100%); /* Chrome10+,Safari5.1+ */
+background: -o-linear-gradient(top,  rgba(124,181,221,1) 0%,rgba(82,162,216,1) 100%); /* Opera 11.10+ */
+background: -ms-linear-gradient(top,  rgba(124,181,221,1) 0%,rgba(82,162,216,1) 100%); /* IE10+ */
+background: linear-gradient(to bottom,  rgba(124,181,221,1) 0%,rgba(82,162,216,1) 100%); /* W3C */
+filter: progid:DXImageTransform.Microsoft.gradient( startColorstr='#7cb5dd', endColorstr='#52a2d8',GradientType=0 ); /* IE6-9 */
+	
+}
+
+#divFooter{
+	width:1024px;
+	height:74px;
+	margin:10px auto;
+	border:1px solid #E0E0E0;
+	background-color:#ffffff;
+	box-shadow: 5px 5px 5px #888888;
+}

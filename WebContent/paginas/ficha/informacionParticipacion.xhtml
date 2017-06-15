@@ -1,0 +1,92 @@
+<div  xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:ui="http://java.sun.com/jsf/facelets"
+      xmlns:h="http://java.sun.com/jsf/html"
+      xmlns:f="http://java.sun.com/jsf/core"
+      xmlns:p="http://primefaces.org/ui">
+
+    <h:panelGrid id="grid7" style="width:100%" rendered="#{fichaCtrl.areaCargada=='/paginas/ficha/informacionParticipacion.xhtml'}">
+
+        <p:growl id="growl7" showDetail="false" sticky="false" />
+
+        <h:panelGrid style="width: 60%" headerClass="headerPanelFicha" columns="2" columnClasses="form-label,form-input">
+
+            <f:facet name="header">
+                <h:outputText
+                    value="#{etiquetas['informacion.participacion']}" />
+            </f:facet>
+
+            <h:outputLabel  value="#{etiquetas['programa.social']}: "/>
+            <p:selectBooleanButton value="#{fichaCtrl.ficha.participacion.participaProgSocial}" onLabel="Si" offLabel="No" style="width:60px" >
+                <p:ajax event="change" update="pnNi pnNi2" process="@this" />
+            </p:selectBooleanButton>
+            <h:panelGroup id="pnNi"  >
+                <h:outputLabel  value="#{etiquetas['nombre.institucion']}: " rendered="#{fichaCtrl.ficha.participacion.participaProgSocial}"/>
+            </h:panelGroup>
+            <h:panelGroup id="pnNi2"  >
+                <p:inputText value="#{fichaCtrl.ficha.participacion.nombreInstitucion}" maxlength="50" styleClass="inputUpper" rendered="#{fichaCtrl.ficha.participacion.participaProgSocial}" />
+            </h:panelGroup>
+
+        </h:panelGrid>
+
+        <h:panelGrid id="progSocPanel" style="width: 60%" headerClass="headerPanelFicha" columns="4" columnClasses="form-label,form-input,form-label,form-input">
+            <h:outputLabel value="#{etiquetas['recibe.asistencia.monetaria']}" />
+            <p:selectBooleanButton value="#{fichaCtrl.ficha.participacion.recibeAsistenciaMonetaria}" onLabel="Si" offLabel="No" style="width:60px" >
+                <p:ajax update="pnAmr9 panelTAM9" />
+            </p:selectBooleanButton>
+            <h:panelGroup id="pnAmr9" >
+                <h:outputLabel value="#{etiquetas['cual.de.ellas.recibe']}" rendered="#{fichaCtrl.ficha.participacion.recibeAsistenciaMonetaria}" />
+            </h:panelGroup>
+            <h:panelGroup id="panelTAM9">
+                <h:selectManyCheckbox value="#{fichaCtrl.tiposDeAsistenciaMonetariaParticipacion}" layout="pageDirection" rendered="#{fichaCtrl.ficha.participacion.recibeAsistenciaMonetaria}" >
+                    <f:selectItems value="#{selectItemCtrl.tipoAsistenciaMonetariaItems}"/>
+                    <p:ajax process="@this" update="panelOtroTipoAsistencia panelOtroTipoAsistencia2" />
+                </h:selectManyCheckbox>
+            </h:panelGroup>
+            <h:panelGroup id="panelOtroTipoAsistencia" >
+                <h:outputLabel value="#{etiquetas['otro.tipo.asistencia']}:" rendered="#{fichaCtrl.otroTipoAsistenciaParticipacion}" />
+            </h:panelGroup>
+            <h:panelGroup id="panelOtroTipoAsistencia2" >
+                <p:inputText value="#{fichaCtrl.ficha.participacion.otroTipoAsistenciaMonetaria}" styleClass="inputUpper" rendered="#{fichaCtrl.otroTipoAsistenciaParticipacion}" />
+            </h:panelGroup>
+
+
+            <h:outputLabel  value="#{etiquetas['tipo.programa']}: " rendered="#{fichaCtrl.ficha.participacion.participaProgSocial}"/>
+            <p:inputText value="#{fichaCtrl.ficha.participacion.tipoPrograma}" maxlength="50" styleClass="inputUpper" onkeypress="acceptText(event)" rendered="#{fichaCtrl.ficha.participacion.participaProgSocial}"/>
+
+        </h:panelGrid>
+
+        <h:panelGrid style="width: 60%" headerClass="headerPanelFicha" columns="2" columnClasses="form-label,form-input,form-label,form-input,form-input">
+
+            <h:outputLabel  value="#{etiquetas['programa.ong']}: "/>
+            <p:selectBooleanCheckbox value="#{fichaCtrl.ficha.participacion.participaProgOng}">
+                <p:ajax event="change" update="progOngPanel" process="@this" partialSubmit="true"/>
+            </p:selectBooleanCheckbox>
+
+        </h:panelGrid>
+
+        <h:panelGrid id="progOngPanel" style="width: 60%" headerClass="headerPanelFicha" columns="2" columnClasses="form-label,form-input">
+
+            <h:outputLabel  value="#{etiquetas['nombre.ong']}: " rendered="#{fichaCtrl.ficha.participacion.participaProgOng}"/>
+            <p:inputText value="#{fichaCtrl.ficha.participacion.nombreOng}" maxlength="50" styleClass="inputUpper" rendered="#{fichaCtrl.ficha.participacion.participaProgOng}"/>
+
+            <h:outputLabel  value="#{etiquetas['tipo.programa.ong']}: " rendered="#{fichaCtrl.ficha.participacion.participaProgOng}"/>
+            <p:inputText value="#{fichaCtrl.ficha.participacion.tipoProgramaOng}" maxlength="50" styleClass="inputUpper" rendered="#{fichaCtrl.ficha.participacion.participaProgOng}"/>            
+
+        </h:panelGrid>
+
+        <h:panelGrid style="width: 60%" headerClass="headerPanelFicha" columns="2" columnClasses="form-label,form-input">
+
+            <h:outputLabel  value="#{etiquetas['otras.actividades']}: "/>
+            <p:inputText value="#{fichaCtrl.ficha.participacion.participaOtrasActividades}" styleClass="inputUpper" />
+
+        </h:panelGrid>
+
+        <p:commandLink id="registraPrtBtn" actionListener="#{fichaCtrl.guardar}" update="growl7" rendered="#{sesionCtrl.administrador or sesionCtrl.tecnicoResponsable or sesionCtrl.coordinador}">
+            <h:panelGrid style="text-align:center">
+                <h:graphicImage value="/img/guardar.png" title="Guardar" />
+                <h:outputText value="#{etiquetas['guardar']}"/>
+            </h:panelGrid>
+        </p:commandLink>
+
+    </h:panelGrid>
+</div>
