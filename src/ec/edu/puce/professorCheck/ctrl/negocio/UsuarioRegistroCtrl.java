@@ -122,7 +122,6 @@ public class UsuarioRegistroCtrl extends BaseCtrl {
 			usuario = new Usuario();
 			usuario.setRegistroNuevo(true);
 			usuario.setRoles(new ArrayList<Rol>());
-			usuario.setEspecialidad(new Parametro());
 			List<String> rolTarget = new ArrayList<String>();
 			List<String> rolSource = new ArrayList<String>();
 			List<Rol> rolesBase = rolServicio.devuelveRolesActivos();
@@ -183,7 +182,6 @@ public class UsuarioRegistroCtrl extends BaseCtrl {
 				rolNuevo = servicioCrud.findById("PACIENTE", Rol.class);
 				rolesXUsuario.add(rolNuevo);
 				usuario.setEstado(EnumEstado.ACT);
-				usuario.setEspecialidad(null);
 				usuario.setRoles(rolesXUsuario);
 				servicioCrud.insert(this.usuario);
 				System.out.println("guardado Medico");

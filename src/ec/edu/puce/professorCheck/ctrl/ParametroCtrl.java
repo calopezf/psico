@@ -1,5 +1,6 @@
 package ec.edu.puce.professorCheck.ctrl;
 
+import java.util.ArrayList;
 import java.util.List;
 
 import javax.annotation.PostConstruct;
@@ -31,6 +32,7 @@ public class ParametroCtrl extends BaseCtrl {
 	private Parametro parametro;
 	private Parametro parametroFiltro;
 	private List<Parametro> parametros;
+	private List<Parametro> padreLista;
 
 	@PostConstruct
 	public void postConstructor() {
@@ -42,9 +44,13 @@ public class ParametroCtrl extends BaseCtrl {
 			String parametroId = getHttpServletRequestParam("idParametro");
 			if (parametroId == null) {
 				parametro = new Parametro();
+				parametro.setPadre(new Parametro());
 				parametro.setEstado(EnumEstado.ACT);
 			} else {
 				parametro = servicioCrud.findById(parametroId, Parametro.class);
+				if(parametro.getPadre()==null){
+					parametro.setPadre(new Parametro());
+				}
 			}
 		}
 		return parametro;
@@ -74,8 +80,14 @@ public class ParametroCtrl extends BaseCtrl {
 			Parametro paramtroEnBase = servicioCrud.findById(
 					this.parametro.getCodigo(), Parametro.class);
 			if (paramtroEnBase == null) {
+				if(this.parametro.getPadre().getCodigo()==null){
+					this.parametro.setPadre(null);
+				}
 				servicioCrud.insert(parametro);
 			} else {
+				if(this.parametro.getPadre().getCodigo()==null){
+					this.parametro.setPadre(null);
+				}
 				servicioCrud.update(parametro);
 			}
 			String m = getBundleMensajes("registro.guardado.correctamente",
@@ -121,6 +133,22 @@ public class ParametroCtrl extends BaseCtrl {
 
 	public void setParametros(List<Parametro> parametros) {
 		this.parametros = parametros;
+	}
+
+	public List<Parametro> getPadreLista() {
+		if (padreLista == null) {
+			padreLista = new ArrayList<Parametro>();
+			Parametro referenciaFiltro = new Parametro();
+			referenciaFiltro.setEstado(EnumEstado.ACT);
+			for (Parametro a : servicioCrud.findOrder(referenciaFiltro)) {
+				this.padreLista.add(a);
+			}
+		}
+		return padreLista;
+	}
+
+	public void setPadreLista(List<Parametro> padreLista) {
+		this.padreLista = padreLista;
 	}
 
 }

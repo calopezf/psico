@@ -26,6 +26,7 @@ import org.primefaces.event.FileUploadEvent;
 import org.primefaces.model.DualListModel;
 
 import ec.edu.puce.professorCheck.constantes.EnumEstado;
+import ec.edu.puce.professorCheck.constantes.EnumRol;
 import ec.edu.puce.professorCheck.constantes.EnumTipoParametro;
 import ec.edu.puce.professorCheck.crud.ServicioCrud;
 import ec.edu.puce.professorCheck.ctrl.BaseCtrl;
@@ -57,6 +58,9 @@ public class UsuarioCtrl extends BaseCtrl {
 	private List<String> rolesSeleccionados;
 	private List<Usuario> usuarios;
 	private List<Parametro> referenciaLista;
+	private List<Parametro> empresaLista;
+	private List<Parametro> sucursalLista;
+	private List<Parametro> areaTrabajoLista;
 	private DualListModel<String> componenteRoles;
 	private List<Parametro> especialidadesLista;
 
@@ -122,10 +126,12 @@ public class UsuarioCtrl extends BaseCtrl {
 			String usuarioId = getHttpServletRequestParam("idUsuario");
 			if (usuarioId == null) {
 				if (isAdministrador()) {
-					usuario = new Usuario();
-					usuario.setRegistroNuevo(true);
-					usuario.setRoles(new ArrayList<Rol>());
-					usuario.setEspecialidad(new Parametro());
+					this.usuario = new Usuario();
+					this.usuario.setRegistroNuevo(true);
+					this.usuario.setRoles(new ArrayList<Rol>());
+					this.usuario.setEmpresa(new Parametro());
+					this.usuario.setSucursal(new Parametro());
+					this.usuario.setAreaTrabajo(new Parametro());
 					List<String> rolTarget = new ArrayList<String>();
 					List<String> rolSource = new ArrayList<String>();
 					List<Rol> rolesBase = rolServicio.devuelveRolesActivos();
@@ -136,11 +142,11 @@ public class UsuarioCtrl extends BaseCtrl {
 							rolTarget);
 				} else {
 					if (getUsuarioLogueado() != null) {
-						usuario = getUsuarioLogueado();
-						usuario.setRegistroNuevo(false);
+						this.usuario = getUsuarioLogueado();
+						this.usuario.setRegistroNuevo(false);
 						List<String> rolTarget = new ArrayList<String>();
 						List<String> rolSource = new ArrayList<String>();
-						for (Rol rol : usuario.getRoles()) {
+						for (Rol rol : this.usuario.getRoles()) {
 							rolTarget.add(rol.getId().toString());
 						}
 						List<Rol> rolesBase = rolServicio
@@ -150,14 +156,16 @@ public class UsuarioCtrl extends BaseCtrl {
 								rolSource.add(rol.getId().toString());
 							}
 						}
-						componenteRoles = new DualListModel<String>(rolSource,
+						this.componenteRoles = new DualListModel<String>(rolSource,
 								rolTarget);
 						setRolesSeleccionados(rolTarget);
 					} else {
-						usuario = new Usuario();
-						usuario.setRegistroNuevo(true);
-						usuario.setRoles(new ArrayList<Rol>());
-						usuario.setEspecialidad(new Parametro());
+						this.usuario = new Usuario();
+						this.usuario.setRegistroNuevo(true);
+						this.usuario.setRoles(new ArrayList<Rol>());
+						this.usuario.setEmpresa(new Parametro());
+						this.usuario.setSucursal(new Parametro());
+						this.usuario.setAreaTrabajo(new Parametro());
 						List<String> rolTarget = new ArrayList<String>();
 						List<String> rolSource = new ArrayList<String>();
 						List<Rol> rolesBase = rolServicio
@@ -165,7 +173,7 @@ public class UsuarioCtrl extends BaseCtrl {
 						for (Rol rol : rolesBase) {
 							rolSource.add(rol.getId().toString());
 						}
-						componenteRoles = new DualListModel<String>(rolSource,
+						this.componenteRoles = new DualListModel<String>(rolSource,
 								rolTarget);
 					}
 
@@ -174,6 +182,15 @@ public class UsuarioCtrl extends BaseCtrl {
 			} else {
 				usuario = usuarioServicio.obtieneUsuarioXCedula(usuarioId);
 				usuario.setRegistroNuevo(false);
+				if (usuario.getEmpresa() == null) {
+					usuario.setEmpresa(new Parametro());
+				}
+				if (usuario.getSucursal() == null) {
+					usuario.setSucursal(new Parametro());
+				}
+				if (usuario.getAreaTrabajo() == null) {
+					usuario.setAreaTrabajo(new Parametro());
+				}
 				List<String> rolTarget = new ArrayList<String>();
 				List<String> rolSource = new ArrayList<String>();
 				for (Rol rol : usuario.getRoles()) {
@@ -224,7 +241,8 @@ public class UsuarioCtrl extends BaseCtrl {
 			List<Rol> rolesXUsuario = new ArrayList<Rol>();
 			Rol rolNuevo;
 			for (String id : getComponenteRoles().getTarget()) {
-				rolNuevo = servicioCrud.findById(id, Rol.class);
+				rolNuevo = servicioCrud
+						.findById(EnumRol.valueOf(id), Rol.class);
 				rolesXUsuario.add(rolNuevo);
 			}
 			usuario.setRoles(rolesXUsuario);
@@ -234,6 +252,15 @@ public class UsuarioCtrl extends BaseCtrl {
 				this.usuario.setPassword(this.usuario.getIdentificacion());
 				servicioCrud.insert(this.usuario);
 			} else {
+				if (usuario.getEmpresa().getCodigo() == null) {
+					usuario.setEmpresa(null);
+				}
+				if (usuario.getSucursal().getCodigo() == null) {
+					usuario.setSucursal(null);
+				}
+				if (usuario.getAreaTrabajo().getCodigo() == null) {
+					usuario.setAreaTrabajo(null);
+				}
 				servicioCrud.update(this.usuario);
 			}
 			System.out.println("guardado...");
@@ -284,7 +311,6 @@ public class UsuarioCtrl extends BaseCtrl {
 	}
 
 	public String guardarPerfilPaciente() {
-
 
 		try {
 			// if (validadorDeCedula(this.usuario.getIdentificacion())) {
@@ -518,7 +544,7 @@ public class UsuarioCtrl extends BaseCtrl {
 
 	public List<Parametro> getEspecialidadesLista() {
 		if (especialidadesLista == null) {
-			especialidadesLista=new ArrayList<Parametro>();
+			especialidadesLista = new ArrayList<Parametro>();
 			Parametro referenciaFiltro = new Parametro();
 			referenciaFiltro.setTipo(EnumTipoParametro.ESPECIALIDAD);
 			referenciaFiltro.setEstado(EnumEstado.ACT);
@@ -531,6 +557,62 @@ public class UsuarioCtrl extends BaseCtrl {
 
 	public void setEspecialidadesLista(List<Parametro> especialidadesLista) {
 		this.especialidadesLista = especialidadesLista;
+	}
+
+	public List<Parametro> getEmpresaLista() {
+		if (empresaLista == null) {
+			empresaLista = new ArrayList<Parametro>();
+			Parametro referenciaFiltro = new Parametro();
+			referenciaFiltro.setTipo(EnumTipoParametro.EMPRESA);
+			referenciaFiltro.setEstado(EnumEstado.ACT);
+			for (Parametro a : servicioCrud.findOrder(referenciaFiltro)) {
+				this.empresaLista.add(a);
+			}
+		}
+		return empresaLista;
+	}
+
+	public void setEmpresaLista(List<Parametro> empresaLista) {
+		this.empresaLista = empresaLista;
+	}
+
+	public void cambiaEmpresa(AjaxBehaviorEvent event) {
+		this.sucursalLista = null;
+	}
+
+	public List<Parametro> getSucursalLista() {
+		if (sucursalLista == null && usuario.getEmpresa().getCodigo() != null) {
+			sucursalLista = new ArrayList<Parametro>();
+			Parametro referenciaFiltro = new Parametro();
+			referenciaFiltro.setTipo(EnumTipoParametro.SUCURSAL_EMPRESA);
+			referenciaFiltro.setEstado(EnumEstado.ACT);
+
+			for (Parametro a : servicioCrud.findOrder(referenciaFiltro)) {
+				this.sucursalLista.add(a);
+			}
+		}
+		return sucursalLista;
+	}
+	
+	
+
+	public List<Parametro> getAreaTrabajoLista() {
+		areaTrabajoLista = new ArrayList<Parametro>();
+		Parametro referenciaFiltro = new Parametro();
+		referenciaFiltro.setTipo(EnumTipoParametro.AREA_TRABAJO);
+		referenciaFiltro.setEstado(EnumEstado.ACT);
+		for (Parametro a : servicioCrud.findOrder(referenciaFiltro)) {
+			this.areaTrabajoLista.add(a);
+		}
+		return areaTrabajoLista;
+	}
+
+	public void setAreaTrabajoLista(List<Parametro> areaTrabajoLista) {
+		this.areaTrabajoLista = areaTrabajoLista;
+	}
+
+	public void setSucursalLista(List<Parametro> sucursalLista) {
+		this.sucursalLista = sucursalLista;
 	}
 
 	public void setReferenciaLista(List<Parametro> referenciaLista) {

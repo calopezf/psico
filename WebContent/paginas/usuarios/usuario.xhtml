@@ -18,21 +18,21 @@
 						maxlength="10">
 					</p:inputText>
 					<p:outputLabel value="#{etiquetas['nombres']}*:" />
-					<p:inputText id="nombres" value="#{usuarioCtrl.usuario.nombre}"
+					<p:inputText id="nombres" value="#{usuarioCtrl.usuario.nombre}" style="width:250px;"
 						required="true"
 						requiredMessage="#{etiquetas['nombres']} #{mensajes['requerido.masculino']}"
 						maxlength="250" size="25" />
 					<p:outputLabel value="#{etiquetas['apellidos']}*:" />
-					<p:inputText id="apellidos" value="#{usuarioCtrl.usuario.apellido}"
+					<p:inputText id="apellidos" value="#{usuarioCtrl.usuario.apellido}" style="width:250px;"
 						required="true"
 						requiredMessage="#{etiquetas['apellidos']} #{mensajes['requerido.masculino']}"
 						maxlength="250" size="25" />
 
 					<p:outputLabel value="#{etiquetas['direccion.domicilio']}:" />
-					<p:inputText id="residencia" size="48"
+					<p:inputTextarea id="residencia" cols="50"
 						value="#{usuarioCtrl.usuario.direccion}" maxlength="250" />
 					<p:outputLabel value="#{etiquetas['correoElectronico']}*:" />
-					<p:inputText id="correoElectronico"
+					<p:inputText id="correoElectronico" style="width:250px;"
 						value="#{usuarioCtrl.usuario.email}" required="true"
 						requiredMessage="#{etiquetas['correoElectronico']} #{mensajes['requerido.masculino']}"
 						size="25">
@@ -47,6 +47,35 @@
 						<f:ajax event="transfer" render="semestre"
 							listener="#{usuarioCtrl.cambiaRoles}" />
 					</p:pickList>
+
+					<p:outputLabel value="#{etiquetas['empresa']}:"
+						rendered="#{usuarioCtrl.administrador}" />
+					<p:selectOneMenu id="empresa"
+						value="#{usuarioCtrl.usuario.empresa.codigo}" style="width:250px">
+						<f:selectItem />
+						<f:selectItems value="#{usuarioCtrl.empresaLista}" var="item"
+							itemLabel="#{item.nombre}" itemValue="#{item.codigo}" />
+						<f:ajax event="change" render="sucursal"
+							listener="#{usuarioCtrl.cambiaEmpresa}" />
+					</p:selectOneMenu>
+
+					<p:outputLabel value="#{etiquetas['sucursal']}:"
+						rendered="#{usuarioCtrl.administrador}" />
+					<p:selectOneMenu id="sucursal"
+						value="#{usuarioCtrl.usuario.sucursal.codigo}" style="width:250px">
+						<f:selectItem />
+						<f:selectItems value="#{usuarioCtrl.sucursalLista}" var="item"
+							itemLabel="#{item.nombre}" itemValue="#{item.codigo}" />
+					</p:selectOneMenu>
+					
+						<p:outputLabel value="#{etiquetas['areaTrabajo']}:"
+						rendered="#{usuarioCtrl.administrador}" />
+					<p:selectOneMenu 
+						value="#{usuarioCtrl.usuario.areaTrabajo.codigo}" style="width:250px">
+						<f:selectItem />
+						<f:selectItems value="#{usuarioCtrl.areaTrabajoLista}" var="item"
+							itemLabel="#{item.nombre}" itemValue="#{item.codigo}" />
+					</p:selectOneMenu>
 
 					<!--  >p:selectCheckboxMenu value="#{usuarioCtrl.rolesSeleccionados}"
 						label="Roles" required="true"

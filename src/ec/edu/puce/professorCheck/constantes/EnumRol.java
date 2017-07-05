@@ -12,9 +12,6 @@ import java.io.Serializable;
  */
 public enum EnumRol implements Serializable {
 
-    ADMINISTRADOR, DOCTOR, PACIENTE, ASISTENTE;
-    
-    public boolean esPaciente() {
-    	return this.equals(PACIENTE);
-    }
+	ADMINISTRADOR, GERENTE, COORDINADOR, TRABAJADOR;
+
 }

@@ -29,10 +29,10 @@ public class Usuario implements Serializable {
 	 */
 	private static final long serialVersionUID = 1L;
 	@Id
-	@Column(name = "email", length = 200)
-	private String email;
 	@Column(name = "identificacion", length = 20)
 	private String identificacion;// o username
+	@Column(name = "email", length = 200)
+	private String email;
 	@Column(name = "nombre", nullable = false, length = 200)
 	private String nombre;
 	@Column(name = "apellido", length = 200)
@@ -47,8 +47,14 @@ public class Usuario implements Serializable {
 	@Column(name = "foto", length = 4000)
 	private String foto;
 	@ManyToOne(optional = true)
-	@JoinColumn(name = "especialidad", referencedColumnName = "codigo", nullable = true)
-	private Parametro especialidad;
+	@JoinColumn(name = "empresa", referencedColumnName = "codigo", nullable = true)
+	private Parametro empresa;
+	@ManyToOne(optional = true)
+	@JoinColumn(name = "sucursal", referencedColumnName = "codigo", nullable = true)
+	private Parametro sucursal;
+	@ManyToOne(optional = true)
+	@JoinColumn(name = "area_trabajo", referencedColumnName = "codigo", nullable = true)
+	private Parametro areaTrabajo;
 	@Transient
 	private boolean tachado;
 	@Transient
@@ -58,7 +64,7 @@ public class Usuario implements Serializable {
 	// @ManyToMany(mappedBy = "usuarios")
 	// private List<Rol> roles;
 	@ManyToMany(fetch = FetchType.EAGER)
-	@JoinTable(name = "usuario_rol", joinColumns = { @JoinColumn(name = "email", referencedColumnName = "email") }, inverseJoinColumns = @JoinColumn(name = "rol_id", referencedColumnName = "id"))
+	@JoinTable(name = "usuario_rol", joinColumns = { @JoinColumn(name = "identificacion", referencedColumnName = "identificacion") }, inverseJoinColumns = @JoinColumn(name = "rol_id", referencedColumnName = "id"))
 	private List<Rol> roles;
 	@Transient
 	private StreamedContent fotoTransient;
@@ -78,11 +84,10 @@ public class Usuario implements Serializable {
 
 	public Usuario() {
 	}
-	
+
 	public Usuario(String email) {
 		this.email = email;
 	}
-	
 
 	public List<Rol> getRoles() {
 		return roles;
@@ -176,22 +181,21 @@ public class Usuario implements Serializable {
 	public void setFoto(String foto) {
 		this.foto = foto;
 	}
-	
-	public boolean tieneRolPaciente() {
-		for (Rol rol : roles) {
-			if (rol.getId().esPaciente()) {
-				return true;
-			}
-		}
-		return false;
+
+	public Parametro getEmpresa() {
+		return empresa;
 	}
 
-	public Parametro getEspecialidad() {
-		return especialidad;
+	public void setEmpresa(Parametro empresa) {
+		this.empresa = empresa;
 	}
 
-	public void setEspecialidad(Parametro especialidad) {
-		this.especialidad = especialidad;
+	public Parametro getSucursal() {
+		return sucursal;
+	}
+
+	public void setSucursal(Parametro sucursal) {
+		this.sucursal = sucursal;
 	}
 
 	public String getConfirmaPassword() {
@@ -208,6 +212,14 @@ public class Usuario implements Serializable {
 
 	public void setFotoTransient(StreamedContent fotoTransient) {
 		this.fotoTransient = fotoTransient;
+	}
+
+	public Parametro getAreaTrabajo() {
+		return areaTrabajo;
+	}
+
+	public void setAreaTrabajo(Parametro areaTrabajo) {
+		this.areaTrabajo = areaTrabajo;
 	}
 
 	@Override

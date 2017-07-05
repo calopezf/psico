@@ -33,6 +33,13 @@
 					value="#{parametroCtrl.parametro.descripcion}">
 					<f:validateLength maximum="150" />
 				</p:inputTextarea>
+				<p:outputLabel value="#{etiquetas['padre']}" />
+				<p:selectOneMenu id="semestre"
+					value="#{parametroCtrl.parametro.padre.codigo}" style="width:250px">
+					<f:selectItem />
+					<f:selectItems value="#{parametroCtrl.padreLista}" var="item"
+						itemLabel="#{item.nombre}" itemValue="#{item.codigo}" />
+				</p:selectOneMenu>
 				<p:outputLabel value="#{etiquetas['estado']}*:" />
 				<p:selectOneMenu value="#{parametroCtrl.parametro.estado}">
 					<f:selectItems value="#{selectItemCtrl.estadoEnum}" />
@@ -49,9 +56,9 @@
 					action="#{parametroCtrl.guardar}" title="#{etiquetas['guardar']}"
 					update="growl">
 				</p:commandButton>
-				<p:commandButton value="#{etiquetas.atras}" 
-					action="/paginas/parametros/parametroLista?faces-redirect=true" title="#{etiquetas['atras']}"
-					immediate="true">
+				<p:commandButton value="#{etiquetas.atras}"
+					action="/paginas/parametros/parametroLista?faces-redirect=true"
+					title="#{etiquetas['atras']}" immediate="true">
 				</p:commandButton>
 			</div>
 

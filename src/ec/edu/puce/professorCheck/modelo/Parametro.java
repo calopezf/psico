@@ -7,6 +7,8 @@ import javax.persistence.Entity;
 import javax.persistence.EnumType;
 import javax.persistence.Enumerated;
 import javax.persistence.Id;
+import javax.persistence.JoinColumn;
+import javax.persistence.ManyToOne;
 import javax.persistence.Table;
 import javax.persistence.Transient;
 
@@ -24,10 +26,10 @@ public class Parametro implements Serializable {
 
 	@Id
 	@Column(name = "codigo")
-	private String codigo;// de ParametroEnum
+	private String codigo;
 
 	@Column(name = "nombre")
-	private String nombre;// de ParametroEnum
+	private String nombre;
 
 	@Enumerated(EnumType.STRING)
 	@Column(name = "tipo", nullable = false, length = 30)
@@ -39,6 +41,10 @@ public class Parametro implements Serializable {
 	@Enumerated(EnumType.STRING)
 	@Column(name = "estado", nullable = false, length = 50)
 	private EnumEstado estado;
+
+	@ManyToOne(optional = true)
+	@JoinColumn(name = "codigo_padre", referencedColumnName = "codigo", nullable = true)
+	private Parametro padre;
 
 	@Transient
 	private boolean registroNuevo;
@@ -91,11 +97,18 @@ public class Parametro implements Serializable {
 		this.codigo = codigo;
 	}
 
+	public Parametro getPadre() {
+		return padre;
+	}
+
+	public void setPadre(Parametro padre) {
+		this.padre = padre;
+	}
+
 	@Override
 	public String toString() {
 		return "Parametro{" + "nombre=" + nombre + ", tipo=" + tipo
-				+ ", descripcion=" + descripcion
-				+ ", estado=" + estado + '}';
+				+ ", descripcion=" + descripcion + ", estado=" + estado + '}';
 	}
 
 }

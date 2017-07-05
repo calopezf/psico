@@ -1,0 +1,91 @@
+<ui:composition xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:ui="http://java.sun.com/jsf/facelets"
+	xmlns:h="http://java.sun.com/jsf/html"
+	xmlns:f="http://java.sun.com/jsf/core"
+	xmlns:p="http://primefaces.org/ui" template="/WEB-INF/template.xhtml">
+	<ui:define name="content">
+		<h:form id="formEncuestaLista">
+			<h1>#{etiquetas['encuestaLista']}</h1>
+			<p:growl id="msg" autoUpdate="true" />
+			<h:panelGrid columns="1">
+				<h:panelGrid columns="2" id="gridFiltros" style="width: 700px">
+					<h:panelGrid columns="2" columnClasses="form-label,form-input">
+						<p:outputLabel value="#{etiquetas['nombre']}" />
+						<p:inputText value="#{encuestaCtrl.encuestaFiltro.nombre}"
+							style="width:120px" />
+						<p:outputLabel value="#{etiquetas['estado']}" />
+						<p:selectOneMenu id="estado"
+							value="#{encuestaCtrl.encuestaFiltro.estado}">
+							<f:selectItem />
+							<f:selectItems value="#{selectItemCtrl.estadoEnum}" />
+						</p:selectOneMenu>
+					</h:panelGrid>
+				</h:panelGrid>
+				<h:panelGrid columns="2">
+					<p:commandButton value="Nuevo Registro"
+						action="/paginas/encuesta/encuesta?faces-redirect=true"
+						title="#{etiquetas['crear.nuevo']}" immediate="true">
+					</p:commandButton>
+					<p:commandButton value="Buscar" action="#{encuestaCtrl.buscar}"
+						title="#{etiquetas.buscar}">
+						<p:ajax update="itemsPanel" process="gridFiltros" />
+					</p:commandButton>
+				</h:panelGrid>
+			</h:panelGrid>
+
+			<h:panelGroup id="itemsPanel">
+
+
+				<p:dataTable id="itemsTable"
+					emptyMessage="#{etiquetas['no.existen.registros']}"
+					value="#{encuestaCtrl.encuestas}" var="item"
+					style="width:100%"
+					paginatorTemplate="{CurrentPageReport}  {FirstPageLink} {PreviousPageLink} {PageLinks} {NextPageLink} {LastPageLink} "
+					paginator="true" rows="10">
+					<p:column style="width:100px;">
+						<f:facet name="header">
+							<h:outputText value="#{etiquetas['nombre']}" />
+						</f:facet>
+						<h:outputText value="#{item.nombre}" />
+					</p:column>
+					<p:column style="width:100px;">
+						<f:facet name="header">
+							<h:outputText value="#{etiquetas['descripcion']}" />
+						</f:facet>
+						<h:outputText value="#{item.descripcion}" />
+					</p:column>
+					
+					<p:column headerText="#{etiquetas['editar']}" style="width:70px;" styleClass="columnaCentrada">
+						<h:commandLink action="#{encuestaCtrl.editar}"
+							title="#{etiquetas.editar}">
+							<h:graphicImage value="/img/edit.png" id="editImage" style="width:20px; height:20px"/>
+						</h:commandLink>
+					</p:column>
+					<p:column styleClass="columnaCentrada" style="width:150px;">
+						<f:facet name="header">
+							<h:outputText value="#{etiquetas['configurarPreguntas']}" />
+						
+						</f:facet>
+						<h:commandLink action="#{encuestaCtrl.configurarPreguntas}"
+							title="#{etiquetas.editar}">
+							<h:graphicImage value="/img/addList.png" id="editImageconf"
+								style="width:20px; height:20px" />
+						</h:commandLink>
+					</p:column>
+					<p:column styleClass="columnaCentrada"
+						rendered="#{sesionCtrl.administrador}"
+						headerText="#{etiquetas['eliminar.sistema']}" style="width:100px;">
+						<h:commandLink
+							actionListener="#{encuestaCtrl.eliminarEncuesta}"
+							title="#{etiquetas['eliminar.sistema']}"
+							onclick="if(!confirm('#{mensajes['esta.seguro']}'))return false;">
+							<h:graphicImage value="/img/delete.png" id="trashImage"
+								style="width:20px; height:20px" />
+							<f:ajax render="@form" />
+						</h:commandLink>
+					</p:column>
+				</p:dataTable>
+			</h:panelGroup>
+		</h:form>
+	</ui:define>
+</ui:composition>

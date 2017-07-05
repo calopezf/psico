@@ -1,0 +1,104 @@
+<ui:composition xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:ui="http://java.sun.com/jsf/facelets"
+	xmlns:h="http://java.sun.com/jsf/html"
+	xmlns:f="http://java.sun.com/jsf/core"
+	template="/WEB-INF/template.xhtml" xmlns:p="http://primefaces.org/ui">
+	<ui:define name="content">
+		<h:form id="formEncuestaFrepunta">
+			<h1>#{etiquetas['preguntas']}</h1>
+			<p:growl id="growl" autoUpdate="true" />
+			<h:panelGrid columns="2" columnClasses="form-label,form-input">
+				<p:outputLabel for="materia" value="#{etiquetas['materia']}:" />
+				<p:outputLabel id="materia" value="#{encuestaCtrl.encuesta.nombre}" />
+			</h:panelGrid>
+
+			<br />
+			<br />
+
+			<h:panelGrid columns="2" id="gridDetalle" style="width: 700px">
+				<h:commandLink actionListener="#{encuestaCtrl.agregarPregunta}"
+					title="#{etiquetas['eliminar.sistema']}">
+					<h:graphicImage value="/img/addList.png" id="addImage" />
+					<f:ajax render="itemsTable gridDetalle" execute="gridDetalle" />
+				</h:commandLink>
+			</h:panelGrid>
+			<p:dataTable id="itemsTable" paginator="true" rows="30"
+				emptyMessage="#{etiquetas['no.existen.registros']}"
+				value="#{encuestaCtrl.encuestaPreguntaLista}" var="item"
+				style="width:100%">
+
+				<p:column style="width:200px;">
+					<f:facet name="header">
+						<h:outputText value="#{etiquetas['pregunta']}" />
+					</f:facet>
+					<p:inputTextarea value="#{item.pregunta}"
+						style="width:100px;height:80px;">
+						<f:ajax />
+					</p:inputTextarea>
+				</p:column>
+				<p:column style="width:200px;">
+					<f:facet name="header">
+						<h:outputText value="#{etiquetas['descripcion']}" />
+					</f:facet>
+					<p:inputTextarea style="width:100px; height:80px;"
+						value="#{item.descripcionPregunta}">
+						<f:ajax />
+					</p:inputTextarea>
+				</p:column>
+
+
+				<p:column style="width:150px;">
+					<f:facet name="header">
+						<h:outputText value="#{etiquetas['factor']}" />
+					</f:facet>
+					<p:selectOneMenu id="factor" value="#{item.factor.codigo}"
+						style="width:250px">
+						<f:selectItem />
+						<f:selectItems value="#{encuestaCtrl.factores}" var="item"
+							itemLabel="#{item.nombre}"
+							itemValue="#{item.codigo}" />
+						<f:ajax event="change" render="subfactore"
+							listener="#{encuestaCtrl.cambiaFactor}" />
+					</p:selectOneMenu>
+				</p:column>
+
+				<p:column style="width:150px;">
+					<f:facet name="header">
+						<h:outputText value="#{etiquetas['subfactor']}" />
+					</f:facet>
+					<p:selectOneMenu id="subfactor" value="#{item.subfactor.codigo}"
+						style="width:250px">
+						<f:selectItem />
+						<f:selectItems value="#{encuestaCtrl.subFactores}" var="item"
+							itemLabel="#{item.nombre}"
+							itemValue="#{item.codigo}" />
+					</p:selectOneMenu>
+				</p:column>
+				<p:column styleClass="columnaCentrada" style="width:100px;"
+					headerText="#{etiquetas['eliminar.sistema']}">
+					<h:commandLink actionListener="#{encuestaCtrl.eliminarPregunta()}"
+						title="#{etiquetas['eliminar.sistema']}">
+						<h:graphicImage value="/img/delete.png" id="trashImage" />
+						<f:ajax render="itemsTable" />
+					</h:commandLink>
+				</p:column>
+			</p:dataTable>
+
+			<br />
+			<br />
+
+			<div align="center">
+				<p:commandButton value="#{etiquetas.guardar}"
+					action="#{encuestaCtrl.guardarPreguntas}"
+					title="#{etiquetas['guardar']}" update="growl">
+				</p:commandButton>
+				<p:commandButton value="#{etiquetas.atras}"
+					action="/paginas/encuesta/encuestaLista?faces-redirect=true"
+					title="#{etiquetas['atras']}" immediate="true">
+				</p:commandButton>
+			</div>
+
+		</h:form>
+	</ui:define>
+
+</ui:composition>

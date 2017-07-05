@@ -47,8 +47,8 @@
 						style="width:150px;">
 						<h:outputText value="#{item.descripcion}" />
 					</p:column>
-					<p:column headerText="#{etiquetas['tipo']}" style="width:150px;">
-						<h:outputText value="#{item.tipo}" />
+					<p:column headerText="#{etiquetas['padre']}" style="width:150px;">
+						<h:outputText value="#{item.padre.nombre}" />
 					</p:column>
 					<p:column headerText="#{etiquetas['estado']}" style="width:150px;">
 						<h:outputText value="#{etiquetas[item.estado.etiqueta]}" />

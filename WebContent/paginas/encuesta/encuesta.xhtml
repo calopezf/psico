@@ -1,0 +1,54 @@
+<ui:composition xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:ui="http://java.sun.com/jsf/facelets"
+	xmlns:h="http://java.sun.com/jsf/html"
+	xmlns:f="http://java.sun.com/jsf/core"
+	xmlns:p="http://primefaces.org/ui" template="/WEB-INF/template.xhtml">
+	<ui:define name="title">
+		<h:outputText value="#{etiquetas['encuesta']}" />
+	</ui:define>
+	<ui:define name="content">
+		<h:form id="formEcuesta">
+			<p:growl id="growl" autoUpdate="true" />
+			<h:panelGrid columns="2" columnClasses="form-label,form-input">
+				<p:outputLabel value="#{etiquetas['nombre']}*:" />
+				<p:inputText id="nombre" value="#{encuestaCtrl.encuesta.nombre}"
+					required="true"
+					requiredMessage="#{etiquetas['nombre']} #{mensajes['requerido.masculino']}"
+					maxlength="200" size="50" />
+				<p:outputLabel value="#{etiquetas['descripcion']}:*" />
+				<p:inputTextarea style="width:370px; height:100px;" required="true"
+					requiredMessage="#{etiquetas['descripcion']} #{mensajes['requerido.masculino']}"
+					value="#{encuestaCtrl.encuesta.descripcion}"></p:inputTextarea>
+				<p:outputLabel value="#{etiquetas['ponderacion']}*:" />
+				<p:inputNumber  id="ponnderacion" value="#{encuestaCtrl.encuesta.ponderacion}"
+					required="true"
+					requiredMessage="#{etiquetas['ponderacion']} #{mensajes['requerido.masculino']}"
+					maxlength="3" size="3" />
+				<p:outputLabel value="#{etiquetas['fecha']}:*" />
+				<p:calendar id="fecha"
+					value="#{encuestaCtrl.encuesta.fechaCreacion}"
+					disabled="true" style="width:250px" />
+				<p:outputLabel value="#{etiquetas['estado']}:*"/>
+				<p:selectOneMenu id="estado" required="true"
+					value="#{encuestaCtrl.encuesta.estado}" style="width:250px">
+					<f:selectItems value="#{selectItemCtrl.estadoEnum}" />
+				</p:selectOneMenu>
+			</h:panelGrid>
+			<br />
+			<br />
+			<h:outputText value="#{etiquetas['campos.obligatorios']}" />
+
+			<div align="center">
+				<p:commandButton value="#{etiquetas.guardar}"
+					action="#{encuestaCtrl.guardar}" title="#{etiquetas['guardar']}"
+					update="growl">
+				</p:commandButton>
+				<p:commandButton value="#{etiquetas.atras}"
+					action="/paginas/encuesta/encuestaLista?faces-redirect=true"
+					title="#{etiquetas['atras']}" immediate="true">
+				</p:commandButton>
+			</div>
+
+		</h:form>
+	</ui:define>
+</ui:composition>
