@@ -8,8 +8,8 @@
 			<h1>#{etiquetas['preguntas']}</h1>
 			<p:growl id="growl" autoUpdate="true" />
 			<h:panelGrid columns="2" columnClasses="form-label,form-input">
-				<p:outputLabel for="materia" value="#{etiquetas['materia']}:" />
-				<p:outputLabel id="materia" value="#{encuestaCtrl.encuesta.nombre}" />
+				<p:outputLabel for="encuesta" value="#{etiquetas['encuesta']}:" />
+				<p:outputLabel id="encuesta" value="#{encuestaCtrl.encuesta.nombre}" />
 			</h:panelGrid>
 
 			<br />
@@ -19,28 +19,28 @@
 				<h:commandLink actionListener="#{encuestaCtrl.agregarPregunta}"
 					title="#{etiquetas['eliminar.sistema']}">
 					<h:graphicImage value="/img/addList.png" id="addImage" />
-					<f:ajax render="itemsTable gridDetalle" execute="gridDetalle" />
+					<f:ajax render="itemsTable gridDetalle"  />
 				</h:commandLink>
 			</h:panelGrid>
 			<p:dataTable id="itemsTable" paginator="true" rows="30"
 				emptyMessage="#{etiquetas['no.existen.registros']}"
-				value="#{encuestaCtrl.encuestaPreguntaLista}" var="item"
+				value="#{encuestaCtrl.encuesta.preguntas}" var="item"
 				style="width:100%">
 
-				<p:column style="width:200px;">
+				<p:column style="width:300px;">
 					<f:facet name="header">
 						<h:outputText value="#{etiquetas['pregunta']}" />
 					</f:facet>
 					<p:inputTextarea value="#{item.pregunta}"
-						style="width:100px;height:80px;">
+						style="width:300px;height:100px;">
 						<f:ajax />
 					</p:inputTextarea>
 				</p:column>
-				<p:column style="width:200px;">
+				<p:column style="width:300px;">
 					<f:facet name="header">
 						<h:outputText value="#{etiquetas['descripcion']}" />
 					</f:facet>
-					<p:inputTextarea style="width:100px; height:80px;"
+					<p:inputTextarea style="width:300px; height:100px;"
 						value="#{item.descripcionPregunta}">
 						<f:ajax />
 					</p:inputTextarea>
@@ -51,28 +51,27 @@
 					<f:facet name="header">
 						<h:outputText value="#{etiquetas['factor']}" />
 					</f:facet>
-					<p:selectOneMenu id="factor" value="#{item.factor.codigo}"
-						style="width:250px">
-						<f:selectItem />
-						<f:selectItems value="#{encuestaCtrl.factores}" var="item"
+					<h:selectOneMenu id="factor" value="#{item.factor.codigo}"
+						style="width:150px">
+						<f:selectItems value="#{item.factores}" var="item"
 							itemLabel="#{item.nombre}"
 							itemValue="#{item.codigo}" />
-						<f:ajax event="change" render="subfactore"
+						<f:ajax event="change" render="subfactor"
 							listener="#{encuestaCtrl.cambiaFactor}" />
-					</p:selectOneMenu>
+					</h:selectOneMenu>
 				</p:column>
 
 				<p:column style="width:150px;">
 					<f:facet name="header">
 						<h:outputText value="#{etiquetas['subfactor']}" />
 					</f:facet>
-					<p:selectOneMenu id="subfactor" value="#{item.subfactor.codigo}"
-						style="width:250px">
-						<f:selectItem />
-						<f:selectItems value="#{encuestaCtrl.subFactores}" var="item"
+					<h:selectOneMenu id="subfactor" value="#{item.subfactor.codigo}"
+						style="width:150px">
+						<f:selectItems value="#{item.subfactores}" var="item"
 							itemLabel="#{item.nombre}"
 							itemValue="#{item.codigo}" />
-					</p:selectOneMenu>
+							<f:ajax />
+					</h:selectOneMenu>
 				</p:column>
 				<p:column styleClass="columnaCentrada" style="width:100px;"
 					headerText="#{etiquetas['eliminar.sistema']}">

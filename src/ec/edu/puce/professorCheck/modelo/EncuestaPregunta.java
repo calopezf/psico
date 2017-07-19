@@ -1,10 +1,11 @@
 package ec.edu.puce.professorCheck.modelo;
 
 import java.io.Serializable;
+import java.util.ArrayList;
+import java.util.List;
 
 import javax.persistence.Column;
 import javax.persistence.Entity;
-import javax.persistence.FetchType;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
@@ -12,6 +13,7 @@ import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
 import javax.persistence.Table;
 import javax.persistence.TableGenerator;
+import javax.persistence.Transient;
 
 @Entity
 @Table(name = "ENCUESTA_PREGUNTA")
@@ -28,6 +30,9 @@ public class EncuestaPregunta implements Serializable {
 	@GeneratedValue(strategy = GenerationType.TABLE, generator = "GEN_ENCUESTA_PREGUNTA")
 	private Long id;
 
+	@Column(name = "id_encuesta", nullable = false)
+	private Long encuestaId;
+
 	@Column(name = "pregunta", nullable = false, length = 4000)
 	private String pregunta;
 
@@ -42,12 +47,10 @@ public class EncuestaPregunta implements Serializable {
 	@JoinColumn(name = "subfactor", referencedColumnName = "codigo")
 	private Parametro subfactor;
 
-//	@Column(name = "respuesta", nullable = false)
-//	private Integer respuesta;
-
-	@ManyToOne(fetch = FetchType.EAGER, optional = false)
-	@JoinColumn(name = "id_encuesta", referencedColumnName = "id")
-	private Encuesta encuesta;
+	@Transient
+	private List<Parametro> factores;
+	@Transient
+	private List<Parametro> subfactores;
 
 	public Long getId() {
 		return id;
@@ -95,12 +98,34 @@ public class EncuestaPregunta implements Serializable {
 		this.subfactor = subfactor;
 	}
 
-	public Encuesta getEncuesta() {
-		return encuesta;
+	public List<Parametro> getFactores() {
+		if (factores == null) {
+			factores = new ArrayList<Parametro>();
+		}
+		return factores;
 	}
 
-	public void setEncuesta(Encuesta encuesta) {
-		this.encuesta = encuesta;
+	public void setFactores(List<Parametro> factores) {
+		this.factores = factores;
+	}
+
+	public List<Parametro> getSubfactores() {
+		if (subfactores == null) {
+			subfactores = new ArrayList<Parametro>();
+		}
+		return subfactores;
+	}
+
+	public void setSubfactores(List<Parametro> subfactores) {
+		this.subfactores = subfactores;
+	}
+
+	public Long getEncuestaId() {
+		return encuestaId;
+	}
+
+	public void setEncuestaId(Long encuestaId) {
+		this.encuestaId = encuestaId;
 	}
 
 }

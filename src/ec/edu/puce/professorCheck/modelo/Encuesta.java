@@ -4,7 +4,6 @@ import java.io.Serializable;
 import java.util.Date;
 import java.util.List;
 
-import javax.persistence.CascadeType;
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.EnumType;
@@ -12,10 +11,10 @@ import javax.persistence.Enumerated;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
-import javax.persistence.OneToMany;
 import javax.persistence.Table;
 import javax.persistence.TableGenerator;
 import javax.persistence.Temporal;
+import javax.persistence.Transient;
 
 import ec.edu.puce.professorCheck.constantes.EnumEstado;
 
@@ -33,7 +32,7 @@ public class Encuesta implements Serializable {
 	@Column(name = "id")
 	@GeneratedValue(strategy = GenerationType.TABLE, generator = "GEN_ENCUESTA")
 	private Long id;
-
+	
 	@Column(name = "nombre")
 	private String nombre;
 
@@ -51,7 +50,7 @@ public class Encuesta implements Serializable {
 	@Column(name = "ponderacion", nullable = false, length = 2000)
 	private Integer ponderacion;
 
-	@OneToMany(mappedBy = "encuesta", cascade = CascadeType.ALL)
+	@Transient
 	private List<EncuestaPregunta> preguntas;
 
 	public Long getId() {
@@ -109,5 +108,7 @@ public class Encuesta implements Serializable {
 	public void setPonderacion(Integer ponderacion) {
 		this.ponderacion = ponderacion;
 	}
+	
+	
 
 }

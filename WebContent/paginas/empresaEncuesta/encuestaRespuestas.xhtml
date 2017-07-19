@@ -1,0 +1,59 @@
+<ui:composition xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:ui="http://java.sun.com/jsf/facelets"
+	xmlns:h="http://java.sun.com/jsf/html"
+	xmlns:f="http://java.sun.com/jsf/core"
+	template="/WEB-INF/template.xhtml" xmlns:p="http://primefaces.org/ui">
+	<ui:define name="content">
+		<h:form id="formEncuestaFrepunta">
+			<h1>Respuestas</h1>
+			<p:growl id="growl" autoUpdate="true" />
+
+			<br />
+			<br />
+
+			<p:dataTable var="sale"
+				value="#{empresaEncuestaCtrl.empresaEncuesta.respuestas}">
+				<f:facet name="header">
+            #{empresaEncuestaCtrl.empresaEncuesta.empresa.nombre}
+        </f:facet>
+
+
+				<p:columnGroup type="header">
+					<p:row>
+						<p:column rowspan="3" headerText="PERSONA" />
+						<p:column colspan="3" headerText="Resultados" />
+					</p:row>
+					<p:row>
+						<p:column colspan="1" headerText="Resultado" />
+						<p:column colspan="1" headerText="Factor" />
+						<p:column colspan="1" headerText="Subfactor" />
+					</p:row>
+				</p:columnGroup>
+
+				<p:column >
+					<h:outputText value="#{sale.persona}" />
+				</p:column>
+				<p:column>
+					<h:outputText value="#{sale.respuesta}" />
+				</p:column>
+				<p:column>
+					<h:outputText value="#{sale.factor.nombre}" />
+				</p:column>
+				<p:column>
+					<h:outputText value="#{sale.subfactor.nombre}" />
+				</p:column>
+
+
+
+				<f:facet name="footer">
+           FECHA Encuesta: #{empresaEncuestaCtrl.empresaEncuesta.fechaCreacion}
+        </f:facet>
+			</p:dataTable>
+
+
+
+
+		</h:form>
+	</ui:define>
+
+</ui:composition>

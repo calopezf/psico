@@ -42,6 +42,12 @@
 					style="width:100%"
 					paginatorTemplate="{CurrentPageReport}  {FirstPageLink} {PreviousPageLink} {PageLinks} {NextPageLink} {LastPageLink} "
 					paginator="true" rows="10">
+					<p:column style="width:20px;">
+						<f:facet name="header">
+							<h:outputText value="#" />
+						</f:facet>
+						<h:outputText value="#{item.id}" />
+					</p:column>
 					<p:column style="width:100px;">
 						<f:facet name="header">
 							<h:outputText value="#{etiquetas['nombre']}" />

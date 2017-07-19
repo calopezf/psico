@@ -38,10 +38,7 @@ public class EncuestaCtrl extends BaseCtrl {
 	private Encuesta encuesta;
 	private Encuesta encuestaFiltro;
 	private List<Encuesta> encuestas;
-	private List<EncuestaPregunta> encuestaPreguntaLista;
 	private EncuestaPregunta encuestaPregunta;
-	private List<Parametro> factores;
-	private List<Parametro> subFactores;
 
 	@PostConstruct
 	public void postConstructor() {
@@ -58,6 +55,32 @@ public class EncuestaCtrl extends BaseCtrl {
 			} else {
 				encuesta = servicioCrud.findById(Long.parseLong(encuestaId),
 						Encuesta.class);
+				EncuestaPregunta filtro = new EncuestaPregunta();
+				filtro.setEncuestaId(this.encuesta.getId());
+				encuesta.setPreguntas(servicioCrud.findOrder(filtro));
+
+				for (EncuestaPregunta encuestaPre : encuesta.getPreguntas()) {
+					List<Parametro> listaNueva = new ArrayList<Parametro>();
+					Parametro referenciaFiltro = new Parametro();
+					referenciaFiltro.setTipo(EnumTipoParametro.FACTOR);
+					referenciaFiltro.setEstado(EnumEstado.ACT);
+					for (Parametro a : servicioCrud.findOrder(referenciaFiltro)) {
+						listaNueva.add(a);
+					}
+					encuestaPre.setFactores(listaNueva);
+					List<Parametro> subFactoresLista = new ArrayList<Parametro>();
+					Parametro referenciaFiltroSub = new Parametro();
+					referenciaFiltroSub.setTipo(EnumTipoParametro.SUBFACTOR);
+					referenciaFiltroSub.setEstado(EnumEstado.ACT);
+					referenciaFiltroSub.setPadre(encuestaPre.getFactor());
+					for (Parametro a : servicioCrud
+							.findOrder(referenciaFiltroSub)) {
+						subFactoresLista.add(a);
+					}
+					encuestaPre.setSubfactores(subFactoresLista);
+
+				}
+
 			}
 		}
 		return encuesta;
@@ -107,32 +130,58 @@ public class EncuestaCtrl extends BaseCtrl {
 
 	public String guardarPreguntas() {
 		EncuestaPregunta preguntaEncuestaFiltro = new EncuestaPregunta();
-		preguntaEncuestaFiltro.setEncuesta(this.encuesta);
+		preguntaEncuestaFiltro.setEncuestaId(this.encuesta.getId());
 		List<EncuestaPregunta> listaBase = servicioCrud
 				.findOrder(preguntaEncuestaFiltro);
 		for (EncuestaPregunta detalle : listaBase) {
 			this.servicioCrud.remove(detalle.getId(), EncuestaPregunta.class);
 		}
-		for (EncuestaPregunta detalle : encuestaPreguntaLista) {
-			detalle.setEncuesta(encuesta);
+		for (EncuestaPregunta detalle : encuesta.getPreguntas()) {
+			detalle.setSubfactor(this.servicioCrud.findByPK(detalle
+					.getSubfactor().getCodigo(), Parametro.class));
+			detalle.setEncuestaId(this.encuesta.getId());
+			detalle.setFactores(null);
+			detalle.setSubfactores(null);
+			detalle.setId(null);
+			this.servicioCrud.insert(detalle);
 		}
-		this.encuesta.setPreguntas(encuestaPreguntaLista);
 		this.encuesta = servicioCrud.update(this.encuesta);
 		return "/paginas/encuesta/encuestaLista";
 
 	}
 
 	public void agregarPregunta() {
-		this.encuestaPregunta = new EncuestaPregunta();
-		this.encuestaPreguntaLista.add(encuestaPregunta);
-		
+		EncuestaPregunta nueva = new EncuestaPregunta();
 
+		List<Parametro> listaNueva = new ArrayList<Parametro>();
+		Parametro referenciaFiltro = new Parametro();
+		referenciaFiltro.setTipo(EnumTipoParametro.FACTOR);
+		referenciaFiltro.setEstado(EnumEstado.ACT);
+		List<Parametro> listaParametroPrimero = servicioCrud
+				.findOrder(referenciaFiltro);
+		for (Parametro a : servicioCrud.findOrder(referenciaFiltro)) {
+			listaNueva.add(a);
+		}
+		nueva.setFactores(listaNueva);
+
+		List<Parametro> subFactoresLista = new ArrayList<Parametro>();
+		Parametro referenciaFiltroSub = new Parametro();
+		referenciaFiltroSub.setTipo(EnumTipoParametro.SUBFACTOR);
+		referenciaFiltroSub.setEstado(EnumEstado.ACT);
+		if (listaParametroPrimero.size() > 0) {
+			referenciaFiltroSub.setPadre(listaParametroPrimero.get(0));
+		}
+		for (Parametro a : servicioCrud.findOrder(referenciaFiltroSub)) {
+			subFactoresLista.add(a);
+		}
+		nueva.setSubfactores(subFactoresLista);
+		this.encuesta.getPreguntas().add(nueva);
 	}
 
 	public void eliminarPregunta() {
 		EncuestaPregunta encuestaPreguntaData = (EncuestaPregunta) getExternalContext()
 				.getRequestMap().get("item");
-		this.encuestaPreguntaLista.remove(encuestaPreguntaData);
+		this.encuesta.getPreguntas().remove(encuestaPreguntaData);
 	}
 
 	public String editar() {
@@ -172,24 +221,6 @@ public class EncuestaCtrl extends BaseCtrl {
 		this.encuestas = encuestas;
 	}
 
-	public List<EncuestaPregunta> getEncuestaPreguntaLista() {
-		if (encuestaPreguntaLista == null) {
-			encuestaPreguntaLista = new ArrayList<EncuestaPregunta>();
-			if (encuesta.getId() != null) {
-				EncuestaPregunta preguntaEncuestaFiltro = new EncuestaPregunta();
-				preguntaEncuestaFiltro.setEncuesta(this.encuesta);
-				this.encuestaPreguntaLista = servicioCrud
-						.findOrder(preguntaEncuestaFiltro);
-			}
-		}
-		return encuestaPreguntaLista;
-	}
-
-	public void setEncuestaPreguntaLista(
-			List<EncuestaPregunta> encuestaPreguntaLista) {
-		this.encuestaPreguntaLista = encuestaPreguntaLista;
-	}
-
 	public EncuestaPregunta getEncuestaPregunta() {
 		if (encuestaPregunta == null) {
 			encuestaPregunta = new EncuestaPregunta();
@@ -201,43 +232,21 @@ public class EncuestaCtrl extends BaseCtrl {
 		this.encuestaPregunta = encuestaPregunta;
 	}
 
-	public List<Parametro> getFactores() {
-		if (factores == null) {
-			factores = new ArrayList<Parametro>();
-			Parametro referenciaFiltro = new Parametro();
-			referenciaFiltro.setTipo(EnumTipoParametro.FACTOR);
-			referenciaFiltro.setEstado(EnumEstado.ACT);
-			for (Parametro a : servicioCrud.findOrder(referenciaFiltro)) {
-				this.factores.add(a);
-			}
-		}
-		return factores;
-	}
-
-	public void setFactores(List<Parametro> factores) {
-		this.factores = factores;
-	}
-
 	public void cambiaFactor(AjaxBehaviorEvent event) {
-		this.subFactores = null;
-	}
+		EncuestaPregunta encuestaPreguntaData = (EncuestaPregunta) getExternalContext()
+				.getRequestMap().get("item");
+		Parametro padre = new Parametro();
+		padre.setCodigo(encuestaPreguntaData.getFactor().getCodigo());
+		List<Parametro> subFactoresLista = new ArrayList<Parametro>();
+		Parametro referenciaFiltro = new Parametro();
+		referenciaFiltro.setTipo(EnumTipoParametro.SUBFACTOR);
+		referenciaFiltro.setEstado(EnumEstado.ACT);
+		referenciaFiltro.setPadre(padre);
 
-	public List<Parametro> getSubFactores() {
-		if (subFactores == null) {
-			subFactores = new ArrayList<Parametro>();
-			Parametro referenciaFiltro = new Parametro();
-			referenciaFiltro.setTipo(EnumTipoParametro.SUBFACTOR);
-			referenciaFiltro.setEstado(EnumEstado.ACT);
-
-			for (Parametro a : servicioCrud.findOrder(referenciaFiltro)) {
-				this.subFactores.add(a);
-			}
+		for (Parametro a : servicioCrud.findOrder(referenciaFiltro)) {
+			subFactoresLista.add(a);
 		}
-		return subFactores;
-	}
-
-	public void setSubFactores(List<Parametro> subFactores) {
-		this.subFactores = subFactores;
+		encuestaPreguntaData.setSubfactores(subFactoresLista);
 	}
 
 }

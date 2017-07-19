@@ -1,0 +1,75 @@
+<ui:composition xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:ui="http://java.sun.com/jsf/facelets"
+	xmlns:h="http://java.sun.com/jsf/html"
+	xmlns:f="http://java.sun.com/jsf/core"
+	xmlns:p="http://primefaces.org/ui" template="/WEB-INF/template.xhtml">
+	<ui:define name="title">
+		<h:outputText value="Configuración Encuesta por Empresa" />
+	</ui:define>
+	<ui:define name="content">
+		<h:form id="formEcuesta">
+			<p:growl id="growl" autoUpdate="true" />
+			<h:panelGrid columns="2" columnClasses="form-label,form-input">
+				<p:outputLabel value="#{etiquetas['empresa']}:" />
+				<p:selectOneMenu id="empresa"
+					value="#{empresaEncuestaCtrl.empresaEncuesta.empresa.codigo}"
+					style="width:250px">
+					<f:selectItem />
+					<f:selectItems value="#{empresaEncuestaCtrl.empresaLista}"
+						var="item" itemLabel="#{item.nombre}" itemValue="#{item.codigo}" />
+					<f:ajax event="change" render="sucursal"
+						listener="#{empresaEncuestaCtrl.cambiaEmpresa}" />
+				</p:selectOneMenu>
+
+				<p:outputLabel value="#{etiquetas['sucursal']}:"
+					rendered="#{usuarioCtrl.administrador}" />
+				<p:selectOneMenu id="sucursal"
+					value="#{empresaEncuestaCtrl.empresaEncuesta.sucursal.codigo}"
+					style="width:250px">
+					<f:selectItem />
+					<f:selectItems value="#{empresaEncuestaCtrl.sucursalLista}"
+						var="item" itemLabel="#{item.nombre}" itemValue="#{item.codigo}" />
+				</p:selectOneMenu>
+
+				<p:outputLabel value="#{etiquetas['encuesta']}:"
+					rendered="#{usuarioCtrl.administrador}" />
+				<p:selectOneMenu id="encuesta"
+					value="#{empresaEncuestaCtrl.empresaEncuesta.encuestaId}"
+					style="width:250px">
+					<f:selectItem />
+					<f:selectItems value="#{empresaEncuestaCtrl.encuestas}" var="item"
+						itemLabel="#{item.nombre}" itemValue="#{item.id}" />
+				</p:selectOneMenu>
+
+				<p:outputLabel value="#{etiquetas['descripcion']}:*" />
+				<p:inputTextarea style="width:370px; height:100px;" required="true"
+					requiredMessage="#{etiquetas['descripcion']} #{mensajes['requerido.masculino']}"
+					value="#{empresaEncuestaCtrl.empresaEncuesta.descripcion}"></p:inputTextarea>
+				<p:outputLabel value="#{etiquetas['fecha']}:*" />
+				<p:calendar id="fecha"
+					value="#{empresaEncuestaCtrl.empresaEncuesta.fechaCreacion}"
+					style="width:250px" />
+
+			</h:panelGrid>
+			<br />
+			<p:fileUpload fileUploadListener="#{empresaEncuestaCtrl.upload}" 
+				allowTypes="/(\.|\/)(xlsx|xsl)$/" sizeLimit="10000000"
+				update="growl"></p:fileUpload>
+			<br/>
+			<br />
+			<h:outputText value="#{etiquetas['campos.obligatorios']}" />
+
+			<div align="center">
+				<p:commandButton value="#{etiquetas.guardar}"
+					action="#{empresaEncuestaCtrl.guardar}"
+					title="#{etiquetas['guardar']}" update="growl">
+				</p:commandButton>
+				<p:commandButton value="#{etiquetas.atras}"
+					action="/paginas/empresaEncuesta/empresaEncuestaLista?faces-redirect=true"
+					title="#{etiquetas['atras']}" immediate="true">
+				</p:commandButton>
+			</div>
+
+		</h:form>
+	</ui:define>
+</ui:composition>
