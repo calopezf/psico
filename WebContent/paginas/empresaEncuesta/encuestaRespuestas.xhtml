@@ -10,49 +10,132 @@
 
 			<br />
 			<br />
-
-			<p:dataTable var="sale"
-				value="#{empresaEncuestaCtrl.empresaEncuesta.respuestas}">
-				<f:facet name="header">
-            #{empresaEncuestaCtrl.empresaEncuesta.empresa.nombre}
+			
+			 <p:dataTable var="item" value="#{empresaEncuestaCtrl.respuesta()}" style="margin-top:40px">
+        <f:facet name="header">
+           Datos
         </f:facet>
-
-
-				<p:columnGroup type="header">
-					<p:row>
-						<p:column rowspan="3" headerText="PERSONA" />
-						<p:column colspan="3" headerText="Resultados" />
-					</p:row>
-					<p:row>
-						<p:column colspan="1" headerText="Resultado" />
-						<p:column colspan="1" headerText="Factor" />
-						<p:column colspan="1" headerText="Subfactor" />
-					</p:row>
-				</p:columnGroup>
-
-				<p:column >
-					<h:outputText value="#{sale.persona}" />
-				</p:column>
-				<p:column>
-					<h:outputText value="#{sale.respuesta}" />
-				</p:column>
-				<p:column>
-					<h:outputText value="#{sale.factor.nombre}" />
-				</p:column>
-				<p:column>
-					<h:outputText value="#{sale.subfactor.nombre}" />
-				</p:column>
-
-
-
-				<f:facet name="footer">
+ 
+        <p:columnGroup type="header">
+            <p:row>
+                <p:column rowspan="2" headerText="Persona" />
+                <p:column colspan="#{empresaEncuestaCtrl.preguntas().size()}" headerText="Respuestas" />
+            </p:row>
+            <p:row>
+                <ui:repeat value="#{empresaEncuestaCtrl.preguntas()}" var="pregunta">
+                    <p:column headerText="#{pregunta}" />
+                </ui:repeat>
+            </p:row>
+        </p:columnGroup>
+ 
+        <p:column>
+            <h:outputText value="#{item.personas}" />
+        </p:column>
+ 
+        <p:columns value="#{empresaEncuestaCtrl.preguntas()}" var="pregunta">
+            <h:outputText value="#{item.getValor(pregunta)}" />
+        </p:columns>
+ 
+        <f:facet name="footer">
            FECHA Encuesta: #{empresaEncuestaCtrl.empresaEncuesta.fechaCreacion}
         </f:facet>
-			</p:dataTable>
+    </p:dataTable>
+    
+    
+    
+     <p:dataTable var="item" value="#{empresaEncuestaCtrl.respuestaFrecuencia()}" style="margin-top:40px">
+        <f:facet name="header">
+            Datos por Persona y Pregunta
+        </f:facet>
+ 
+        <p:columnGroup type="header">
+            <p:row>
+                <p:column rowspan="2" headerText="Pond." />
+                <p:column colspan="#{empresaEncuestaCtrl.preguntas().size()}" headerText="Respuestas" />
+            </p:row>
+            <p:row>
+                <ui:repeat value="#{empresaEncuestaCtrl.preguntas()}" var="pregunta">
+                    <p:column headerText="#{pregunta}" />
+                </ui:repeat>
+            </p:row>
+        </p:columnGroup>
+ 
+        <p:column>
+            <h:outputText value="#{item.ponderacion}" />
+        </p:column>
+ 
+        <p:columns value="#{empresaEncuestaCtrl.preguntas()}" var="pregunta">
+            <h:outputText value="#{item.getValor(pregunta)}" />
+        </p:columns>
+
+    </p:dataTable>
+    
+     <p:dataTable var="item" value="#{empresaEncuestaCtrl.maximosMinimos()}" style="margin-top:40px">
+        <f:facet name="header">
+            Maximos y Mínimos
+        </f:facet>
+ 
+        <p:columnGroup type="header">
+            <p:row>
+                <p:column rowspan="2" headerText="" />
+                <p:column colspan="#{empresaEncuestaCtrl.preguntas().size()}" headerText="Respuestas" />
+            </p:row>
+            <p:row>
+                <ui:repeat value="#{empresaEncuestaCtrl.preguntas()}" var="pregunta">
+                    <p:column headerText="#{pregunta}" />
+                </ui:repeat>
+            </p:row>
+        </p:columnGroup>
+ 
+        <p:column>
+            <h:outputText value="#{item.maxMin}" />
+        </p:column>
+ 
+        <p:columns value="#{empresaEncuestaCtrl.preguntas()}" var="pregunta">
+            <h:outputText value="#{item.getValor(pregunta)}" />
+        </p:columns>
+
+    </p:dataTable>
+    
+     <p:dataTable var="item1" value="#{empresaEncuestaCtrl.respuestaFrecuencia2()}" style="margin-top:40px">
+        <f:facet name="header">
+            Datos por Persona y Pregunta
+        </f:facet>
+ 
+        <p:columnGroup type="header">
+            <p:row>
+                <p:column rowspan="2" headerText="Pond." />
+                <p:column colspan="#{empresaEncuestaCtrl.preguntas().size()}" headerText="Respuestas" />
+            </p:row>
+            <p:row>
+                <ui:repeat value="#{empresaEncuestaCtrl.preguntas()}" var="pregunta">
+                    <p:column headerText="#{pregunta}" />
+                </ui:repeat>
+            </p:row>
+        </p:columnGroup>
+ 
+        <p:column>
+            <h:outputText value="#{item1.ponderacion}" />
+        </p:column>
+ 
+        <p:columns value="#{empresaEncuestaCtrl.preguntas()}" var="pregunta">
+            <h:outputText value="#{item1.getValorPorcentaje(pregunta)}" />
+        </p:columns>
+
+    </p:dataTable>
+			
 
 
-
-
+		
+			<br />
+			<br />
+			<br />
+			<div align="center">
+				<p:commandButton value="#{etiquetas.atras}"
+					action="/paginas/empresaEncuesta/empresaEncuestaLista?faces-redirect=true"
+					title="#{etiquetas['atras']}" immediate="true">
+				</p:commandButton>
+			</div>
 		</h:form>
 	</ui:define>
 

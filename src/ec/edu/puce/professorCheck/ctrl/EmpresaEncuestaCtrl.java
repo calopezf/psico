@@ -10,8 +10,10 @@ import java.text.DateFormat;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Date;
+import java.util.HashMap;
 import java.util.Iterator;
 import java.util.List;
+import java.util.Map;
 
 import javax.annotation.PostConstruct;
 import javax.ejb.EJB;
@@ -30,6 +32,9 @@ import org.primefaces.event.FileUploadEvent;
 import ec.edu.puce.professorCheck.constantes.EnumEstado;
 import ec.edu.puce.professorCheck.constantes.EnumTipoParametro;
 import ec.edu.puce.professorCheck.crud.ServicioCrud;
+import ec.edu.puce.professorCheck.dto.FrecuenciaDto;
+import ec.edu.puce.professorCheck.dto.MaxMinDto;
+import ec.edu.puce.professorCheck.dto.ResultadoDto;
 import ec.edu.puce.professorCheck.modelo.EmpresaEncuesta;
 import ec.edu.puce.professorCheck.modelo.EmpresaEncuestaRespuesta;
 import ec.edu.puce.professorCheck.modelo.Encuesta;
@@ -64,10 +69,222 @@ public class EmpresaEncuestaCtrl extends BaseCtrl {
 	private List<Parametro> sucursalLista;
 	private List<Parametro> empresaListaBusqueda;
 	private List<Parametro> sucursalListaBusqueda;
+	List<FrecuenciaDto> respuestaFinal = new ArrayList<FrecuenciaDto>();
+	List<FrecuenciaDto> respuestaFinal2 = new ArrayList<FrecuenciaDto>();
 
 	@PostConstruct
 	public void postConstructor() {
 		this.empresaEncuestaFiltro = new EmpresaEncuesta();
+	}
+
+	public List<ResultadoDto> respuesta() {
+		List<ResultadoDto> respuestaFinal = new ArrayList<ResultadoDto>();
+		for (int i = 0; i <= ultimaPersona(); i++) {
+			ResultadoDto dto = new ResultadoDto();
+			dto.setPersonas(i);
+			EmpresaEncuestaRespuesta encuestaRespuesta = new EmpresaEncuestaRespuesta();
+			encuestaRespuesta.setEncuestaId(getEmpresaEncuesta()
+					.getEncuestaId());
+			encuestaRespuesta.setEmpresaEncuestaId(empresaEncuesta.getId());
+			encuestaRespuesta.setPersona(i);
+			List<EmpresaEncuestaRespuesta> encuestaRespuestas = servicioCrud
+					.findOrder(encuestaRespuesta);
+			for (int j = 0; j < encuestaRespuestas.size(); j++) {
+				dto.getPreguntas().put(j + 1,
+						encuestaRespuestas.get(j).getRespuesta());
+			}
+			respuestaFinal.add(dto);
+		}
+		return respuestaFinal;
+	}
+
+	// funcion que saca las frecuencias
+	public List<FrecuenciaDto> respuestaFrecuencia() {
+
+		int numPreguntas = preguntas().size();
+		int numPonderacion = ponderacion().size();
+		for (int i = 1; i <= numPonderacion; i++) {
+			FrecuenciaDto dto = new FrecuenciaDto();
+			dto.setPonderacion(i);
+			for (int j = 0; j < numPreguntas; j++) {
+				int contador = 0;
+				for (int k = 0; k <= ultimaPersona(); k++) {
+
+					EmpresaEncuestaRespuesta encuestaRespuesta = new EmpresaEncuestaRespuesta();
+					encuestaRespuesta.setEncuestaId(getEmpresaEncuesta()
+							.getEncuestaId());
+					encuestaRespuesta.setEmpresaEncuestaId(empresaEncuesta
+							.getId());
+					encuestaRespuesta.setPersona(k);
+					List<EmpresaEncuestaRespuesta> encuestaRespuestas = servicioCrud
+							.findOrder(encuestaRespuesta);
+					if (encuestaRespuestas.get(j).getRespuesta() == i) {
+						contador++;
+					}
+					dto.getPreguntas().put(j + 1, contador);
+				}
+				double val=(double)contador/(double)numPreguntas;
+				dto.getPreguntasPorcetajes().put(j + 1, val*100);
+			}
+			respuestaFinal.add(dto);
+		}
+
+		return respuestaFinal;
+	}
+	
+	// funcion que saca las frecuencias
+		public List<FrecuenciaDto> respuestaFrecuencia2() {
+
+			int numPreguntas = preguntas().size();
+			int numPonderacion = ponderacion().size();
+			for (int i = 1; i <= numPonderacion; i++) {
+				FrecuenciaDto dto = new FrecuenciaDto();
+				dto.setPonderacion(i);
+				for (int j = 0; j < numPreguntas; j++) {
+					int contador = 0;
+					for (int k = 0; k <= ultimaPersona(); k++) {
+
+						EmpresaEncuestaRespuesta encuestaRespuesta = new EmpresaEncuestaRespuesta();
+						encuestaRespuesta.setEncuestaId(getEmpresaEncuesta()
+								.getEncuestaId());
+						encuestaRespuesta.setEmpresaEncuestaId(empresaEncuesta
+								.getId());
+						encuestaRespuesta.setPersona(k);
+						List<EmpresaEncuestaRespuesta> encuestaRespuestas = servicioCrud
+								.findOrder(encuestaRespuesta);
+						if (encuestaRespuestas.get(j).getRespuesta() == i) {
+							contador++;
+						}
+						dto.getPreguntas().put(j + 1, contador);
+					}
+					double val=(double)contador/(double)numPreguntas;
+					dto.getPreguntasPorcetajes().put(j + 1, val*100);
+				}
+				respuestaFinal2.add(dto);
+			}
+
+			return respuestaFinal2;
+		}
+
+	// para sacar el maximo y minimo de las frecuencias
+	public List<MaxMinDto> maximosMinimos() {
+		List<MaxMinDto> respuestaFinalMaxMin = new ArrayList<MaxMinDto>();
+		int numPreguntas = preguntas().size();
+		int sizeRespuesta = respuestaFinal.size();
+		int min = 0;
+		int max = 0;
+		for (int i = 1; i <= 2; i++) {
+			MaxMinDto dto = new MaxMinDto();
+			if (i == 1)
+				dto.setMaxMin("Maximo");
+			else
+				dto.setMaxMin("Minimo");
+			for (int j = 0; j < numPreguntas; j++) {
+				for (int h = 0; h < sizeRespuesta; h++) {
+					int[] arr = new int[sizeRespuesta];
+					arr[h] = respuestaFinal.get(h).getPreguntas().get(j+1);
+					if (min > arr[h]) {
+						min = arr[h];
+					}
+					if (max < arr[h]) {
+						max = arr[h];
+					}
+				}
+				if (i == 1)
+					dto.getPreguntas().put(j + 1, max);
+				else
+					dto.getPreguntas().put(j + 1, min);
+			}
+			respuestaFinalMaxMin.add(dto);
+		}
+		return respuestaFinalMaxMin;
+	}
+
+	public List<Integer> personas() {
+		List<Integer> list = new ArrayList<Integer>();
+		for (int i = 0; i < ultimaPersona(); i++) {
+			list.add(i);
+		}
+		return list;
+	}
+
+	public List<Integer> preguntas() {
+		List<Integer> list = new ArrayList<Integer>();
+		EncuestaPregunta encuestaPregunta = new EncuestaPregunta();
+		encuestaPregunta.setEncuestaId(getEmpresaEncuesta().getEncuestaId());
+		List<EncuestaPregunta> encuestaPreguntas = servicioCrud
+				.findOrder(encuestaPregunta);
+		for (int i = 1; i <= encuestaPreguntas.size(); i++) {
+			list.add(i);
+		}
+		return list;
+	}
+
+	public List<Integer> ponderacion() {
+		List<Integer> list = new ArrayList<Integer>();
+		Encuesta enc = servicioCrud.findByPK(empresaEncuesta.getEncuestaId(),
+				Encuesta.class);
+		for (int i = 0; i < enc.getPonderacion(); i++) {
+			list.add(i);
+		}
+		return list;
+	}
+
+	public List<FrecuenciaDto> frecuenciaPorPregunta() {
+		List<FrecuenciaDto> frecuencias = new ArrayList<FrecuenciaDto>();
+		Encuesta encuesta = servicioCrud.findById(
+				empresaEncuesta.getEncuestaId(), Encuesta.class);
+		// for (int k = 0; k <= ultimaPersona(); k++) {
+		// for (int i = 1; i <= encuesta.getPonderacion(); i++) {
+		// int frecuencia = 0;
+		// EmpresaEncuestaRespuesta respuestaFiltro = new
+		// EmpresaEncuestaRespuesta();
+		// respuestaFiltro.setEmpresaEncuestaId(empresaEncuesta.getId());
+		// respuestaFiltro.setEncuestaId(empresaEncuesta.getEncuestaId());
+		// respuestaFiltro.setPersona(k);
+		// List<EmpresaEncuestaRespuesta> resps = servicioCrud
+		// .findOrder(respuestaFiltro);
+		// for (EmpresaEncuestaRespuesta resp : resps) {
+		// if (resp.getRespuesta() == i) {
+		// frecuencia++;
+		// }
+		// }
+		// FrecuenciaDto frecuenciaDto = new FrecuenciaDto();
+		// frecuenciaDto.setPersona(k);
+		// frecuenciaDto.setPonderacion(i);
+		// frecuenciaDto.setFrecuencia(frecuencia);
+		// frecuencias.add(frecuenciaDto);
+		// }
+		// }
+		return frecuencias;
+	}
+
+	public List<EmpresaEncuestaRespuesta> respuestasEncuesta() {
+		EmpresaEncuestaRespuesta respuestaFiltro = new EmpresaEncuestaRespuesta();
+		respuestaFiltro.setEmpresaEncuestaId(empresaEncuesta.getId());
+		respuestaFiltro.setEncuestaId(empresaEncuesta.getEncuestaId());
+		return servicioCrud.findOrder(respuestaFiltro);
+	}
+
+	public int ultimaPersona() {
+		int mayor = 0;
+		if (empresaEncuesta != null) {
+
+			EmpresaEncuestaRespuesta respuestaFiltro = new EmpresaEncuestaRespuesta();
+			respuestaFiltro.setEmpresaEncuestaId(empresaEncuesta.getId());
+			respuestaFiltro.setEncuestaId(empresaEncuesta.getEncuestaId());
+			List<EmpresaEncuestaRespuesta> lista = servicioCrud
+					.findOrder(respuestaFiltro);
+
+			for (int i = 0; i < lista.size(); i++) {
+
+				if (lista.get(i).getPersona() > mayor) {
+					mayor = lista.get(i).getPersona();
+				}
+
+			}
+		}
+		return mayor;
 	}
 
 	public EmpresaEncuesta getEmpresaEncuesta() {
@@ -100,15 +317,17 @@ public class EmpresaEncuestaCtrl extends BaseCtrl {
 		try {
 			EmpresaEncuesta empresaEncuestaData = (EmpresaEncuesta) getExternalContext()
 					.getRequestMap().get("item");
-			servicioCrud.remove(empresaEncuestaData.getId(), EmpresaEncuesta.class);
-
 			EmpresaEncuestaRespuesta respuestaFiltro = new EmpresaEncuestaRespuesta();
-			respuestaFiltro.setEncuestaId(empresaEncuesta.getEncuestaId());
-			respuestaFiltro.setEmpresaEncuestaId(empresaEncuesta.getId());
-			for(EmpresaEncuestaRespuesta empRes:servicioCrud
-					.findOrder(respuestaFiltro)){
-				this.servicioCrud.remove(empRes.getId(), EmpresaEncuestaRespuesta.class);
+			respuestaFiltro.setEncuestaId(empresaEncuestaData.getEncuestaId());
+			respuestaFiltro.setEmpresaEncuestaId(empresaEncuestaData.getId());
+			for (EmpresaEncuestaRespuesta empRes : servicioCrud
+					.findOrder(respuestaFiltro)) {
+				this.servicioCrud.remove(empRes.getId(),
+						EmpresaEncuestaRespuesta.class);
 			}
+			servicioCrud.remove(empresaEncuestaData.getId(),
+					EmpresaEncuesta.class);
+
 			addInfoMessage(
 					getBundleMensajes("mensaje.informacion.elimina.exito", null),
 					"");
@@ -179,13 +398,13 @@ public class EmpresaEncuestaCtrl extends BaseCtrl {
 			for (int i = 0; i < filas.size(); i++) {
 				for (int j = 0; j < filas.get(i).size(); j++) {
 					EmpresaEncuestaRespuesta empresaEncuestaRespuesta = new EmpresaEncuestaRespuesta();
-					empresaEncuestaRespuesta.setPregunta(preguntas.get(i)
+					empresaEncuestaRespuesta.setPregunta(preguntas.get(j)
 							.getPregunta());
 					empresaEncuestaRespuesta.setDescripcionPregunta(preguntas
-							.get(i).getDescripcionPregunta());
-					empresaEncuestaRespuesta.setFactor(preguntas.get(i)
+							.get(j).getDescripcionPregunta());
+					empresaEncuestaRespuesta.setFactor(preguntas.get(j)
 							.getFactor());
-					empresaEncuestaRespuesta.setSubfactor(preguntas.get(i)
+					empresaEncuestaRespuesta.setSubfactor(preguntas.get(j)
 							.getSubfactor());
 					empresaEncuestaRespuesta.setEncuestaId(empresaEncuesta
 							.getEncuestaId());
