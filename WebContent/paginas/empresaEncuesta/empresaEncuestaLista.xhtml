@@ -101,11 +101,20 @@
 						<h:outputText value="#{item.descripcion}" />
 					</p:column>
 
-					<p:column headerText="Ver Resultados" style="width:70px;"
+					<p:column headerText="Ver Resultados Generales" style="width:70px;"
 						styleClass="columnaCentrada">
 						<h:commandLink action="#{empresaEncuestaCtrl.verResultados}"
 							title="#{etiquetas.editar}">
 							<h:graphicImage value="/img/edit.png" id="editImage"
+								style="width:20px; height:20px" />
+						</h:commandLink>
+					</p:column>
+					
+					<p:column headerText="Ver Resultados por Subfactor" style="width:70px;"
+						styleClass="columnaCentrada">
+						<h:commandLink action="#{empresaEncuestaCtrl.verResultadosSubfactor}"
+							title="#{etiquetas.editar}">
+							<h:graphicImage value="/img/edit.png" id="editImage1"
 								style="width:20px; height:20px" />
 						</h:commandLink>
 					</p:column>

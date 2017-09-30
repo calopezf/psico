@@ -32,9 +32,13 @@ import org.primefaces.event.FileUploadEvent;
 import ec.edu.puce.professorCheck.constantes.EnumEstado;
 import ec.edu.puce.professorCheck.constantes.EnumTipoParametro;
 import ec.edu.puce.professorCheck.crud.ServicioCrud;
+import ec.edu.puce.professorCheck.dto.Calculo2Dto;
+import ec.edu.puce.professorCheck.dto.Calculo3Dto;
+import ec.edu.puce.professorCheck.dto.CalculoDto;
 import ec.edu.puce.professorCheck.dto.FrecuenciaDto;
 import ec.edu.puce.professorCheck.dto.MaxMinDto;
 import ec.edu.puce.professorCheck.dto.ResultadoDto;
+import ec.edu.puce.professorCheck.dto.ResultadoSubfactorDto;
 import ec.edu.puce.professorCheck.modelo.EmpresaEncuesta;
 import ec.edu.puce.professorCheck.modelo.EmpresaEncuestaRespuesta;
 import ec.edu.puce.professorCheck.modelo.Encuesta;
@@ -69,12 +73,251 @@ public class EmpresaEncuestaCtrl extends BaseCtrl {
 	private List<Parametro> sucursalLista;
 	private List<Parametro> empresaListaBusqueda;
 	private List<Parametro> sucursalListaBusqueda;
-	List<FrecuenciaDto> respuestaFinal = new ArrayList<FrecuenciaDto>();
-	List<FrecuenciaDto> respuestaFinal2 = new ArrayList<FrecuenciaDto>();
+	private List<FrecuenciaDto> respuestaFinal = new ArrayList<FrecuenciaDto>();
+	private List<FrecuenciaDto> respuestaFinal2 = new ArrayList<FrecuenciaDto>();
+	private List<String> preguntasTexto;
+	private List<ResultadoSubfactorDto> respuestaFinalSubfactor;
+	private List<CalculoDto> calculoPaso1;
+	private List<Calculo2Dto> calculoPaso2;
+	private List<Calculo3Dto> calculoPaso3;
+	private boolean cambiaPaso;
+	private int sumafs;
+	private double medianaPaso4;
+	private double desviacionPaso4;
 
 	@PostConstruct
 	public void postConstructor() {
 		this.empresaEncuestaFiltro = new EmpresaEncuesta();
+	}
+
+	public List<ResultadoSubfactorDto> respuestaSubfactor() {
+		if (respuestaFinalSubfactor == null) {
+			respuestaFinalSubfactor = new ArrayList<ResultadoSubfactorDto>();
+			for (int i = 0; i <= ultimaPersona(); i++) {
+				ResultadoSubfactorDto dto = new ResultadoSubfactorDto();
+				dto.setPersonas(i);
+				EmpresaEncuestaRespuesta encuestaRespuesta = new EmpresaEncuestaRespuesta();
+				encuestaRespuesta.setEncuestaId(getEmpresaEncuesta()
+						.getEncuestaId());
+				encuestaRespuesta.setEmpresaEncuestaId(empresaEncuesta.getId());
+				encuestaRespuesta.setPersona(i);
+				List<EmpresaEncuestaRespuesta> encuestaRespuestas = servicioCrud
+						.findOrder(encuestaRespuesta);
+
+				for (int j = 0; j < encuestaRespuestas.size(); j++) {
+
+					if (dto.getPreguntas().get(
+							encuestaRespuestas.get(j).getSubfactor()
+									.getCodigo()) == null) {
+						int sumaSub = encuestaRespuestas.get(j).getRespuesta();
+						for (int k = j + 1; k < encuestaRespuestas.size(); k++) {
+							if (encuestaRespuestas
+									.get(j)
+									.getSubfactor()
+									.getCodigo()
+									.equals(encuestaRespuestas.get(k)
+											.getSubfactor().getCodigo())) {
+								sumaSub = sumaSub
+										+ encuestaRespuestas.get(k)
+												.getRespuesta();
+							}
+						}
+						dto.getPreguntas().put(
+								encuestaRespuestas.get(j).getSubfactor()
+										.getCodigo(), sumaSub);
+					}
+				}
+				respuestaFinalSubfactor.add(dto);
+			}
+		}
+
+		return respuestaFinalSubfactor;
+	}
+
+	public void cambiaCalculo() {
+		calculoPaso1 = null;
+		calculoPaso2 = null;
+		calculoPaso3 = null;
+		cambiaPaso = true;
+		medianaPaso4=0.0;
+		desviacionPaso4=0.0;
+	}
+
+	public List<CalculoDto> getCalculoPaso1() {
+		if (calculoPaso1 == null && cambiaPaso) {
+			calculoPaso1 = new ArrayList<CalculoDto>();
+			String pregunta = (String) getExternalContext().getRequestMap()
+					.get("pregunta");
+			if (pregunta != null) {
+				List<Integer> datos = new ArrayList<Integer>();
+				List<Integer> listaNumeroSinRepetir = new ArrayList<Integer>();
+				int sumaNumeroSinRepetir = 0;
+				for (ResultadoSubfactorDto dto : respuestaFinalSubfactor) {
+					for (Map.Entry<String, Integer> entry : dto.getPreguntas()
+							.entrySet()) {
+						if (entry.getKey().equals(pregunta)) {
+							datos.add(entry.getValue());
+						}
+					}
+				}
+				Map<Integer, String> numeros = new HashMap<Integer, String>();
+				for (Integer a : datos) {
+					numeros.put(a, "aaaaa");
+				}
+				// Crea lista sin repeticion
+				for (Map.Entry<Integer, String> entry2 : numeros.entrySet()) {
+					listaNumeroSinRepetir.add(entry2.getKey());
+				}
+				for (Integer in : listaNumeroSinRepetir) {
+					sumaNumeroSinRepetir = sumaNumeroSinRepetir + in;
+				}
+				double xOriginal = sumaNumeroSinRepetir
+						/ listaNumeroSinRepetir.size();
+				int count = 1;
+				// number,frequency type map.
+				Map<Integer, Integer> frequencyMap = new HashMap<Integer, Integer>();
+				for (int i = 0; i < datos.size(); i++) {
+					if (datos.get(i) != null) {
+						for (int j = i + 1; j < datos.size(); j++) {
+							if (datos.get(j) != -1) {
+								if (datos.get(i) == datos.get(j)) {
+									// -1 is an indicator that this number is
+									// already counted.
+									// You should replace it such a number which
+									// is sure to be not coming in array.
+									datos.remove(i);
+									// i--;
+									count++;
+								}
+							}
+						}
+						frequencyMap.put(datos.get(i), count);
+						count = 1;
+					}
+				}
+				List<CalculoDto> calculos = new ArrayList<CalculoDto>();
+				for (Map.Entry<Integer, Integer> entry1 : frequencyMap
+						.entrySet()) {
+					CalculoDto cal = new CalculoDto();
+					cal.setCalculo(entry1.getKey());
+					cal.setCalculofs(entry1.getValue());
+					cal.setCalculofsp(entry1.getKey() * entry1.getValue());
+					cal.setCalculofspp(cal.getCalculofsp()
+							* cal.getCalculofsp());
+					cal.setCalculox(xOriginal - cal.getCalculo());
+					cal.setCalculoxx(cal.getCalculox() * cal.getCalculox());
+					calculos.add(cal);
+				}
+				calculoPaso1 = calculos;
+			}
+
+		}
+		return calculoPaso1;
+	}
+
+	public void setCalculoPaso1(List<CalculoDto> calculoPaso1) {
+		this.calculoPaso1 = calculoPaso1;
+	}
+
+	public List<Calculo2Dto> getCalculoPaso2() {
+		if (calculoPaso2 == null && calculoPaso1 != null) {
+			calculoPaso2 = new ArrayList<Calculo2Dto>();
+			sumafs = 0;
+			for (CalculoDto paso1 : calculoPaso1) {
+				Calculo2Dto paso2 = new Calculo2Dto();
+				paso2.setCalculofs(paso1.getCalculofs());
+				calculoPaso2.add(paso2);
+				sumafs = sumafs + paso2.getCalculofs();
+			}
+			int []arr=new int[calculoPaso2.size()];
+			for (int i = calculoPaso2.size() - 1; i >= 0; i--) {
+				if (i == calculoPaso2.size() - 1) {
+					calculoPaso2.get(i).setCalculofa(
+							calculoPaso2.get(i).getCalculofs());
+				} else {
+					calculoPaso2.get(i).setCalculofa(
+							calculoPaso2.get(i + 1).getCalculofa()
+									+ calculoPaso2.get(i).getCalculofs());
+				}
+				calculoPaso2.get(i).setCalculopa(
+						(double) calculoPaso2.get(i).getCalculofa()
+								/ (double) sumafs);
+				calculoPaso2.get(i).setCalculop(
+						(int) (calculoPaso2.get(i).getCalculopa() * 100));
+				for (int j = 0; j <= 100; j = j + 5) {
+					if (calculoPaso2.get(i).getCalculop() == j && j != 100) {
+						calculoPaso2.get(i).setCentil(j);
+						break;
+					} else if (calculoPaso2.get(i).getCalculop() == j + 1) {
+						calculoPaso2.get(i).setCentil(j);
+						break;
+					} else if (calculoPaso2.get(i).getCalculop() == j + 2) {
+						calculoPaso2.get(i).setCentil(j);
+						break;
+					} else if (calculoPaso2.get(i).getCalculop() == j - 1) {
+						calculoPaso2.get(i).setCentil(j);
+						break;
+					} else if (calculoPaso2.get(i).getCalculop() == j - 2) {
+						calculoPaso2.get(i).setCentil(j);
+						break;
+					}
+					if (j == 100) {
+						calculoPaso2.get(i).setCentil(99);
+						break;
+					}
+				}
+				arr[i]=calculoPaso2.get(i).getCentil();
+				medianaPaso4=mediana(arr);
+				desviacionPaso4=desviacion(arr);
+			}
+		}
+		return calculoPaso2;
+	}
+
+	public void setCalculoPaso2(List<Calculo2Dto> calculoPaso2) {
+		this.calculoPaso2 = calculoPaso2;
+	}
+
+	public List<Calculo3Dto> getCalculoPaso3() {
+		if (calculoPaso3 == null && calculoPaso2 != null) {
+			calculoPaso3 = new ArrayList<Calculo3Dto>();
+			for (int i = 0; i < calculoPaso2.size(); i++) {
+				Calculo3Dto paso3 = new Calculo3Dto();
+				int a = (((i + 1) == calculoPaso2.size()) ? 0 : calculoPaso2
+						.get(i + 1).getCalculofa());
+				paso3.setCalculofa((calculoPaso2.get(i).getCalculofa() + a) / 2);
+				paso3.setCalculopa((double) paso3.getCalculofa()
+						/ (double) sumafs);
+				paso3.setCalculoTabla(paso3.getCalculopa() - 0.5);
+				paso3.setCalculoZ(0.79);
+				paso3.setCalculoT((int) (paso3.getCalculoZ() * 10) + 50);
+				calculoPaso3.add(paso3);
+			}
+		}
+		return calculoPaso3;
+	}
+
+	public void setCalculoPaso3(List<Calculo3Dto> calculoPaso3) {
+		this.calculoPaso3 = calculoPaso3;
+	}
+
+	static int[] ordenaArreglo(int arreglo[]) {
+		int k = 0;
+		for (int i = 1; i < arreglo.length; i++) {
+			for (int j = 0; j < arreglo.length - i; j++) {
+				if (arreglo[j] > arreglo[j + 1]) {
+					k = arreglo[j + 1];
+					arreglo[j + 1] = arreglo[j];
+					arreglo[j] = k;
+				}
+			}
+		}
+		return arreglo;
+	}
+
+	public String nombreSubfactor(String codigo) {
+		Parametro subfactor = servicioCrud.findById(codigo, Parametro.class);
+		return subfactor.getNombre();
 	}
 
 	public List<ResultadoDto> respuesta() {
@@ -123,48 +366,49 @@ public class EmpresaEncuestaCtrl extends BaseCtrl {
 					}
 					dto.getPreguntas().put(j + 1, contador);
 				}
-				double val=(double)contador/(double)numPreguntas;
-				dto.getPreguntasPorcetajes().put(j + 1, val*100);
+				double val = (double) contador / (double) numPreguntas;
+				dto.getPreguntasPorcetajes().put(j + 1, val * 100);
 			}
 			respuestaFinal.add(dto);
 		}
 
 		return respuestaFinal;
 	}
-	
+
 	// funcion que saca las frecuencias
-		public List<FrecuenciaDto> respuestaFrecuencia2() {
+	public List<FrecuenciaDto> respuestaFrecuencia2() {
 
-			int numPreguntas = preguntas().size();
-			int numPonderacion = ponderacion().size();
-			for (int i = 1; i <= numPonderacion; i++) {
-				FrecuenciaDto dto = new FrecuenciaDto();
-				dto.setPonderacion(i);
-				for (int j = 0; j < numPreguntas; j++) {
-					int contador = 0;
-					for (int k = 0; k <= ultimaPersona(); k++) {
+		int numPreguntas = preguntas().size();
+		int numPonderacion = ponderacion().size();
+		int personas = ultimaPersona();
+		for (int i = 1; i <= numPonderacion; i++) {
+			FrecuenciaDto dto = new FrecuenciaDto();
+			dto.setPonderacion(i);
+			for (int j = 0; j < numPreguntas; j++) {
+				int contador = 0;
+				for (int k = 0; k <= ultimaPersona(); k++) {
 
-						EmpresaEncuestaRespuesta encuestaRespuesta = new EmpresaEncuestaRespuesta();
-						encuestaRespuesta.setEncuestaId(getEmpresaEncuesta()
-								.getEncuestaId());
-						encuestaRespuesta.setEmpresaEncuestaId(empresaEncuesta
-								.getId());
-						encuestaRespuesta.setPersona(k);
-						List<EmpresaEncuestaRespuesta> encuestaRespuestas = servicioCrud
-								.findOrder(encuestaRespuesta);
-						if (encuestaRespuestas.get(j).getRespuesta() == i) {
-							contador++;
-						}
-						dto.getPreguntas().put(j + 1, contador);
+					EmpresaEncuestaRespuesta encuestaRespuesta = new EmpresaEncuestaRespuesta();
+					encuestaRespuesta.setEncuestaId(getEmpresaEncuesta()
+							.getEncuestaId());
+					encuestaRespuesta.setEmpresaEncuestaId(empresaEncuesta
+							.getId());
+					encuestaRespuesta.setPersona(k);
+					List<EmpresaEncuestaRespuesta> encuestaRespuestas = servicioCrud
+							.findOrder(encuestaRespuesta);
+					if (encuestaRespuestas.get(j).getRespuesta() == i) {
+						contador++;
 					}
-					double val=(double)contador/(double)numPreguntas;
-					dto.getPreguntasPorcetajes().put(j + 1, val*100);
+					dto.getPreguntas().put(j + 1, contador);
 				}
-				respuestaFinal2.add(dto);
+				double val = (double) contador / (double) (personas + 1);
+				dto.getPreguntasPorcetajes().put(j + 1, val * 100);
 			}
-
-			return respuestaFinal2;
+			respuestaFinal2.add(dto);
 		}
+
+		return respuestaFinal2;
+	}
 
 	// para sacar el maximo y minimo de las frecuencias
 	public List<MaxMinDto> maximosMinimos() {
@@ -182,7 +426,7 @@ public class EmpresaEncuestaCtrl extends BaseCtrl {
 			for (int j = 0; j < numPreguntas; j++) {
 				for (int h = 0; h < sizeRespuesta; h++) {
 					int[] arr = new int[sizeRespuesta];
-					arr[h] = respuestaFinal.get(h).getPreguntas().get(j+1);
+					arr[h] = respuestaFinal.get(h).getPreguntas().get(j + 1);
 					if (min > arr[h]) {
 						min = arr[h];
 					}
@@ -428,6 +672,13 @@ public class EmpresaEncuestaCtrl extends BaseCtrl {
 				+ empresaEncuestaData.getId();
 	}
 
+	public String verResultadosSubfactor() {
+		EmpresaEncuesta empresaEncuestaData = (EmpresaEncuesta) getExternalContext()
+				.getRequestMap().get("item");
+		return "/paginas/empresaEncuesta/encuestaRespuestasSubfactor?faces-redirect=true&idEmpresaEncuesta="
+				+ empresaEncuestaData.getId();
+	}
+
 	public void buscar() {
 		this.empresaEncuestas = null;
 	}
@@ -586,5 +837,132 @@ public class EmpresaEncuestaCtrl extends BaseCtrl {
 			System.out.println(e.getMessage());
 		}
 	}
+
+	public List<String> preguntasSubfactor() {
+		if (preguntasTexto == null) {
+			preguntasTexto = new ArrayList<String>();
+			ResultadoSubfactorDto dto = new ResultadoSubfactorDto();
+			EmpresaEncuestaRespuesta encuestaRespuesta = new EmpresaEncuestaRespuesta();
+			encuestaRespuesta.setEncuestaId(getEmpresaEncuesta()
+					.getEncuestaId());
+			encuestaRespuesta.setEmpresaEncuestaId(empresaEncuesta.getId());
+			List<EmpresaEncuestaRespuesta> encuestaRespuestas = servicioCrud
+					.findOrder(encuestaRespuesta);
+			for (int j = 0; j < encuestaRespuestas.size(); j++) {
+
+				if (dto.getPreguntas().get(
+						encuestaRespuestas.get(j).getSubfactor().getCodigo()) == null) {
+					int sumaSub = encuestaRespuestas.get(j).getRespuesta();
+					for (int k = j + 1; k < encuestaRespuestas.size(); k++) {
+						if (encuestaRespuestas
+								.get(j)
+								.getSubfactor()
+								.getCodigo()
+								.equals(encuestaRespuestas.get(k)
+										.getSubfactor().getCodigo())) {
+							sumaSub = sumaSub
+									+ encuestaRespuestas.get(k).getRespuesta();
+						}
+
+					}
+					dto.getPreguntas().put(
+							encuestaRespuestas.get(j).getSubfactor()
+									.getCodigo(), sumaSub);
+
+				}
+			}
+			for (Map.Entry<String, Integer> entry : dto.getPreguntas()
+					.entrySet()) {
+				preguntasTexto.add(entry.getKey());
+			}
+		}
+		return preguntasTexto;
+	}
+
+	public List<String> getPreguntasTexto() {
+		return preguntasTexto;
+	}
+
+	public void setPreguntasTexto(List<String> preguntasTexto) {
+		this.preguntasTexto = preguntasTexto;
+	}
+	
+
+	  public static double promedio ( int [ ] v ) {
+	    double prom = 0.0;
+	    for ( int i = 0; i < v.length; i++ )
+	      prom += v[i];
+
+	    return prom / ( double ) v.length;  
+	  }
+
+	  public static double desviacion ( int [ ] v ) {
+	    double prom, sum = 0; int i, n = v.length;
+	    prom = promedio ( v );
+
+	    for ( i = 0; i < n; i++ ) 
+	      sum += Math.pow ( v [ i ] - prom, 2 );
+
+	    return Math.sqrt ( sum / ( double ) n );
+	  }
+
+	  // 0 - Menor a Mayor, 1 - Mayor a menor
+	  public static int [ ] burbuja ( int [ ] v, int ord ) {
+	    int i, j, n = v.length, aux = 0;
+	    
+	    for ( i = 0; i < n - 1; i++ )
+	      for ( j = i + 1; j < n; j++ )
+	        if ( ord == 0 )
+	          if ( v [ i ] > v [ j ] ) {
+	            aux = v [ j ];
+	            v [ j ] = v [ i ];
+	            v [ i ] = aux;
+	          }
+	        else if ( ord == 1 )
+	          if ( v [ i ] < v [ j ] ) {
+	            aux = v [ i ];
+	            v [ i ] = v [ j ];
+	            v [ j ] = aux;
+	          }
+
+	    return v;
+	  }
+
+	  public static double mediana ( int [ ] v ) {
+	    int pos = 0, n = v.length;
+	    double temp = 0, temp0 = 0;    
+	    // ordenar de menor a mayor
+	    v = burbuja ( v, 0 );
+
+	    temp = n / 2;
+	    if ( n % 2 == 0 ) {
+	      pos = (int)temp;      
+	      temp0 = (double)(v [ pos ] / v [ pos + 1 ]);
+	    }
+	    if ( n % 2 == 1 ) {
+	      pos = (int)(temp + 0.5);
+	      temp0 = (double)(v [ pos ]);  
+	    }
+
+	    return temp0;
+	  }
+
+	public double getMedianaPaso4() {
+		return medianaPaso4;
+	}
+
+	public void setMedianaPaso4(double medianaPaso4) {
+		this.medianaPaso4 = medianaPaso4;
+	}
+
+	public double getDesviacionPaso4() {
+		return desviacionPaso4;
+	}
+
+	public void setDesviacionPaso4(double desviacionPaso4) {
+		this.desviacionPaso4 = desviacionPaso4;
+	}
+	  
+	  
 
 }

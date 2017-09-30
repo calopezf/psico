@@ -1,0 +1,209 @@
+<ui:composition xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:ui="http://java.sun.com/jsf/facelets"
+	xmlns:h="http://java.sun.com/jsf/html"
+	xmlns:f="http://java.sun.com/jsf/core"
+	template="/WEB-INF/template.xhtml" xmlns:p="http://primefaces.org/ui">
+	<ui:define name="content">
+		<h:form id="formEncuestaPregunta">
+			<h1>Respuestas por Subfactores</h1>
+			<p:growl id="growl" autoUpdate="true" />
+
+			<br />
+			<br />
+
+			<p:dataTable var="item"
+				value="#{empresaEncuestaCtrl.respuestaSubfactor()}"
+				style="margin-top:40px">
+				<f:facet name="header">
+           Datos
+        </f:facet>
+				<p:columnGroup type="header">
+					<p:row>
+						<p:column rowspan="2" headerText="Persona" />
+						<p:column colspan="#{empresaEncuestaCtrl.preguntasTexto.size()}"
+							headerText="Respuestas" />
+					</p:row>
+					<p:row>
+						<ui:repeat value="#{empresaEncuestaCtrl.preguntasSubfactor()}"
+							var="pregunta">
+							<p:column
+								headerText="#{empresaEncuestaCtrl.nombreSubfactor(pregunta)}">
+								<f:facet name="header">
+									<h:outputText
+										value="#{empresaEncuestaCtrl.nombreSubfactor(pregunta)}" />
+									<div align="center">
+										<p:commandButton value="Calcular Pasos"
+											update=":formEncuestaPregunta:panelGroupId"
+											actionListener="#{empresaEncuestaCtrl.cambiaCalculo}"
+											title="Seleccionar">
+										</p:commandButton>
+
+									</div>
+								</f:facet>
+							</p:column>
+						</ui:repeat>
+					</p:row>
+				</p:columnGroup>
+
+				<p:column>
+					<h:outputText value="#{item.personas}" />
+				</p:column>
+
+				<p:columns value="#{empresaEncuestaCtrl.preguntasSubfactor()}"
+					var="pregunta">
+					<h:outputText value="#{item.getValor(pregunta)}" />
+
+				</p:columns>
+
+				<f:facet name="footer">
+           				FECHA Encuesta: #{empresaEncuestaCtrl.empresaEncuesta.fechaCreacion}
+        		</f:facet>
+			</p:dataTable>
+
+			<br />
+			<h:panelGroup id="panelGroupId">
+				<br/>
+				<p:dataTable id="itemsTable"
+					emptyMessage="#{etiquetas['no.existen.registros']}"
+					rendered="#{empresaEncuestaCtrl.calculoPaso1.size()>0}"
+					value="#{empresaEncuestaCtrl.calculoPaso1}" var="item"
+					paginatorTemplate="{CurrentPageReport}  {FirstPageLink} {PreviousPageLink} {PageLinks} {NextPageLink} {LastPageLink} "
+					paginator="true" rows="10" style="width:100%; margin-bottom:20px">
+					 <f:facet name="header">
+      				  Paso 1
+    				</f:facet>
+					<p:column style="width:100px;">
+						<f:facet name="header">
+							<h:outputText value="X" />
+						</f:facet>
+						<h:outputText value="#{item.calculo}" />
+					</p:column>
+					<p:column style="width:100px;">
+						<f:facet name="header">
+							<h:outputText value="fs" />
+						</f:facet>
+						<h:outputText value="#{item.calculofs}" />
+					</p:column>
+					<p:column style="width:100px;">
+						<f:facet name="header">
+							<h:outputText value="fs'" />
+						</f:facet>
+						<h:outputText value="#{item.calculofsp}" />
+					</p:column>
+					<p:column style="width:100px;">
+						<f:facet name="header">
+							<h:outputText value="fs''" />
+						</f:facet>
+						<h:outputText value="#{item.calculofspp}" />
+					</p:column>
+					<p:column style="width:100px;">
+						<f:facet name="header">
+							<h:outputText value="X" />
+						</f:facet>
+						<h:outputText value="#{item.calculox}" />
+					</p:column>
+					<p:column style="width:100px;">
+						<f:facet name="header">
+							<h:outputText value="X2" />
+						</f:facet>
+						<h:outputText value="#{item.calculoxx}" />
+					</p:column>
+				</p:dataTable>
+				<br/>
+				<p:dataTable id="itemsTable2"
+					emptyMessage="#{etiquetas['no.existen.registros']}"
+					rendered="#{empresaEncuestaCtrl.calculoPaso2.size()>0}"
+					value="#{empresaEncuestaCtrl.calculoPaso2}" var="item"
+					paginatorTemplate="{CurrentPageReport}  {FirstPageLink} {PreviousPageLink} {PageLinks} {NextPageLink} {LastPageLink} "
+					paginator="true" rows="10" style="width:100%; margin-bottom:20px">
+	 				<f:facet name="header">
+      				  Paso 2
+    				</f:facet>
+					<p:column style="width:100px;">
+						<f:facet name="header">
+							<h:outputText value="fs" />
+						</f:facet>
+						<h:outputText value="#{item.calculofs}" />
+					</p:column>
+					<p:column style="width:100px;">
+						<f:facet name="header">
+							<h:outputText value="fa" />
+						</f:facet>
+						<h:outputText value="#{item.calculofa}" />
+					</p:column>
+					<p:column style="width:100px;">
+						<f:facet name="header">
+							<h:outputText value="pa" />
+						</f:facet>
+						<h:outputText value="#{item.calculopa}" />
+					</p:column>
+					<p:column style="width:100px;">
+						<f:facet name="header">
+							<h:outputText value="p" />
+						</f:facet>
+						<h:outputText value="#{item.calculop}" />
+					</p:column>
+					<p:column style="width:100px;">
+						<f:facet name="header">
+							<h:outputText value="Centil" />
+						</f:facet>
+						<h:outputText value="#{item.centil}" />
+					</p:column>
+				</p:dataTable>
+				<br/>
+				<p:dataTable id="itemsTable3"
+					emptyMessage="#{etiquetas['no.existen.registros']}"
+					rendered="#{empresaEncuestaCtrl.calculoPaso3.size()>0}"
+					value="#{empresaEncuestaCtrl.calculoPaso3}" var="item"
+					paginatorTemplate="{CurrentPageReport}  {FirstPageLink} {PreviousPageLink} {PageLinks} {NextPageLink} {LastPageLink} "
+					paginator="true" rows="10" style="width:100%; margin-bottom:20px">
+					<f:facet name="header">
+      				  Paso 3
+    				</f:facet>
+					<p:column style="width:100px;">
+						<f:facet name="header">
+							<h:outputText value="fa.Pm" />
+						</f:facet>
+						<h:outputText value="#{item.calculofa}" />
+					</p:column>
+					<p:column style="width:100px;">
+						<f:facet name="header">
+							<h:outputText value="Pa.Pm" />
+						</f:facet>
+						<h:outputText value="#{item.calculopa}" />
+					</p:column>
+					<p:column style="width:100px;">
+						<f:facet name="header">
+							<h:outputText value="Cálculo Tabla" />
+						</f:facet>
+						<h:outputText value="#{item.calculoTabla}" />
+					</p:column>
+						<p:column style="width:100px;">
+						<f:facet name="header">
+							<h:outputText value="Escala Z" />
+						</f:facet>
+						<h:outputText value="#{item.calculoZ}" />
+					</p:column>
+						<p:column style="width:100px;">
+						<f:facet name="header">
+							<h:outputText value="Escala T" />
+						</f:facet>
+						<h:outputText value="#{item.calculoT}" />
+					</p:column>
+				</p:dataTable>
+			</h:panelGroup>
+
+
+			<br />
+			<br />
+			<br />
+			<div align="center">
+				<p:commandButton value="#{etiquetas.atras}"
+					action="/paginas/empresaEncuesta/empresaEncuestaLista?faces-redirect=true"
+					title="#{etiquetas['atras']}" immediate="true">
+				</p:commandButton>
+			</div>
+		</h:form>
+	</ui:define>
+
+</ui:composition>
