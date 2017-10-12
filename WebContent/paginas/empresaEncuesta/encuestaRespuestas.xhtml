@@ -10,125 +10,500 @@
 
 			<br />
 			<br />
-			
-			 <p:dataTable var="item" value="#{empresaEncuestaCtrl.respuesta()}" style="margin-top:40px">
-        <f:facet name="header">
+
+			<p:dataTable var="item" value="#{empresaEncuestaCtrl.resultado}"
+				style="margin-top:40px">
+				<f:facet name="header">
            Datos
         </f:facet>
- 
-        <p:columnGroup type="header">
-            <p:row>
-                <p:column rowspan="2" headerText="Persona" />
-                <p:column colspan="#{empresaEncuestaCtrl.preguntas().size()}" headerText="Respuestas" />
-            </p:row>
-            <p:row>
-                <ui:repeat value="#{empresaEncuestaCtrl.preguntas()}" var="pregunta">
-                    <p:column headerText="#{pregunta}" />
-                </ui:repeat>
-            </p:row>
-        </p:columnGroup>
- 
-        <p:column>
-            <h:outputText value="#{item.personas}" />
-        </p:column>
- 
-        <p:columns value="#{empresaEncuestaCtrl.preguntas()}" var="pregunta">
-            <h:outputText value="#{item.getValor(pregunta)}" />
-        </p:columns>
- 
-        <f:facet name="footer">
+
+				<p:columnGroup type="header">
+					<p:row>
+						<p:column rowspan="2" headerText="Persona" />
+						<p:column colspan="#{empresaEncuestaCtrl.preguntas.size()}"
+							headerText="Respuestas" />
+					</p:row>
+					<p:row>
+						<ui:repeat value="#{empresaEncuestaCtrl.preguntas}" var="pregunta">
+							<p:column headerText="#{pregunta}" />
+						</ui:repeat>
+					</p:row>
+				</p:columnGroup>
+
+				<p:column>
+					<h:outputText value="#{item.personas}" />
+				</p:column>
+
+				<p:columns value="#{empresaEncuestaCtrl.preguntas}" var="pregunta"
+					style="padding: 0px 0px;">
+					<h:panelGrid
+						rendered="#{item.getValor(pregunta)==1 or item.getValor(pregunta)==2}">
+						<h:outputText value="#{item.getValor(pregunta)}" />
+					</h:panelGrid>
+					<h:panelGrid style="background-color:coral;"
+						rendered="#{item.getValor(pregunta)==3}">
+						<h:outputText value="#{item.getValor(pregunta)}" />
+					</h:panelGrid>
+					<h:panelGrid style="background-color:#9932CC;"
+						rendered="#{item.getValor(pregunta)==4}">
+						<h:outputText value="#{item.getValor(pregunta)}" />
+					</h:panelGrid>
+					<h:panelGrid style="background-color:red;"
+						rendered="#{item.getValor(pregunta)==5}">
+						<h:outputText value="#{item.getValor(pregunta)}" />
+					</h:panelGrid>
+				</p:columns>
+
+				<f:facet name="footer">
            FECHA Encuesta: #{empresaEncuestaCtrl.empresaEncuesta.fechaCreacion}
         </f:facet>
-    </p:dataTable>
-    
-    
-    
-     <p:dataTable var="item" value="#{empresaEncuestaCtrl.respuestaFrecuencia()}" style="margin-top:40px">
-        <f:facet name="header">
+			</p:dataTable>
+
+
+
+			<p:dataTable var="item"
+				value="#{empresaEncuestaCtrl.respuestaFrecuencia}"
+				style="margin-top:40px">
+				<f:facet name="header">
             Datos por Persona y Pregunta
         </f:facet>
- 
-        <p:columnGroup type="header">
-            <p:row>
-                <p:column rowspan="2" headerText="Pond." />
-                <p:column colspan="#{empresaEncuestaCtrl.preguntas().size()}" headerText="Respuestas" />
-            </p:row>
-            <p:row>
-                <ui:repeat value="#{empresaEncuestaCtrl.preguntas()}" var="pregunta">
-                    <p:column headerText="#{pregunta}" />
-                </ui:repeat>
-            </p:row>
-        </p:columnGroup>
- 
-        <p:column>
-            <h:outputText value="#{item.ponderacion}" />
-        </p:column>
- 
-        <p:columns value="#{empresaEncuestaCtrl.preguntas()}" var="pregunta">
-            <h:outputText value="#{item.getValor(pregunta)}" />
-        </p:columns>
 
-    </p:dataTable>
-    
-     <p:dataTable var="item" value="#{empresaEncuestaCtrl.maximosMinimos()}" style="margin-top:40px">
-        <f:facet name="header">
+				<p:columnGroup type="header">
+					<p:row>
+						<p:column rowspan="2" headerText="Pond." />
+						<p:column colspan="#{empresaEncuestaCtrl.preguntas.size()}"
+							headerText="Respuestas" />
+					</p:row>
+					<p:row>
+						<ui:repeat value="#{empresaEncuestaCtrl.preguntas}" var="pregunta">
+							<p:column headerText="#{pregunta}" />
+						</ui:repeat>
+					</p:row>
+				</p:columnGroup>
+
+				<p:column>
+					<h:outputText value="#{item.ponderacion}" />
+				</p:column>
+
+				<p:columns value="#{empresaEncuestaCtrl.preguntas}" var="pregunta">
+					<h:outputText value="#{item.getValor(pregunta)}" />
+				</p:columns>
+
+			</p:dataTable>
+
+			<p:dataTable var="item" value="#{empresaEncuestaCtrl.maximosMinimos}"
+				style="margin-top:40px">
+				<f:facet name="header">
            Datos por persona y pregunta(Maximos y Mínimos)
         </f:facet>
- 
-        <p:columnGroup type="header">
-            <p:row>
-                <p:column rowspan="2" headerText="" />
-                <p:column colspan="#{empresaEncuestaCtrl.preguntas().size()}" headerText="Respuestas" />
-            </p:row>
-            <p:row>
-                <ui:repeat value="#{empresaEncuestaCtrl.preguntas()}" var="pregunta">
-                    <p:column headerText="#{pregunta}" />
-                </ui:repeat>
-            </p:row>
-        </p:columnGroup>
- 
-        <p:column>
-            <h:outputText value="#{item.maxMin}" />
-        </p:column>
- 
-        <p:columns value="#{empresaEncuestaCtrl.preguntas()}" var="pregunta">
-            <h:outputText value="#{item.getValor(pregunta)}" />
-        </p:columns>
 
-    </p:dataTable>
-    
-     <p:dataTable var="item1" value="#{empresaEncuestaCtrl.respuestaFrecuencia2()}" style="margin-top:40px">
-        <f:facet name="header">
+				<p:columnGroup type="header">
+					<p:row>
+						<p:column rowspan="2" headerText="" />
+						<p:column colspan="#{empresaEncuestaCtrl.preguntas.size()}"
+							headerText="Respuestas" />
+					</p:row>
+					<p:row>
+						<ui:repeat value="#{empresaEncuestaCtrl.preguntas}" var="pregunta">
+							<p:column headerText="#{pregunta}" />
+						</ui:repeat>
+					</p:row>
+				</p:columnGroup>
+
+				<p:column>
+					<h:outputText value="#{item.maxMin}" />
+				</p:column>
+
+				<p:columns value="#{empresaEncuestaCtrl.preguntas}" var="pregunta">
+					<h:outputText value="#{item.getValor(pregunta)}" />
+				</p:columns>
+
+			</p:dataTable>
+
+			<p:dataTable var="item1"
+				value="#{empresaEncuestaCtrl.respuestaFinal2}"
+				style="margin-top:40px">
+				<f:facet name="header">
             Datos porcentuales por pregunta
         </f:facet>
- 
-        <p:columnGroup type="header">
-            <p:row>
-                <p:column rowspan="2" headerText="Pond." />
-                <p:column colspan="#{empresaEncuestaCtrl.preguntas().size()}" headerText="Respuestas" />
-            </p:row>
-            <p:row>
-                <ui:repeat value="#{empresaEncuestaCtrl.preguntas()}" var="pregunta">
-                    <p:column headerText="#{pregunta}" />
-                </ui:repeat>
-            </p:row>
-        </p:columnGroup>
- 
-        <p:column>
-            <h:outputText value="#{item1.ponderacion}" />
-        </p:column>
- 
-        <p:columns value="#{empresaEncuestaCtrl.preguntas()}" var="pregunta">
-            <h:outputText value="#{item1.getValorPorcentaje(pregunta)}" />
-        </p:columns>
 
-    </p:dataTable>
+				<p:columnGroup type="header">
+					<p:row>
+						<p:column rowspan="2" headerText="Pond." />
+						<p:column colspan="#{empresaEncuestaCtrl.preguntas.size()}"
+							headerText="Respuestas" />
+					</p:row>
+					<p:row>
+						<ui:repeat value="#{empresaEncuestaCtrl.preguntas}" var="pregunta">
+							<p:column headerText="#{pregunta}" />
+						</ui:repeat>
+					</p:row>
+				</p:columnGroup>
+
+				<p:column>
+					<h:outputText value="#{item1.ponderacion}" />
+				</p:column>
+
+				<p:columns value="#{empresaEncuestaCtrl.preguntas}" var="pregunta">
+					<h:outputText value="#{item1.getValorPorcentaje(pregunta)}" />
+				</p:columns>
+
+			</p:dataTable>
+
+			<br />
+			<p:fieldset legend="Cálculo Paso 5" toggleable="true"
+				toggleSpeed="500">
+				<h:panelGroup id="idFact">
+					<h:panelGrid columns="2">
+						<h:panelGrid columns="2" columnClasses="form-label,form-input">
+							<p:outputLabel value="Subfactor 1" />
+							<p:inputText id="sub1" size="3"
+								value="#{empresaEncuestaCtrl.correlacionDato1Paso5}"
+								required="true"
+								requiredMessage="El número de subfactor es requerido para el cálculo."
+								maxlength="3">
+							</p:inputText>
+							<p:outputLabel value="Subfactor 2" />
+							<p:inputText id="sub2" size="3"
+								value="#{empresaEncuestaCtrl.correlacionDato2Paso5}"
+								required="true"
+								requiredMessage="El número de subfactor es requerido para el cálculo."
+								maxlength="3">
+							</p:inputText>
+						</h:panelGrid>
+						<p:commandButton value="Calcular Paso 5"
+							actionListener="#{empresaEncuestaCtrl.calcularPaso5()}"
+							title="Calcula el paso 5" update="idFact" process="idFact">
+						</p:commandButton>
+					</h:panelGrid>
+					<br />
+					<br />
+					<h:panelGrid columns="2">
+						<h:panelGrid columns="2" columnClasses="form-label,form-input">
+							<p:outputLabel value="Cof. Corr." />
+							<p:inputText value="#{empresaEncuestaCtrl.correlacionPaso5}">
+							</p:inputText>
+							<p:outputLabel value="Cof. Def" />
+							<p:inputText
+								value="#{empresaEncuestaCtrl.correlacionCuadradoPaso5}">
+							</p:inputText>
+							<p:outputLabel value="Sig Est t" />
+							<p:inputText value="#{empresaEncuestaCtrl.sigEstPaso5}">
+							</p:inputText>
+							<p:outputLabel value="Raiz Gl" />
+							<p:inputText value="#{empresaEncuestaCtrl.raizGlPaso5}">
+							</p:inputText>
+							<p:outputLabel value="Cuadrado r" />
+							<p:inputText value="#{empresaEncuestaCtrl.cuadradoRPaso5}">
+							</p:inputText>
+							<p:outputLabel value="Raiz R" />
+							<p:inputText value="#{empresaEncuestaCtrl.raizRPaso5}">
+							</p:inputText>
+
+
+						</h:panelGrid>
+						<h:panelGrid style="background-color:#DAF7A6" columns="2"
+							rendered="#{empresaEncuestaCtrl.respuestaPaso5=='SI'}">
+							<p:outputLabel value="Respuesta" />
+							<p:inputText value="#{empresaEncuestaCtrl.respuestaPaso5}">
+							</p:inputText>
+						</h:panelGrid>
+						<h:panelGrid style="background-color:#FA8072 " columns="2"
+							rendered="#{empresaEncuestaCtrl.respuestaPaso5=='NO'}">
+							<p:outputLabel value="Respuesta" />
+							<p:inputText value="#{empresaEncuestaCtrl.respuestaPaso5}"
+								size="2">
+							</p:inputText>
+						</h:panelGrid>
+					</h:panelGrid>
+				</h:panelGroup>
+			</p:fieldset>
+			<br />
+			<p:fieldset id="field" legend="Cálculo Paso 6" toggleable="true"
+				toggleSpeed="500">
+				<p:commandButton value="Calcular Paso 6"
+					actionListener="#{empresaEncuestaCtrl.calcularPaso6()}"
+					title="Calcula el paso 6" update="pagPaso6" process="field">
+				</p:commandButton>
+				<br />
+				<br />
+				<h:panelGroup id="pagPaso6">
+					<p:dataTable id="itemsTable2"
+						emptyMessage="#{etiquetas['no.existen.registros']}"
+						value="#{empresaEncuestaCtrl.calculo6Dtos}" var="item"
+						style="width:100%; margin-bottom:20px">
+						<p:column style="width:100px;" groupRow="true">
+							<f:facet name="header">
+								<h:outputText value="Factor" />
+							</f:facet>
+							<h:outputText value="#{item.factorNombre}" />
+						</p:column>
+						<p:column style="width:100px;">
+							<f:facet name="header">
+								<h:outputText value="Subfactor" />
+							</f:facet>
+							<h:outputText value="#{item.subfactorNombre}" />
+						</p:column>
+						<p:column style="width:100px;">
+							<f:facet name="header">
+								<h:outputText value="Pregunta" />
+							</f:facet>
+							<h:outputText value="#{item.numeroPregunta}" />
+						</p:column>
+						<p:column style="width:100px;">
+							<f:facet name="header">
+								<h:outputText value="Valor" />
+							</f:facet>
+							<h:outputText value="#{item.valor}" />
+						</p:column>
+						<p:column style="width:100px; padding: 0px 0px;" >
+							<f:facet name="header">
+								<h:outputText value="Categoría" />
+							</f:facet>
+							<h:panelGrid style="background-color:#00FFFF;"
+								rendered="#{item.categoria eq 'Muy Bajo'}">
+								<h:outputText value="#{item.categoria}" />
+							</h:panelGrid>
+							<h:panelGrid style="background-color:#7FFFD4;"	
+								rendered="#{item.categoria eq 'Bajo'}">
+								<h:outputText value="#{item.categoria}aaa" />
+							</h:panelGrid>
+							<h:panelGrid style="background-color:coral;"
+								rendered="#{item.categoria eq 'Moderado'}">
+								<h:outputText value="#{item.categoria}" />
+							</h:panelGrid>
+							<h:panelGrid style="background-color:#9932CC;"
+								rendered="#{item.categoria eq 'Alto'}">
+								<h:outputText value="#{item.categoria}" />
+							</h:panelGrid>
+							<h:panelGrid style="background-color:red;"
+								rendered="#{item.categoria eq 'Muy Alto'}">
+								<h:outputText value="#{item.categoria}" />
+							</h:panelGrid>
+						</p:column>
+						<p:column style="width:100px;">
+							<f:facet name="header">
+								<h:outputText value="Gráfico" />
+							</f:facet>
+							<p:commandButton value="Ver Grafico"
+								action="#{empresaEncuestaCtrl.verGrafico}" immediate="true"
+								update=":formChart" onclick="PF('dlg2').show();"
+								title="Seleccionar nuevo Empleado">
+							</p:commandButton>
+						</p:column>
+					</p:dataTable>
+					<br />
+					<h:panelGrid columns="2" columnClasses="form-label,form-input">
+						<p:outputLabel value="Máximo:" />
+						<p:inputText value="#{empresaEncuestaCtrl.maximoPaso6}">
+						</p:inputText>
+						<p:outputLabel value="Mínimo:" />
+						<p:inputText value="#{empresaEncuestaCtrl.minimoPaso6}">
+						</p:inputText>
+						<p:outputLabel value="Mediana:" />
+						<p:inputText value="#{empresaEncuestaCtrl.medianaPaso6}">
+						</p:inputText>
+						<p:outputLabel value="Desviación Estandar:" />
+						<p:inputText value="#{empresaEncuestaCtrl.desviacionPaso6}">
+							<f:convertNumber pattern="#0.00" />
+						</p:inputText>
+					</h:panelGrid>
+					<br />
+					<p:dataTable id="itemsTable4"
+						emptyMessage="#{etiquetas['no.existen.registros']}"
+						rendered="#{empresaEncuestaCtrl.calculo6EquivalenciaDto.size()>0}"
+						value="#{empresaEncuestaCtrl.calculo6EquivalenciaDto}" var="item"
+						paginatorTemplate="{CurrentPageReport}  {FirstPageLink} {PreviousPageLink} {PageLinks} {NextPageLink} {LastPageLink} "
+						paginator="true" rows="10" style="width:100%; margin-bottom:20px">
+						<f:facet name="header">
+      				  Valores
+    				</f:facet>
+						<p:column style="width:100px;">
+							<f:facet name="header">
+								<h:outputText value="Paso 1" />
+							</f:facet>
+							<h:outputText value="#{item.calculo1}" >
+							<f:convertNumber pattern="#0.00" />
+							</h:outputText>
+						</p:column>
+						<p:column style="width:100px;">
+							<f:facet name="header">
+								<h:outputText value="Paso 2" />
+							</f:facet>
+							<h:outputText value="#{item.calculo2}" >
+							<f:convertNumber pattern="#0.00" />
+							</h:outputText>
+						</p:column>
+						<p:column style="width:100px;">
+							<f:facet name="header">
+								<h:outputText value="Paso 3" />
+							</f:facet>
+							<h:outputText value="#{item.calculo3}" >
+							<f:convertNumber pattern="#0.00" />
+							</h:outputText>
+						</p:column>
+						<p:column style="width:100px;">
+							<f:facet name="header">
+								<h:outputText value="Paso 4" />
+							</f:facet>
+							<h:outputText value="#{item.calculo4}" >
+							<f:convertNumber pattern="#0.00" />
+							</h:outputText>
+						</p:column>
+						<p:column style="width:100px;">
+							<f:facet name="header">
+								<h:outputText value="Paso 5" />
+							</f:facet>
+							<h:outputText value="#{item.calculo5}" >
+							<f:convertNumber pattern="#0.00" />
+							</h:outputText>
+						</p:column>
+						<p:column style="width:100px;">
+							<f:facet name="header">
+								<h:outputText value="Paso 6" />
+							</f:facet>
+							<h:outputText value="#{item.calculo6}" >
+							<f:convertNumber pattern="#0.00" />
+							</h:outputText>
+						</p:column>
+					</p:dataTable>
+
+					<p:dataTable id="itemsTable5"
+						emptyMessage="#{etiquetas['no.existen.registros']}"
+						rendered="#{empresaEncuestaCtrl.calculo6Equivalencia2Dto.size()>0}"
+						value="#{empresaEncuestaCtrl.calculo6Equivalencia2Dto}" var="item"
+						paginatorTemplate="{CurrentPageReport}  {FirstPageLink} {PreviousPageLink} {PageLinks} {NextPageLink} {LastPageLink} "
+						paginator="true" rows="10" style="width:100%; margin-bottom:20px">
+						<f:facet name="header">
+      				  Categorización 
+    				</f:facet>
+						<p:column style="width:100px;">
+							<f:facet name="header">
+								<h:outputText value="Valor" />
+							</f:facet>
+							<h:outputText value="#{item.valor}" />
+						</p:column>
+						<p:column style="width:100px; padding: 0px 0px;">
+							<f:facet name="header">
+								<h:outputText value="Categorización" />
+							</f:facet>
+							<h:panelGrid style="background-color:#00FFFF;"
+								rendered="#{item.categorizacion eq 'Muy Bajo'}">
+								<h:outputText value="#{item.categorizacion}" />
+							</h:panelGrid>
+							<h:panelGrid style="background-color:#7FFFD4;"	
+								rendered="#{item.categorizacion eq 'Bajo'}">
+								<h:outputText value="#{item.categorizacion}" />
+							</h:panelGrid>
+							<h:panelGrid style="background-color:coral;"
+								rendered="#{item.categorizacion eq 'Moderado'}">
+								<h:outputText value="#{item.categorizacion}" />
+							</h:panelGrid>
+							<h:panelGrid style="background-color:#9932CC;"
+								rendered="#{item.categorizacion eq 'Alto'}">
+								<h:outputText value="#{item.categorizacion}" />
+							</h:panelGrid>
+							<h:panelGrid style="background-color:red;"
+								rendered="#{item.categorizacion eq 'Muy Alto'}">
+								<h:outputText value="#{item.categorizacion}" />
+							</h:panelGrid>
+						</p:column>
+					</p:dataTable>
+				</h:panelGroup>
+			</p:fieldset>
+			<br/>
+			<p:fieldset id="field7" legend="Cálculo Paso 7" toggleable="true"
+				toggleSpeed="500">
+				<h:panelGrid columns="2" columnClasses="form-label,form-input">
+							<p:outputLabel value="Subfactor 1" />
+							<p:inputText id="subf1" size="3"
+								value="#{empresaEncuestaCtrl.dato1Paso7}"
+								required="true"
+								requiredMessage="El número de subfactor es requerido para el cálculo."
+								maxlength="3">
+							</p:inputText>
+							<p:outputLabel value="Subfactor 2" />
+							<p:inputText id="subf2" size="3"
+								value="#{empresaEncuestaCtrl.dato2Paso7}"
+								required="true"
+								requiredMessage="El número de subfactor es requerido para el cálculo."
+								maxlength="3">
+							</p:inputText>
+						</h:panelGrid>
+				<p:commandButton value="Calcular Paso 7"
+					actionListener="#{empresaEncuestaCtrl.calcularPaso7()}"
+					title="Calcula el paso 7" update="pagPaso7" process="field7">
+				</p:commandButton>
+				<br />
+				<br />
+				<h:panelGroup id="pagPaso7">
+					<p:dataTable id="itemsTable7"
+						emptyMessage="#{etiquetas['no.existen.registros']}"
+						value="#{empresaEncuestaCtrl.calculo7Dtos}" var="item"
+						style="width:100%; margin-bottom:20px">
+						<p:column style="width:100px;">
+							<f:facet name="header">
+								<h:outputText value="Numero" />
+							</f:facet>
+							<h:outputText value="#{item.numero}" />
+						</p:column>
+						<p:column style="width:100px;" >
+							<f:facet name="header">
+								<h:outputText value="Factor" />
+							</f:facet>
+							<h:outputText value="#{item.factor}" />
+						</p:column>
+						<p:column style="width:100px;">
+							<f:facet name="header">
+								<h:outputText value="Factor" />
+							</f:facet>
+							<h:outputText value="#{item.factor2}" />
+						</p:column>
+						<p:column style="width:100px;">
+							<f:facet name="header">
+								<h:outputText value="X" />
+							</f:facet>
+							<h:outputText value="#{item.x}" >
+							<f:convertNumber pattern="#0.00" />
+							</h:outputText>
+						</p:column>
+						<p:column style="width:100px;">
+							<f:facet name="header">
+								<h:outputText value="Y" />
+							</f:facet>
+							<h:outputText value="#{item.y}" >
+							<f:convertNumber pattern="#0.00" />
+							</h:outputText>
+						</p:column>
+						<p:column style="width:100px;">
+							<f:facet name="header">
+								<h:outputText value="X2" />
+							</f:facet>
+							<h:outputText value="#{item.x2}" >
+							<f:convertNumber pattern="#0.00" />
+							</h:outputText>
+						</p:column>
+						<p:column style="width:100px;">
+							<f:facet name="header">
+								<h:outputText value="Y2" />
+							</f:facet>
+							<h:outputText value="#{item.y2}" >
+							<f:convertNumber pattern="#0.00" />
+							</h:outputText>
+						</p:column>
+						<p:column style="width:100px;">
+							<f:facet name="header">
+								<h:outputText value="XY" />
+							</f:facet>
+							<h:outputText value="#{item.xy}" >
+							<f:convertNumber pattern="#0.00" />
+							</h:outputText>
+						</p:column>
+					</p:dataTable>
+				</h:panelGroup>
+			</p:fieldset>
 			
-
-
-		
-			<br />
-			<br />
+			
 			<br />
 			<div align="center">
 				<p:commandButton value="#{etiquetas.atras}"
@@ -137,6 +512,14 @@
 				</p:commandButton>
 			</div>
 		</h:form>
+		<p:dialog id="dialog" header="Gráfico de Subfactores" widgetVar="dlg2"
+			modal="true" height="500" width="500">
+			<h:form id="formChart">
+				<p:chart type="bar" model="#{empresaEncuestaCtrl.barModel}"
+					rendered="#{empresaEncuestaCtrl.calculo6Equivalencia2Dto.size()>0}"
+					style="height:300px" />
+			</h:form>
+		</p:dialog>
 	</ui:define>
 
 </ui:composition>

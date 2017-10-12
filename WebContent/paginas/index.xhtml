@@ -13,7 +13,7 @@
 				<h:panelGroup rendered="#{usuarioCtrl.administrador}">
 					<div class="ui-g-6 ui-md-2">
 						<div class="card overview">
-							<div class="overview-content clearfix">
+							<div class="overview-content clearfix" align="center">
 								<h:commandLink action="/paginas/parametros/parametroLista.jsf"
 									rendered="#{sesionCtrl.administrador}">
 									<h:panelGrid
@@ -37,7 +37,7 @@
 				<h:panelGroup rendered="#{usuarioCtrl.administrador}">
 					<div class="ui-g-6 ui-md-2">
 						<div class="card overview">
-							<div class="overview-content clearfix">
+							<div class="overview-content clearfix" align="center">
 
 
 								<h:commandLink action="/paginas/usuarios/usuarioLista.jsf"
@@ -62,7 +62,7 @@
 				
 				<div class="ui-g-6 ui-md-2">
 					<div class="card overview">
-						<div class="overview-content clearfix">
+						<div class="overview-content clearfix" align="center">
 
 
 							<h:commandLink action="/paginas/encuesta/encuestaLista.jsf"
@@ -74,7 +74,7 @@
     margin-bottom: 0px; ">
 									<h:graphicImage value="/img/seguimiento.png"
 										title="Encuestas" style="width:90px; height:90px;" />
-									<h:outputText value="Encuestas" />
+									<h:outputText value="Crear Encuestas" />
 								</h:panelGrid>
 							</h:commandLink>
 
@@ -84,7 +84,7 @@
 				
 				<div class="ui-g-6 ui-md-2">
 					<div class="card overview">
-						<div class="overview-content clearfix">
+						<div class="overview-content clearfix" align="center">
 
 
 							<h:commandLink action="/paginas/empresaEncuesta/empresaEncuestaLista.jsf"
@@ -94,41 +94,18 @@
     font-size: 16px;
     width:130px;
     margin-bottom: 0px; ">
-									<h:graphicImage value="/img/upload.png"
+									<h:graphicImage value="/img/resultado.png"
 										title="Subir Encuestas" style="width:110px; height:90px;" />
-									<h:outputText value="Subir Encuestas" />
+									<h:outputText value="Resultados" />
 								</h:panelGrid>
 							</h:commandLink>
 
 						</div>
 					</div>
 				</div>
-				
-				<div class="ui-g-6 ui-md-2">
-					<div class="card overview">
-						<div class="overview-content clearfix">
-
-
-							<h:commandLink action="/paginas/usuarios/usuarioLista.jsf"
-									rendered="#{usuarioCtrl.administrador}">
-								<h:panelGrid
-									style=" text-align:center;
-    font-size: 16px;
-    width:130px;
-    margin-bottom: 0px; ">
-									<h:graphicImage value="/img/calculo.jpg"
-										title="Cálculos" style="width:90px; height:90px;" />
-									<h:outputText value="Cálculos" />
-								</h:panelGrid>
-							</h:commandLink>
-
-						</div>
-					</div>
-				</div>
-
 
 				<h:panelGroup
-					rendered="#{usuarioCtrl.administrador or usuarioCtrl.coordinador or usuarioCtrl.director}">
+					rendered="false">
 					<div class="ui-g-6 ui-md-2">
 						<div class="card overview">
 							<div class="overview-content clearfix">

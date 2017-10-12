@@ -15,8 +15,9 @@
 							value="#{empresaEncuestaCtrl.empresaEncuestaFiltro.empresa.codigo}"
 							style="width:250px">
 							<f:selectItem />
-							<f:selectItems value="#{empresaEncuestaCtrl.empresaListaBusqueda}"
-								var="item" itemLabel="#{item.nombre}" itemValue="#{item.codigo}" />
+							<f:selectItems
+								value="#{empresaEncuestaCtrl.empresaListaBusqueda}" var="item"
+								itemLabel="#{item.nombre}" itemValue="#{item.codigo}" />
 							<f:ajax event="change" render="sucursal"
 								listener="#{empresaEncuestaCtrl.cambiaEmpresa}" />
 						</p:selectOneMenu>
@@ -27,8 +28,9 @@
 							value="#{empresaEncuestaCtrl.empresaEncuestaFiltro.sucursal.codigo}"
 							style="width:250px">
 							<f:selectItem />
-							<f:selectItems value="#{empresaEncuestaCtrl.sucursalListaBusqueda}"
-								var="item" itemLabel="#{item.nombre}" itemValue="#{item.codigo}" />
+							<f:selectItems
+								value="#{empresaEncuestaCtrl.sucursalListaBusqueda}" var="item"
+								itemLabel="#{item.nombre}" itemValue="#{item.codigo}" />
 						</p:selectOneMenu>
 
 						<p:outputLabel value="#{etiquetas['encuesta']}:"
@@ -91,8 +93,7 @@
 						<f:facet name="header">
 							<h:outputText value="Encuesta" />
 						</f:facet>
-						<h:outputText
-							value="#{item.encuestaId}" />
+						<h:outputText value="#{item.encuestaId}" />
 					</p:column>
 					<p:column style="width:100px;">
 						<f:facet name="header">
@@ -103,20 +104,25 @@
 
 					<p:column headerText="Ver Resultados Generales" style="width:70px;"
 						styleClass="columnaCentrada">
-						<h:commandLink action="#{empresaEncuestaCtrl.verResultados}"
-							title="#{etiquetas.editar}">
-							<h:graphicImage value="/img/edit.png" id="editImage"
-								style="width:20px; height:20px" />
-						</h:commandLink>
+						<div align="center">
+							<h:commandLink action="#{empresaEncuestaCtrl.verResultados}"
+								title="#{etiquetas.editar}">
+								<h:graphicImage value="/img/ver.png" id="editImage"
+									style="width:20px; height:20px" />
+							</h:commandLink>
+						</div>
 					</p:column>
-					
-					<p:column headerText="Ver Resultados por Subfactor" style="width:70px;"
-						styleClass="columnaCentrada">
-						<h:commandLink action="#{empresaEncuestaCtrl.verResultadosSubfactor}"
-							title="#{etiquetas.editar}">
-							<h:graphicImage value="/img/edit.png" id="editImage1"
-								style="width:20px; height:20px" />
-						</h:commandLink>
+
+					<p:column headerText="Ver Resultados por Subfactor"
+						style="width:70px;" styleClass="columnaCentrada">
+						<div align="center">
+							<h:commandLink
+								action="#{empresaEncuestaCtrl.verResultadosSubfactor}"
+								title="#{etiquetas.editar}">
+								<h:graphicImage value="/img/ver.png" id="editImage1"
+									style="width:20px; height:20px" />
+							</h:commandLink>
+						</div>
 					</p:column>
 
 					<p:column styleClass="columnaCentrada"

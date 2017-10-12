@@ -22,7 +22,7 @@
 					<f:ajax render="itemsTable gridDetalle"  />
 				</h:commandLink>
 			</h:panelGrid>
-			<p:dataTable id="itemsTable" paginator="true" rows="30"
+			<p:dataTable id="itemsTable" 
 				emptyMessage="#{etiquetas['no.existen.registros']}"
 				value="#{encuestaCtrl.encuesta.preguntas}" var="item"
 				style="width:100%">

@@ -11,9 +11,9 @@
 			<br />
 			<br />
 
-			<p:dataTable var="item"
+			<p:dataTable var="item" 
 				value="#{empresaEncuestaCtrl.respuestaSubfactor()}"
-				style="margin-top:40px">
+				style="margin-top:40px; width:auto;" scrollWidth="1800">
 				<f:facet name="header">
            Datos
         </f:facet>
@@ -26,7 +26,7 @@
 					<p:row>
 						<ui:repeat value="#{empresaEncuestaCtrl.preguntasSubfactor()}"
 							var="pregunta">
-							<p:column
+							<p:column width="150px"
 								headerText="#{empresaEncuestaCtrl.nombreSubfactor(pregunta)}">
 								<f:facet name="header">
 									<h:outputText
@@ -45,14 +45,13 @@
 					</p:row>
 				</p:columnGroup>
 
-				<p:column>
+				<p:column width="150px">
 					<h:outputText value="#{item.personas}" />
 				</p:column>
 
-				<p:columns value="#{empresaEncuestaCtrl.preguntasSubfactor()}"
+				<p:columns width="150px" value="#{empresaEncuestaCtrl.preguntasSubfactor()}" 
 					var="pregunta">
 					<h:outputText value="#{item.getValor(pregunta)}" />
-
 				</p:columns>
 
 				<f:facet name="footer">
@@ -62,135 +61,259 @@
 
 			<br />
 			<h:panelGroup id="panelGroupId">
-				<br/>
-				<p:dataTable id="itemsTable"
-					emptyMessage="#{etiquetas['no.existen.registros']}"
-					rendered="#{empresaEncuestaCtrl.calculoPaso1.size()>0}"
-					value="#{empresaEncuestaCtrl.calculoPaso1}" var="item"
-					paginatorTemplate="{CurrentPageReport}  {FirstPageLink} {PreviousPageLink} {PageLinks} {NextPageLink} {LastPageLink} "
-					paginator="true" rows="10" style="width:100%; margin-bottom:20px">
-					 <f:facet name="header">
-      				  Paso 1
-    				</f:facet>
-					<p:column style="width:100px;">
+				<br />
+				<p:fieldset legend="Paso 1" toggleable="true" toggleSpeed="500" rendered="#{empresaEncuestaCtrl.calculoPaso1.size()>0}">
+					<p:dataTable id="itemsTable"
+						emptyMessage="#{etiquetas['no.existen.registros']}"
+						rendered="#{empresaEncuestaCtrl.calculoPaso1.size()>0}"
+						value="#{empresaEncuestaCtrl.calculoPaso1}" var="item"
+						style="width:100%; margin-bottom:20px">
+						<p:column style="width:100px;">
+							<f:facet name="header">
+								<h:outputText value="X" />
+							</f:facet>
+							<h:outputText value="#{item.calculo}" />
+						</p:column>
+						<p:column style="width:100px;">
+							<f:facet name="header">
+								<h:outputText value="fs" />
+							</f:facet>
+							<h:outputText value="#{item.calculofs}" />
+						</p:column>
+						<p:column style="width:100px;">
+							<f:facet name="header">
+								<h:outputText value="fs'" />
+							</f:facet>
+							<h:outputText value="#{item.calculofsp}" />
+						</p:column>
+						<p:column style="width:100px;">
+							<f:facet name="header">
+								<h:outputText value="fs''" />
+							</f:facet>
+							<h:outputText value="#{item.calculofspp}" />
+						</p:column>
+						<p:column style="width:100px;">
+							<f:facet name="header">
+								<h:outputText value="X" />
+							</f:facet>
+							<h:outputText value="#{item.calculox}" />
+						</p:column>
+						<p:column style="width:100px;">
+							<f:facet name="header">
+								<h:outputText value="X2" />
+							</f:facet>
+							<h:outputText value="#{item.calculoxx}" />
+						</p:column>
+					</p:dataTable>
+				</p:fieldset>
+				<br />
+				<p:fieldset legend="Paso 2" toggleable="true" toggleSpeed="500" rendered="#{empresaEncuestaCtrl.calculoPaso2.size()>0}">
+					<p:dataTable id="itemsTable2"
+						emptyMessage="#{etiquetas['no.existen.registros']}"
+						rendered="#{empresaEncuestaCtrl.calculoPaso2.size()>0}"
+						value="#{empresaEncuestaCtrl.calculoPaso2}" var="item"
+						style="width:100%; margin-bottom:20px">
+						<p:column style="width:100px;">
+							<f:facet name="header">
+								<h:outputText value="fs" />
+							</f:facet>
+							<h:outputText value="#{item.calculofs}" />
+						</p:column>
+						<p:column style="width:100px;">
+							<f:facet name="header">
+								<h:outputText value="fa" />
+							</f:facet>
+							<h:outputText value="#{item.calculofa}" />
+						</p:column>
+						<p:column style="width:100px;">
+							<f:facet name="header">
+								<h:outputText value="pa" />
+							</f:facet>
+							<h:outputText value="#{item.calculopa}" />
+						</p:column>
+						<p:column style="width:100px;">
+							<f:facet name="header">
+								<h:outputText value="p" />
+							</f:facet>
+							<h:outputText value="#{item.calculop}" />
+						</p:column>
+						<p:column style="width:100px;">
+							<f:facet name="header">
+								<h:outputText value="Centil" />
+							</f:facet>
+							<h:outputText value="#{item.centil}" />
+						</p:column>
+					</p:dataTable>
+				</p:fieldset>
+				<br />
+				<p:fieldset legend="Paso 3" toggleable="true" toggleSpeed="500" rendered="#{empresaEncuestaCtrl.calculoPaso3.size()>0}">
+					<p:dataTable id="itemsTable3"
+						emptyMessage="#{etiquetas['no.existen.registros']}"
+						rendered="#{empresaEncuestaCtrl.calculoPaso3.size()>0}"
+						value="#{empresaEncuestaCtrl.calculoPaso3}" var="item"
+						style="width:100%; margin-bottom:20px">
 						<f:facet name="header">
-							<h:outputText value="X" />
-						</f:facet>
-						<h:outputText value="#{item.calculo}" />
-					</p:column>
-					<p:column style="width:100px;">
-						<f:facet name="header">
-							<h:outputText value="fs" />
-						</f:facet>
-						<h:outputText value="#{item.calculofs}" />
-					</p:column>
-					<p:column style="width:100px;">
-						<f:facet name="header">
-							<h:outputText value="fs'" />
-						</f:facet>
-						<h:outputText value="#{item.calculofsp}" />
-					</p:column>
-					<p:column style="width:100px;">
-						<f:facet name="header">
-							<h:outputText value="fs''" />
-						</f:facet>
-						<h:outputText value="#{item.calculofspp}" />
-					</p:column>
-					<p:column style="width:100px;">
-						<f:facet name="header">
-							<h:outputText value="X" />
-						</f:facet>
-						<h:outputText value="#{item.calculox}" />
-					</p:column>
-					<p:column style="width:100px;">
-						<f:facet name="header">
-							<h:outputText value="X2" />
-						</f:facet>
-						<h:outputText value="#{item.calculoxx}" />
-					</p:column>
-				</p:dataTable>
-				<br/>
-				<p:dataTable id="itemsTable2"
-					emptyMessage="#{etiquetas['no.existen.registros']}"
-					rendered="#{empresaEncuestaCtrl.calculoPaso2.size()>0}"
-					value="#{empresaEncuestaCtrl.calculoPaso2}" var="item"
-					paginatorTemplate="{CurrentPageReport}  {FirstPageLink} {PreviousPageLink} {PageLinks} {NextPageLink} {LastPageLink} "
-					paginator="true" rows="10" style="width:100%; margin-bottom:20px">
-	 				<f:facet name="header">
-      				  Paso 2
-    				</f:facet>
-					<p:column style="width:100px;">
-						<f:facet name="header">
-							<h:outputText value="fs" />
-						</f:facet>
-						<h:outputText value="#{item.calculofs}" />
-					</p:column>
-					<p:column style="width:100px;">
-						<f:facet name="header">
-							<h:outputText value="fa" />
-						</f:facet>
-						<h:outputText value="#{item.calculofa}" />
-					</p:column>
-					<p:column style="width:100px;">
-						<f:facet name="header">
-							<h:outputText value="pa" />
-						</f:facet>
-						<h:outputText value="#{item.calculopa}" />
-					</p:column>
-					<p:column style="width:100px;">
-						<f:facet name="header">
-							<h:outputText value="p" />
-						</f:facet>
-						<h:outputText value="#{item.calculop}" />
-					</p:column>
-					<p:column style="width:100px;">
-						<f:facet name="header">
-							<h:outputText value="Centil" />
-						</f:facet>
-						<h:outputText value="#{item.centil}" />
-					</p:column>
-				</p:dataTable>
-				<br/>
-				<p:dataTable id="itemsTable3"
-					emptyMessage="#{etiquetas['no.existen.registros']}"
-					rendered="#{empresaEncuestaCtrl.calculoPaso3.size()>0}"
-					value="#{empresaEncuestaCtrl.calculoPaso3}" var="item"
-					paginatorTemplate="{CurrentPageReport}  {FirstPageLink} {PreviousPageLink} {PageLinks} {NextPageLink} {LastPageLink} "
-					paginator="true" rows="10" style="width:100%; margin-bottom:20px">
-					<f:facet name="header">
       				  Paso 3
     				</f:facet>
-					<p:column style="width:100px;">
-						<f:facet name="header">
-							<h:outputText value="fa.Pm" />
-						</f:facet>
-						<h:outputText value="#{item.calculofa}" />
-					</p:column>
-					<p:column style="width:100px;">
-						<f:facet name="header">
-							<h:outputText value="Pa.Pm" />
-						</f:facet>
-						<h:outputText value="#{item.calculopa}" />
-					</p:column>
-					<p:column style="width:100px;">
-						<f:facet name="header">
-							<h:outputText value="Cálculo Tabla" />
-						</f:facet>
-						<h:outputText value="#{item.calculoTabla}" />
-					</p:column>
 						<p:column style="width:100px;">
-						<f:facet name="header">
-							<h:outputText value="Escala Z" />
-						</f:facet>
-						<h:outputText value="#{item.calculoZ}" />
-					</p:column>
+							<f:facet name="header">
+								<h:outputText value="fa.Pm" />
+							</f:facet>
+							<h:outputText value="#{item.calculofa}" />
+						</p:column>
 						<p:column style="width:100px;">
+							<f:facet name="header">
+								<h:outputText value="Pa.Pm" />
+							</f:facet>
+							<h:outputText value="#{item.calculopa}" />
+						</p:column>
+						<p:column style="width:100px;">
+							<f:facet name="header">
+								<h:outputText value="Cálculo Tabla" />
+							</f:facet>
+							<h:outputText value="#{item.calculoTabla}" />
+						</p:column>
+						<p:column style="width:100px;">
+							<f:facet name="header">
+								<h:outputText value="Escala Z" />
+							</f:facet>
+							<h:outputText value="#{item.calculoZ}" />
+						</p:column>
+						<p:column style="width:100px;">
+							<f:facet name="header">
+								<h:outputText value="Escala T" />
+							</f:facet>
+							<h:outputText value="#{item.calculoT}" />
+						</p:column>
+					</p:dataTable>
+				</p:fieldset>
+				<br />
+				<p:fieldset legend="Paso 4" toggleable="true" toggleSpeed="500" rendered="#{empresaEncuestaCtrl.calculo4EquivalenciaDto.size()>0}">
+					<h:outputText
+						value="Mediana: #{empresaEncuestaCtrl.medianaPaso4}" />
+					<br/>
+					<br/>
+					<h:outputText
+						value="Desv: #{empresaEncuestaCtrl.desviacionPaso4}" />
+
+					<p:dataTable id="itemsTable4"
+						emptyMessage="#{etiquetas['no.existen.registros']}"
+						rendered="#{empresaEncuestaCtrl.calculo4EquivalenciaDto.size()>0}" 
+						value="#{empresaEncuestaCtrl.calculo4EquivalenciaDto}" var="item"
+						style="width:100%; margin-bottom:20px">
 						<f:facet name="header">
-							<h:outputText value="Escala T" />
-						</f:facet>
-						<h:outputText value="#{item.calculoT}" />
-					</p:column>
-				</p:dataTable>
+      				  Valores
+    				</f:facet>
+						<p:column style="width:100px;">
+							<f:facet name="header">
+								<h:outputText value="Paso 1" />
+							</f:facet>
+							<h:outputText value="#{item.calculo1}" />
+						</p:column>
+						<p:column style="width:100px;">
+							<f:facet name="header">
+								<h:outputText value="Paso 2" />
+							</f:facet>
+							<h:outputText value="#{item.calculo2}" />
+						</p:column>
+						<p:column style="width:100px;">
+							<f:facet name="header">
+								<h:outputText value="Paso 3" />
+							</f:facet>
+							<h:outputText value="#{item.calculo3}" />
+						</p:column>
+						<p:column style="width:100px;">
+							<f:facet name="header">
+								<h:outputText value="Paso 4" />
+							</f:facet>
+							<h:outputText value="#{item.calculo4}" />
+						</p:column>
+						<p:column style="width:100px;">
+							<f:facet name="header">
+								<h:outputText value="Paso 5" />
+							</f:facet>
+							<h:outputText value="#{item.calculo5}" />
+						</p:column>
+						<p:column style="width:100px;">
+							<f:facet name="header">
+								<h:outputText value="Paso 6" />
+							</f:facet>
+							<h:outputText value="#{item.calculo6}" />
+						</p:column>
+					</p:dataTable>
+					<br />
+					<p:dataTable id="itemsTable5"
+						emptyMessage="#{etiquetas['no.existen.registros']}"
+						rendered="#{empresaEncuestaCtrl.calculo4Equivalencia2Dtos.size()>0}"
+						value="#{empresaEncuestaCtrl.calculo4Equivalencia2Dtos}"
+						var="item"
+						style="width:100%; margin-bottom:20px">
+						<f:facet name="header">
+      				  Equivalencias
+    				</f:facet>
+						<p:column style="width:100px;">
+							<h:outputText value="#{item.rangoInicio}" />
+						</p:column>
+						<p:column style="width:100px;">
+							<h:outputText value="#{item.rangoFin}" />
+						</p:column>
+						<p:column style="width:100px;">
+							<h:outputText value="#{item.equivalencia1}" />
+						</p:column>
+						<p:column style="width:100px;">
+							<h:outputText value="#{item.equivalencia2}" />
+						</p:column>
+					</p:dataTable>
+					<br />
+					<p:dataTable id="itemsTable6"
+						emptyMessage="#{etiquetas['no.existen.registros']}"
+						rendered="#{empresaEncuestaCtrl.calculo4Equivalencia3Dtos.size()>0}"
+						value="#{empresaEncuestaCtrl.calculo4Equivalencia3Dtos}"
+						var="item"
+						style="width:100%; margin-bottom:20px">
+						<f:facet name="header">
+      				  Valores
+    				</f:facet>
+						<p:column style="width:100px;">
+							<f:facet name="header">
+								<h:outputText value="Número" />
+							</f:facet>
+							<h:outputText value="#{item.numero}" />
+						</p:column>
+						<p:column style="width:100px;">
+							<f:facet name="header">
+								<h:outputText value="Equivalencia Forma 1" />
+							</f:facet>
+							<h:outputText value="#{item.equivalencia}" />
+						</p:column>
+						<p:column style="width:100px;">
+							<f:facet name="header">
+								<h:outputText value="Equivalencia Forma 2" />
+							</f:facet>
+							<h:outputText value="#{item.equivalencia2}" />
+						</p:column>
+						<p:column style="width:100px;">
+							<f:facet name="header">
+								<h:outputText value="Personas" />
+							</f:facet>
+							<h:outputText value="#{item.personas}" />
+						</p:column>
+						<p:column style="width:100px;">
+							<f:facet name="header">
+								<h:outputText value="Porcentaje" />
+							</f:facet>
+							<h:outputText value="#{item.porcentaje}" />
+						</p:column>
+					</p:dataTable>
+					<br />
+					<h:outputText
+						value="Vulnerabilidad: #{empresaEncuestaCtrl.vulnerabilidadPaso4}" />
+						<br/>
+						<br/>
+					<h:outputText
+						value="Protección: #{empresaEncuestaCtrl.proteccionPaso4}" />
+
+				</p:fieldset>
 			</h:panelGroup>
 
 
