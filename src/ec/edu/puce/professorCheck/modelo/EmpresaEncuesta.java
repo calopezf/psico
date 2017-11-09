@@ -60,6 +60,10 @@ public class EmpresaEncuesta implements Serializable {
 	@Enumerated(EnumType.STRING)
 	private EnumEstado estado;
 
+	@ManyToOne(optional = false)
+	@JoinColumn(name = "id_encuesta", referencedColumnName = "id", insertable = false, updatable = false)
+	private Encuesta encuesta;
+
 	@Transient
 	private List<EmpresaEncuestaRespuesta> respuestas;
 
@@ -139,6 +143,14 @@ public class EmpresaEncuesta implements Serializable {
 
 	public void setRespuestas(List<EmpresaEncuestaRespuesta> respuestas) {
 		this.respuestas = respuestas;
+	}
+
+	public Encuesta getEncuesta() {
+		return encuesta;
+	}
+
+	public void setEncuesta(Encuesta encuesta) {
+		this.encuesta = encuesta;
 	}
 
 }

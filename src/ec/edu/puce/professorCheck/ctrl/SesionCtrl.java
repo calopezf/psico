@@ -38,7 +38,7 @@ public class SesionCtrl extends BaseCtrl {
 	public Usuario getUsuarioLogueado() {
 		if (usuarioLogueado == null) {
 			usuarioLogueado = usuarioServicio
-					.obtieneUsuarioXEmail(getRemoteUser());
+					.obtieneUsuarioXCedula(getRemoteUser());
 		}
 		return usuarioLogueado;
 	}

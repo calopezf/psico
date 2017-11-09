@@ -33,7 +33,7 @@ public class GuestPreferences implements Serializable {
 
 	private Map<String,String> themeColors;
     
-    private String theme = "purple-amber";
+    private String theme = "indigo";
     
     private String menuClass = null;  
     

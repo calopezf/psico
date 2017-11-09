@@ -39,14 +39,14 @@
 					<pu:menu widgetVar="me">
 						<p:menuitem id="um_dashboard" value="Inicio" icon="&#xE871;"
 							outcome="/paginas/index.jsf" />
-						<p:menuitem id="um_usuA" value="Usuarios" icon="&#xE7FD;"
+						<!--<p:menuitem id="um_usuA" value="Usuarios" icon="&#xE7FD;"
 							rendered="#{usuarioCtrl.administrador}"
 							outcome="/paginas/usuarios/usuarioLista.jsf" />
 						<p:menuitem id="um_conf" value="Configuración" icon="&#xE869;"
 							rendered="#{usuarioCtrl.administrador}"
 							outcome="/paginas/parametros/parametroLista.jsf" />
 
-						<!-- p:menuitem id="um_usu" value="Perfil" icon="&#xE7FD;"
+						 p:menuitem id="um_usu" value="Perfil" icon="&#xE7FD;"
 							rendered="#{usuarioCtrl.doctor}"
 							outcome="/paginas/usuarios/usuario.jsf" />
 						<p:menuitem id="um_mat" value="#{etiquetas['pacientes']}"

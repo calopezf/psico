@@ -73,8 +73,8 @@
     width:130px;
     margin-bottom: 0px; ">
 									<h:graphicImage value="/img/seguimiento.png"
-										title="Encuestas" style="width:90px; height:90px;" />
-									<h:outputText value="Crear Encuestas" />
+										title="Gestión del Test" style="width:90px; height:90px;" />
+									<h:outputText value="Gestión del Test" />
 								</h:panelGrid>
 							</h:commandLink>
 
@@ -95,7 +95,7 @@
     width:130px;
     margin-bottom: 0px; ">
 									<h:graphicImage value="/img/resultado.png"
-										title="Subir Encuestas" style="width:110px; height:90px;" />
+										title="Encuestas" style="width:110px; height:90px;" />
 									<h:outputText value="Resultados" />
 								</h:panelGrid>
 							</h:commandLink>
@@ -103,29 +103,6 @@
 						</div>
 					</div>
 				</div>
-
-				<h:panelGroup
-					rendered="false">
-					<div class="ui-g-6 ui-md-2">
-						<div class="card overview">
-							<div class="overview-content clearfix">
-
-								<h:commandLink action="/paginas/reporte/reporte.jsf"
-									rendered="#{usuarioCtrl.administrador or usuarioCtrl.coordinador or usuarioCtrl.director}">
-									<h:panelGrid
-										style=" text-align:center;
-    font-size: 16px;
-    width:130px;
-    margin-bottom: 0px; ">
-										<h:graphicImage value="/img/reporte.png" title="Reporte"
-											style="width:90px; height:90px;" />
-										<h:outputText value="Reporte" />
-									</h:panelGrid>
-								</h:commandLink>
-							</div>
-						</div>
-					</div>
-				</h:panelGroup>
 
 
 			<br />

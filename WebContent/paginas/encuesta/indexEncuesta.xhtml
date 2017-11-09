@@ -1,0 +1,86 @@
+<ui:composition xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:ui="http://java.sun.com/jsf/facelets"
+	xmlns:h="http://java.sun.com/jsf/html"
+	xmlns:f="http://java.sun.com/jsf/core"
+	xmlns:p="http://primefaces.org/ui" template="/WEB-INF/template.xhtml">
+	<ui:define name="title">
+		<h:outputText value="#{etiquetas['seleccione.una.opcion']}" />
+	</ui:define>
+
+	<ui:define name="content">
+
+		<h:form>
+
+			<h:panelGroup>
+				<div class="ui-g-6 ui-md-2">
+					<div class="card overview">
+						<div class="overview-content clearfix" align="center">
+
+
+							<h:commandLink
+								action="/paginas/empresaEncuesta/empresaEncuestaLista.jsf"
+								rendered="#{usuarioCtrl.administrador}">
+								<h:panelGrid
+									style=" text-align:center;
+    font-size: 16px;
+    width:130px;
+    margin-bottom: 0px; ">
+									<h:graphicImage value="/img/resultado.png"
+										title="Subir Encuestas" style="width:110px; height:90px;" />
+									<h:outputText value="Cuestionario" />
+								</h:panelGrid>
+							</h:commandLink>
+
+						</div>
+					</div>
+				</div>
+			</h:panelGroup>
+
+			<h:panelGroup rendered="#{usuarioCtrl.administrador}">
+				<div class="ui-g-6 ui-md-2">
+					<div class="card overview">
+						<div class="overview-content clearfix" align="center">
+							<h:commandLink action="/paginas/parametros/parametroLista.jsf"
+								rendered="#{sesionCtrl.administrador}">
+								<h:panelGrid
+									style=" text-align:center;
+    font-size: 16px;
+    width:130px;
+    margin-bottom: 0px; ">
+									<h:graphicImage value="/img/parametros.png"
+										style="width:90px; height:90px;" />
+									<h:outputText value="Instrumentos por Empresa" />
+								</h:panelGrid>
+							</h:commandLink>
+						</div>
+					</div>
+				</div>
+			</h:panelGroup>
+
+
+
+			<br />
+			<br />
+			<br />
+			<br />
+			<br />
+			<br />
+			<br />
+
+			<br />
+			<br />
+			<br />
+			<br />
+			<br />
+			<br />
+			<br />
+			<br />
+			<br />
+			<br />
+			<br />
+
+		</h:form>
+
+	</ui:define>
+
+</ui:composition>
